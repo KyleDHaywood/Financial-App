@@ -14,6 +14,7 @@ public class FinancialCalculator extends javax.swing.JFrame {
      */
     public FinancialCalculator() {
         initComponents();
+       
     }
 
     /**
@@ -73,6 +74,7 @@ public class FinancialCalculator extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FinancialCalculator().setVisible(true);
+                
             }
         });
     }

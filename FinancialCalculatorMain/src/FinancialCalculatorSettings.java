@@ -14,6 +14,7 @@ public class FinancialCalculatorSettings extends javax.swing.JFrame {
      */
     public FinancialCalculatorSettings() {
         initComponents();
+        frame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -72,6 +73,7 @@ public class FinancialCalculatorSettings extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FinancialCalculatorSettings().setVisible(true);
+                
             }
         });
     }
