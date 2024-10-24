@@ -202,8 +202,8 @@ class CurrencyCalculator extends JFrame{
     
      // Currency codes and names
     private final String[] currencyCodes = {
-        "AUD: Australian Dollar", "BRL: Brazilian Real", "BTC: Bitcoin", "CAD: Canadian Dollar", "CHF: Swiss Franc", "CNY: Chinese Yuan", "EUR: Euro", "GBP: British Pound Sterling", "HKD: Hong Kong Dollar", 
-        "INR: India Rupee", "JPY: Japanese Yen", "KRW: South Korean Won", "MXN: Mexican Peso", "RUB: Russian Ruble", "SGD: Singapore Dollar", "USD: United States Dollar", "ZAR: South African Rand"
+        "AUD", "BRL", "BTC", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", 
+        "INR", "JPY", "KRW", "MXN", "RUB", "SGD", "USD", "ZAR"
     };
     
     public CurrencyCalculator(){
@@ -300,12 +300,18 @@ class CurrencyCalculator extends JFrame{
                 });
                 add(calculateButton); // Add button to the panel
                 
-                // Create and set up the "Clear" JButton
+                 // Create and set up the "Clear" JButton
                 clearButton = new JButton("Clear");
                 clearButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
                 clearButton.setForeground(Color.WHITE); // Set text color to white
                 clearButton.setBackground(Color.GRAY); // Set background color to gray
                 clearButton.setBounds(400, 550, 150, 50); // Position and size of the button
+                clearButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        clearFields(); // Call the clearFields method when clicked
+                    }
+                });
                 add(clearButton); // Add button to the panel
 }
                 // Function for the currency calculator
@@ -351,6 +357,14 @@ class CurrencyCalculator extends JFrame{
                 e.printStackTrace();
                 return 0; // Return 0 if there's an error
             }
+        }
+        
+        // Method to clear input fields and result label
+        private void clearFields() {
+            amountField.setText(""); // Clear the amount field
+            fromCurrencyComboBox.setSelectedIndex(0); // Reset 'From' currency combo box
+            toCurrencyComboBox.setSelectedIndex(0); // Reset 'To' currency combo box
+            resultsLabel.setText("Results"); // Reset the results label
         }
         
        @Override
