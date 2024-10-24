@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 public class JavaApplication_X extends JFrame {
@@ -229,6 +231,9 @@ class CurrencyCalculator extends JFrame{
             private final JLabel toLabel;
             private final JButton calculateButton;
             private final JButton clearButton;
+            private final JLabel resultExchangeLabel;
+            private final JLabel resultExchange2Label;
+            private final JLabel timestampLabel;
             
             public ImagePanel() {
                 setLayout(null); // Use null layout for custom positioning
@@ -246,6 +251,31 @@ class CurrencyCalculator extends JFrame{
                 resultsLabel.setForeground(Color.WHITE); // Set label color to white
                 resultsLabel.setBounds(670, 218, 450, 30); // Position and size of the results label
                 add(resultsLabel); // Add results label to the panel
+                
+                // Create and set up the "result Exhange" JLabel
+                resultExchangeLabel = new JLabel("");
+                resultExchangeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 34)); // Set for result exchange rate
+                resultExchangeLabel.setForeground(Color.BLACK); // Set label color to white
+                resultExchangeLabel.setBackground(new Color(184, 228, 202)); // Set background color
+                resultExchangeLabel.setOpaque(true); // Make the Jlabel's background visible
+                resultExchangeLabel.setBounds(660, 285, 510, 70); // Position and size of the results label
+                add(resultExchangeLabel); // Add results label to the panel
+                
+                // Create and set up the "result Exhange" JLabel 2
+                resultExchange2Label = new JLabel("");
+                resultExchange2Label.setFont(new Font("Times New Roman", Font.PLAIN, 34)); // Set for result exchange rate
+                resultExchange2Label.setForeground(Color.BLACK); // Set label color to white
+                resultExchange2Label.setBackground(new Color(184, 228, 202)); // Set background color
+                resultExchange2Label.setOpaque(true); // Make the Jlabel's background visible
+                resultExchange2Label.setBounds(660, 355, 510, 70); // Position and size of the results label
+                add(resultExchange2Label); // Add results label to the panel
+                
+                // Add a new JLabel for the timestamp
+                timestampLabel = new JLabel("");
+                timestampLabel.setFont(new Font("Times New Roman", Font.ITALIC, 20)); // Set font and style
+                timestampLabel.setForeground(Color.BLACK); // Set text color
+                timestampLabel.setBounds(150, 710, 900, 60); // Position of the timestamp label
+                add(timestampLabel); // Add timestamp label to the panel
                 
                  // Create and set up the "Amount" JLabel
                 amountLabel = new JLabel("Amount:");
@@ -321,14 +351,30 @@ class CurrencyCalculator extends JFrame{
                         String fromCurrency = fromCurrencyComboBox.getSelectedItem().toString();
                         String toCurrency = toCurrencyComboBox.getSelectedItem().toString();
 
-                        // Get exchange rate from the Open Exchange Rates API
-                        double exchangeRate = getExchangeRate(fromCurrency, toCurrency);
-                        double convertedAmount = amount * exchangeRate;
+                        // Get the exchange rate from the Open Exchange Rates API
+                        double exchangeRateFromTo = getExchangeRate(fromCurrency, toCurrency);
+                        double exchangeRateToFrom = getExchangeRate(toCurrency, fromCurrency);
+                        
+                        double convertedAmountFromTo = amount * exchangeRateFromTo;
+                        double convertedAmountToFrom = amount * exchangeRateToFrom;
 
-                        // Update results label
-                        resultsLabel.setText(String.format("%.2f %s = %.5f %s", amount, fromCurrency, convertedAmount, toCurrency));
+                        // Update the two labels for the conversion results
+                        resultExchangeLabel.setText(String.format("<html>%.2f %s = <b><font color='green'>%.4f</font></b> %s</html>", amount, fromCurrency, convertedAmountFromTo, toCurrency));
+                        resultExchange2Label.setText(String.format("<html>%.2f %s = <b><font color='green'>%.4f</font></b> %s</html>", amount, toCurrency, convertedAmountToFrom, fromCurrency));
+                        
+                        // Get the current date and time
+                        LocalDateTime currentDateTime = LocalDateTime.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM. dd, yyyy, HH:mm:ss");
+
+                        // Format the date and time
+                        String formattedDateTime = currentDateTime.format(formatter);
+
+                        // Update the timestamp label with the current time and source
+                        timestampLabel.setText("The results above are based on the " + formattedDateTime + " exchange rate from openexchangerates.org.");
+
                     } catch (NumberFormatException e) {
-                        resultsLabel.setText("Please enter a valid amount.");
+                        resultExchangeLabel.setText("Please enter a valid amount.");
+                        resultExchangeLabel.setText(""); // Clear second label if input is invalid
                     }
                 }
                
@@ -364,7 +410,8 @@ class CurrencyCalculator extends JFrame{
             amountField.setText(""); // Clear the amount field
             fromCurrencyComboBox.setSelectedIndex(0); // Reset 'From' currency combo box
             toCurrencyComboBox.setSelectedIndex(0); // Reset 'To' currency combo box
-            resultsLabel.setText("Results"); // Reset the results label
+            resultExchangeLabel.setText(""); // Reset the results label
+            resultExchange2Label.setText(""); // Reset the results label
         }
         
        @Override
