@@ -142,13 +142,15 @@ class CategoricalCalcs extends JFrame{
             
             // Add action listeners for buttons (example for Auto button)
             autoButton.addActionListener(e -> {
-                // Define what happens when the Auto button is clicked
-                JOptionPane.showMessageDialog(null, "Auto Calculator Category Coming Soon!");
+                AutoCategory AutoCategoryFrame = new AutoCategory();
+                AutoCategoryFrame.setVisible(true);
+                dispose();
             });
             
             retirementButton.addActionListener(e -> {
-                // Define what happens when the Retirement button is clicked
-                JOptionPane.showMessageDialog(null, "Retirement Calculator Category Coming Soon!");
+                RetirementCategory RetirementCategoryFrame = new RetirementCategory();
+                RetirementCategoryFrame.setVisible(true);
+                dispose();
             });
             
             mortgageButton.addActionListener(e -> {
@@ -158,8 +160,9 @@ class CategoricalCalcs extends JFrame{
             });
             
             investmentButton.addActionListener(e -> {
-                // Define what happens when the Investment button is clicked
-                JOptionPane.showMessageDialog(null, "Investment Calculator Category Coming Soon!");
+                InvestmentCategory InvestmentCategoryFrame = new InvestmentCategory();
+                InvestmentCategoryFrame.setVisible(true);
+                dispose();
             });
             
             // Add action listener for the Currency button to open CurrencyCalculator JFrame
@@ -203,6 +206,193 @@ class CategoricalCalcs extends JFrame{
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
             // Draw the background image
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+
+// New JFrame class for the Auto Category
+class AutoCategory extends JFrame{
+    private final Image backgroundImage;
+    
+    public AutoCategory(){
+        // Load the background Image
+        backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/autocategory_background.jpg")).getImage();
+        
+        // Set up the JFrame
+        setTitle("Auto Category");
+        setSize(1200,800); // Set the size of the new window
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
+        setLocationRelativeTo(null); // Center the window
+        
+        // Add the content panel with the background image
+        setContentPane(new ImagePanel());
+    }
+    private class ImagePanel extends JPanel{
+        private final JButton backButton;
+        private final JLabel AutoLabel;
+        private final JLabel AutoLoanLabel;
+        
+        public ImagePanel() {
+            setLayout(null); // Use null layout for absolute positioning
+            
+            // Create a back button to return to the categorical page
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40); // Position the back button
+            add(backButton);
+            
+            // Add action listener for the back button
+            backButton.addActionListener(e -> {
+                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
+                categoricalFrame.setVisible(true);
+                dispose(); // Close the current frame
+            });
+            
+            // Create a JLabel for the title "Auto"
+            AutoLabel = new JLabel("Auto");
+            AutoLabel.setFont(new Font("Times New Roman", Font.PLAIN, 66)); // Set font
+            AutoLabel.setForeground(Color.BLACK); // Set label color to white
+            AutoLabel.setBounds(100, 200, 350, 100); // Position and size of the label
+            add(AutoLabel); // Add label to the panel
+            
+            // Create the access to Auto Loan Calculator
+            AutoLoanLabel = new JLabel("<html>&#8226; Auto Loan Calculator</html>");
+            AutoLoanLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            AutoLoanLabel.setForeground(Color.BLACK); // Set text color
+            AutoLoanLabel.setBounds(100, 350, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            AutoLoanLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    AutoLoanLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Auto Loan Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    AutoLoanLabel.setText("<html>&#8226; Auto Loan Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Auto Loan Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(AutoLoanLabel);
+            
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+
+// New JFrame class for the Retirement Category
+class RetirementCategory extends JFrame{
+    private final Image  backgroundImage;
+    
+    public RetirementCategory(){
+        backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/RetirementCategory_background.jpg")).getImage();
+        
+        // Set up the JFrame
+        setTitle("Retirement Category");
+        setSize(1200, 800); // Set the size of the new window
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
+        setLocationRelativeTo(null); // Center the window
+
+        // Add the content panel with the background image
+        setContentPane(new ImagePanel());
+        }
+    private class ImagePanel extends JPanel{
+        private final JButton backButton;
+        private final JLabel RetirementLabel;
+        private final JLabel RetirementCalculatorLabel;
+        private final JLabel RothCalculatorLabel;
+        
+        public ImagePanel() {
+            setLayout(null); // Use null layout for absolute positioning
+            
+            // Create a back button to return to the categorical page
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40); // Position the back button
+            add(backButton);
+            
+            // Add action listener for the back button
+            backButton.addActionListener(e -> {
+                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
+                categoricalFrame.setVisible(true);
+                dispose(); // Close the current frame
+            });
+            
+            // Create a JLabel for the title "Retirement"
+            RetirementLabel = new JLabel("Retirement");
+            RetirementLabel.setFont(new Font("Times New Roman", Font.PLAIN, 66)); // Set font
+            RetirementLabel.setForeground(Color.BLACK); // Set label color to white
+            RetirementLabel.setBounds(100, 200, 350, 100); // Position and size of the label
+            add(RetirementLabel); // Add label to the panel
+            
+            // Create the access to Retirement Calculator
+            RetirementCalculatorLabel = new JLabel("<html>&#8226; Retirement Calculator</html>");
+            RetirementCalculatorLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            RetirementCalculatorLabel.setForeground(Color.BLACK); // Set text color
+            RetirementCalculatorLabel.setBounds(100, 340, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            RetirementCalculatorLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    RetirementCalculatorLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Retirement Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    RetirementCalculatorLabel.setText("<html>&#8226; Retirement Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Retirement Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(RetirementCalculatorLabel); 
+            
+            // Create the access to Roth IRA Calculator
+            RothCalculatorLabel = new JLabel("<html>&#8226; Roth IRA Calculator</html>");
+            RothCalculatorLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            RothCalculatorLabel.setForeground(Color.BLACK); // Set text color
+            RothCalculatorLabel.setBounds(100, 380, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            RothCalculatorLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    RothCalculatorLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Roth IRA Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    RothCalculatorLabel.setText("<html>&#8226; Roth IRA Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Roth IRA Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(RothCalculatorLabel);
+            
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
@@ -448,6 +638,86 @@ class MortgageAndRealCategory extends JFrame{
             });
             // Add the label to the panel
             add(mortgagepayoffLabel);
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+
+// New JFrame class for the Investment Category
+class InvestmentCategory extends JFrame{
+    private final Image backgroundImage;
+    
+    public InvestmentCategory(){
+        // Load the background Image
+        backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/InvestmentCategory_background.jpg")).getImage();
+        
+        // Set up the JFrame
+        setTitle("Investment Category");
+        setSize(1200,800); // Set the size of the new window
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
+        setLocationRelativeTo(null); // Center the window
+        
+        // Add the content panel with the background image
+        setContentPane(new ImagePanel());
+    }
+    private class ImagePanel extends JPanel{
+        private final JButton backButton;
+        private final JLabel InvestmentLabel;
+        private final JLabel InterestCalculatorLabel;
+        
+        public ImagePanel() {
+            setLayout(null); // Use null layout for absolute positioning
+            
+            // Create a back button to return to the categorical page
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40); // Position the back button
+            add(backButton);
+            
+            // Add action listener for the back button
+            backButton.addActionListener(e -> {
+                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
+                categoricalFrame.setVisible(true);
+                dispose(); // Close the current frame
+            });
+            
+            // Create a JLabel for the title "Investment"
+            InvestmentLabel = new JLabel("Investment");
+            InvestmentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 66)); // Set font
+            InvestmentLabel.setForeground(Color.BLACK); // Set label color to white
+            InvestmentLabel.setBounds(100, 200, 350, 100); // Position and size of the label
+            add(InvestmentLabel); // Add label to the panel
+            
+            // Create the access to Interest Calculator
+            InterestCalculatorLabel = new JLabel("<html>&#8226; Interest Calculator</html>");
+            InterestCalculatorLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            InterestCalculatorLabel.setForeground(Color.BLACK); // Set text color
+            InterestCalculatorLabel.setBounds(100, 350, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            InterestCalculatorLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    InterestCalculatorLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Interest Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    InterestCalculatorLabel.setText("<html>&#8226; Interest Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Interest Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(InterestCalculatorLabel);
+            
         }
         @Override
         protected void paintComponent(Graphics g) {
@@ -720,7 +990,6 @@ private void showError(String message) {
             }
     }
 }
-      
     public static void main(String[] args) {
         // Create and display the form
         SwingUtilities.invokeLater(() -> {
