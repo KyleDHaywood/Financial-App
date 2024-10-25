@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import org.json.JSONObject;
 
 public class JavaApplication_X extends JFrame {
@@ -39,7 +41,7 @@ public class JavaApplication_X extends JFrame {
             startButton = new JButton("Start");
             startButton.setBounds(850, 580, 180, 60); // Position and size of the button
             startButton.setBackground(new Color(169, 223, 191));// Set button color to green
-            startButton.setForeground(Color.WHITE);
+            startButton.setForeground(Color.BLACK);
             startButton.setFont(new Font("Times New Roman", Font.BOLD, 28)); // Font name, style, size
             add(startButton); // Add button to the panel
             
@@ -96,6 +98,7 @@ class CategoricalCalcs extends JFrame{
         private final JLabel mortgageImageLabel;
         private final JLabel investmentImageLabel;
         private final JLabel currencyImageLabel;
+        private final JButton backButton; // Back button
         
         public ImagePanel(){
             setLayout(null); // Use null layout for absolute positioning
@@ -106,6 +109,7 @@ class CategoricalCalcs extends JFrame{
             mortgageButton = new JButton("Mortgage & Real Estate");
             investmentButton = new JButton("Investment");
             currencyButton = new JButton("Currency");
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png"))); // Load back button image
             
             // Set bounds (position and size) for the buttons
             autoButton.setBounds(175, 420, 100, 40);
@@ -113,6 +117,7 @@ class CategoricalCalcs extends JFrame{
             mortgageButton.setBounds(470, 420, 220, 40);
             investmentButton.setBounds(725, 495, 140, 40);
             currencyButton.setBounds(890, 420, 140, 40);
+            backButton.setBounds(20, 20, 80, 40); // Position the back button (adjust size as necessary)
             
             // Set button styles (Optional)
             Font buttonFont = new Font("Times New Roman", Font.BOLD, 16);
@@ -126,13 +131,14 @@ class CategoricalCalcs extends JFrame{
             investmentButton.setBackground(new Color(169, 223, 191));
             currencyButton.setFont(buttonFont);
             currencyButton.setBackground(new Color(169, 223, 191));
-            
+                        
             // Add buttons to the panel
             add(autoButton);
             add(retirementButton);
             add(mortgageButton);
             add(investmentButton);
             add(currencyButton);
+            //add(backButton);
             
             // Add action listeners for buttons (example for Auto button)
             autoButton.addActionListener(e -> {
@@ -146,8 +152,9 @@ class CategoricalCalcs extends JFrame{
             });
             
             mortgageButton.addActionListener(e -> {
-                // Define what happens when the Mortgage & Real Estate button is clicked
-                JOptionPane.showMessageDialog(null, "Mortgage & Real Estate Calculator Category Coming Soon!");
+                MortgageAndRealCategory MortgageAndRealCategoryFrame = new MortgageAndRealCategory();
+                MortgageAndRealCategoryFrame.setVisible(true);
+                dispose();
             });
             
             investmentButton.addActionListener(e -> {
@@ -160,6 +167,14 @@ class CategoricalCalcs extends JFrame{
                 CurrencyCalculator currencyFrame = new CurrencyCalculator();
                 currencyFrame.setVisible(true);
                 dispose();
+            });
+            
+            // Add action listener for the back button
+            backButton.addActionListener(e -> {
+                // Create a new instance of the main frame and make it visible
+                JavaApplication_X mainFrame = new JavaApplication_X();
+                mainFrame.setVisible(true);
+                dispose(); // Closes the current frame
             });
             
             // Initialize and load the images into labels
@@ -188,6 +203,255 @@ class CategoricalCalcs extends JFrame{
         protected void paintComponent(Graphics g){
             super.paintComponent(g);
             // Draw the background image
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+
+// New JFrame class for the Mortgage & Real Estate Category
+class MortgageAndRealCategory extends JFrame{
+    private final Image backgroundImage;
+    
+    public MortgageAndRealCategory(){
+    // Load the background image
+    backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/mortgage&real_background.jpg")).getImage();
+    
+    // Set up the JFrame
+    setTitle("Mortgage & Real Estate Category");
+    setSize(1200, 800); // Set the size of the new window
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
+    setLocationRelativeTo(null); // Center the window
+    
+    // Add the content panel with the background image
+    setContentPane(new ImagePanel());
+}
+        private class ImagePanel extends JPanel {
+        private final JButton backButton;
+        private final JLabel Mortgage_RealLabel;
+        private final JLabel rentBuyLabel;
+        private final JLabel mortgagecalculatorLabel;
+        private final JLabel houseaffordabilityLabel;
+        private final JLabel rentcalculatorLabel;
+        private final JLabel refinancecalculatorLabel;
+        private final JLabel downpaymentcalcLabel;
+        private final JLabel mortgagepayoffLabel;
+
+        public ImagePanel() {
+            setLayout(null); // Use null layout for absolute positioning
+
+            // Create a back button to return to the categorical page
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40); // Position the back button
+            add(backButton);
+            
+            // Add action listener for the back button
+            backButton.addActionListener(e -> {
+                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
+                categoricalFrame.setVisible(true);
+                dispose(); // Close the current frame
+            });
+            
+            // Create a JLabel for the title "Mortgage & Real Estate"
+            Mortgage_RealLabel = new JLabel("<html>Mortgage &<br>Real Estate</html>");
+            Mortgage_RealLabel.setFont(new Font("Times New Roman", Font.PLAIN, 60)); // Set font
+            Mortgage_RealLabel.setForeground(Color.BLACK); // Set label color to white
+            Mortgage_RealLabel.setBounds(100, 110, 350, 200); // Position and size of the label
+            add(Mortgage_RealLabel); // Add label to the panel
+            
+            // Create the access to rentvsBuy Calculator
+            rentBuyLabel = new JLabel("<html>&#8226; Rent vs. Buy Calculator</html>");
+            rentBuyLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            rentBuyLabel.setForeground(Color.BLACK); // Set text color
+            rentBuyLabel.setBounds(100, 350, 300, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            rentBuyLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    rentBuyLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Rent vs. Buy Calculator</span></html>");
+                }
+
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    rentBuyLabel.setText("<html>&#8226; Rent vs. Buy Calculator</html>");
+                }
+
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Rent vs. Buy Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(rentBuyLabel);
+            
+            // Create the access to mortgage Calculator
+            mortgagecalculatorLabel = new JLabel("<html>&#8226; Mortgage Calculator</html>");
+            mortgagecalculatorLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            mortgagecalculatorLabel.setForeground(Color.BLACK); // Set text color
+            mortgagecalculatorLabel.setBounds(100, 390, 300, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            mortgagecalculatorLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    mortgagecalculatorLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Mortgage Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    mortgagecalculatorLabel.setText("<html>&#8226; Mortgage Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Mortgage Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(mortgagecalculatorLabel);
+            
+            // Create the access to House Affordability Calculator
+            houseaffordabilityLabel = new JLabel("<html>&#8226; House Affordability Calculator</html>");
+            houseaffordabilityLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            houseaffordabilityLabel.setForeground(Color.BLACK); // Set text color
+            houseaffordabilityLabel.setBounds(100, 440, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            houseaffordabilityLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    houseaffordabilityLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; House Affordability Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    houseaffordabilityLabel.setText("<html>&#8226; House Affordability Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "House Affordability Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(houseaffordabilityLabel);
+            
+            // Create the access to Rent Calculator
+            rentcalculatorLabel = new JLabel("<html>&#8226; Rent Calculator</html>");
+            rentcalculatorLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            rentcalculatorLabel.setForeground(Color.BLACK); // Set text color
+            rentcalculatorLabel.setBounds(100, 490, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            rentcalculatorLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    rentcalculatorLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Rent Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    rentcalculatorLabel.setText("<html>&#8226; Rent Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Rent Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(rentcalculatorLabel);
+            
+            // Create the access to Refinance Calculator
+            refinancecalculatorLabel = new JLabel("<html>&#8226; Refinance Calculator</html>");
+            refinancecalculatorLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            refinancecalculatorLabel.setForeground(Color.BLACK); // Set text color
+            refinancecalculatorLabel.setBounds(100, 540, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            refinancecalculatorLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    refinancecalculatorLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Refinance Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    refinancecalculatorLabel.setText("<html>&#8226; Refinance Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Refinance Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(refinancecalculatorLabel);
+            
+            // Create the access to Down Payment Calculator
+            downpaymentcalcLabel = new JLabel("<html>&#8226; Down Payment Calculator</html>");
+            downpaymentcalcLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            downpaymentcalcLabel.setForeground(Color.BLACK); // Set text color
+            downpaymentcalcLabel.setBounds(100, 590, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            downpaymentcalcLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    downpaymentcalcLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Down Payment Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    downpaymentcalcLabel.setText("<html>&#8226; Down Payment Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Down Payment Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(downpaymentcalcLabel);
+            
+            // Create the access to Mortgage Payoff Calculator
+            mortgagepayoffLabel = new JLabel("<html>&#8226; Mortgage Payoff Calculator</html>");
+            mortgagepayoffLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font size and style
+            mortgagepayoffLabel.setForeground(Color.BLACK); // Set text color
+            mortgagepayoffLabel.setBounds(100, 640, 400, 50); // Adjust position and size
+            
+            // Add mouse listener to make the label look like a link on hover
+            mortgagepayoffLabel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent evt) {
+                    // Change to link style when mouse hovers over
+                    mortgagepayoffLabel.setText("<html><span style='color: blue; text-decoration: underline;'>&#8226; Mortgage Payoff Calculator</span></html>");
+                }
+                @Override
+                public void mouseExited(MouseEvent evt) {
+                    // Revert to normal style when mouse exits
+                    mortgagepayoffLabel.setText("<html>&#8226; Mortgage Payoff Calculator </html>");
+                }
+                @Override
+                public void mouseClicked(MouseEvent evt) {
+                    // Show message when clicked
+                    JOptionPane.showMessageDialog(null, "Mortgage Payoff Calculator will come soon");
+                }
+            });
+            // Add the label to the panel
+            add(mortgagepayoffLabel);
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
@@ -224,6 +488,7 @@ class CurrencyCalculator extends JFrame{
     
     // Inner class to handle the background image panel
         private class ImagePanel extends JPanel {
+            private final JButton backButton; // Back button
             private final JLabel titleLabel;
             private final JLabel resultsLabel;
             private final JLabel amountLabel;
@@ -237,6 +502,19 @@ class CurrencyCalculator extends JFrame{
             
             public ImagePanel() {
                 setLayout(null); // Use null layout for custom positioning
+                
+                // Create a back button to come back to categorical page
+                backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png"))); // Load back button image
+                backButton.setBounds(1100, 10, 80, 40); // Position the back button (adjust size as necessary)
+                add(backButton);
+                
+                // Add action listener for the back button
+            backButton.addActionListener(e -> {
+                // Create a new instance of the CategoricalCalcs and make it visible
+                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
+                categoricalFrame.setVisible(true);
+                dispose(); // Closes the current frame
+            });
                 
                 // Create and set up the JLabel
                 titleLabel = new JLabel("Currency Calculator");
@@ -347,21 +625,37 @@ class CurrencyCalculator extends JFrame{
                 // Function for the currency calculator
                 private void performCurrencyConversion() {
                     try {
-                        double amount = Double.parseDouble(amountField.getText());
+                        String amountText = amountField.getText();
+                        // Check if the amount is empty
+                        if (amountText.trim().isEmpty()) {
+                            showError("Please enter an amount.");
+                            amountField.setForeground(Color.BLACK); // Change text color to red
+                            return;
+                        }
+
+                        // Remove any spaces and replace comma with dot for parsing
+                        amountText = amountText.trim().replace(',', '.');
+
+                        // Attempt to parse the amount to a double
+                        double amount = Double.parseDouble(amountText);
+
+                        // Reset text color to black if input is valid
+                        amountField.setForeground(Color.BLACK);
+
                         String fromCurrency = fromCurrencyComboBox.getSelectedItem().toString();
                         String toCurrency = toCurrencyComboBox.getSelectedItem().toString();
 
                         // Get the exchange rate from the Open Exchange Rates API
                         double exchangeRateFromTo = getExchangeRate(fromCurrency, toCurrency);
                         double exchangeRateToFrom = getExchangeRate(toCurrency, fromCurrency);
-                        
+
                         double convertedAmountFromTo = amount * exchangeRateFromTo;
                         double convertedAmountToFrom = amount * exchangeRateToFrom;
 
                         // Update the two labels for the conversion results
                         resultExchangeLabel.setText(String.format("<html>%.2f %s = <b><font color='green'>%.4f</font></b> %s</html>", amount, fromCurrency, convertedAmountFromTo, toCurrency));
                         resultExchange2Label.setText(String.format("<html>%.2f %s = <b><font color='green'>%.4f</font></b> %s</html>", amount, toCurrency, convertedAmountToFrom, fromCurrency));
-                        
+
                         // Get the current date and time
                         LocalDateTime currentDateTime = LocalDateTime.now();
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM. dd, yyyy, HH:mm:ss");
@@ -373,11 +667,15 @@ class CurrencyCalculator extends JFrame{
                         timestampLabel.setText("The results above are based on the " + formattedDateTime + " exchange rate from openexchangerates.org.");
 
                     } catch (NumberFormatException e) {
-                        resultExchangeLabel.setText("Please enter a valid amount.");
-                        resultExchangeLabel.setText(""); // Clear second label if input is invalid
+                        showError("Please enter a valid numerical amount. Correct format: 123.45");
+                        amountField.setForeground(Color.BLACK); // Change text color to red
                     }
                 }
-               
+
+// Method to show error messages
+private void showError(String message) {
+    JOptionPane.showMessageDialog(this, message, "Input Error", JOptionPane.ERROR_MESSAGE);
+}
         private double getExchangeRate(String fromCurrency, String toCurrency) {
             try {
                 // Replace 'YOUR_APP_ID' with your actual app id from Open Exchange Rates
