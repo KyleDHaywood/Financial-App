@@ -15,6 +15,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.text.DecimalFormat;
 import org.json.JSONObject;
 
 public class JavaApplication_X extends JFrame {
@@ -276,8 +277,9 @@ class AutoCategory extends JFrame{
                 }
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Auto Loan Calculator will come soon");
+                    Auto_loan_calculator Auto_loan_calculatorFrame = new Auto_loan_calculator();
+                    Auto_loan_calculatorFrame.setVisible(true);
+                    dispose();
                 }
             });
             // Add the label to the panel
@@ -729,6 +731,154 @@ class InvestmentCategory extends JFrame{
         }
     }
 }
+
+// New JFrame class for the Auto Loan calculator
+class Auto_loan_calculator extends JFrame{
+    private final Image backgroundImage;
+
+    private JTextField loanAmountField;
+    private JTextField interestRateField;
+    private JTextField loanTermField;
+    private JLabel resultLabel;
+
+    public Auto_loan_calculator() {
+        // Load the background image
+        backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/auto_loan_cal_background.jpg")).getImage();
+
+        // Set up the JFrame
+        setTitle("Auto Loan Calculator");
+        setSize(1200, 800);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
+        // Add content to the JFrame (background panel)
+        setContentPane(new ImagePanel());
+    }
+
+    // Inner class to handle the background image panel
+    private class ImagePanel extends JPanel {
+        private final JButton backButton;
+        private final JLabel titleLabel;
+        private final JLabel loanAmountLabel;
+        private final JLabel interestRateLabel;
+        private final JLabel loanTermLabel;
+        private final JButton calculateButton;
+        private final JButton clearButton;
+
+        public ImagePanel() {
+            setLayout(null);
+
+            // Back button setup
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
+                categoricalFrame.setVisible(true);
+                dispose();
+            });
+
+            // Title label setup
+            titleLabel = new JLabel("Auto Loan Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(80, 70, 700, 100);
+            add(titleLabel);
+
+            // Loan Amount label and field setup
+            loanAmountLabel = new JLabel("Loan Amount:");
+            loanAmountLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            loanAmountLabel.setBounds(75, 250, 200, 30);
+            add(loanAmountLabel);
+
+            loanAmountField = new JTextField();
+            loanAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            loanAmountField.setBounds(300, 250, 300, 40);
+            add(loanAmountField);
+
+            // Interest Rate label and field setup
+            interestRateLabel = new JLabel("Interest Rate (%):");
+            interestRateLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            interestRateLabel.setBounds(75, 350, 250, 30);
+            add(interestRateLabel);
+
+            interestRateField = new JTextField();
+            interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            interestRateField.setBounds(300, 350, 300, 40);
+            add(interestRateField);
+
+            // Loan Term label and field setup
+            loanTermLabel = new JLabel("Loan Term (Years):");
+            loanTermLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            loanTermLabel.setBounds(75, 450, 250, 30);
+            add(loanTermLabel);
+
+            loanTermField = new JTextField();
+            loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            loanTermField.setBounds(300, 450, 300, 40);
+            add(loanTermField);
+
+            // Calculate button setup
+            calculateButton = new JButton("Calculate");
+            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            calculateButton.setBounds(150, 550, 200, 50);
+            add(calculateButton);
+            calculateButton.addActionListener(e -> calculateMonthlyPayment());
+
+            // Clear button setup
+            clearButton = new JButton("Clear");
+            clearButton.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            clearButton.setBounds(400, 550, 150, 50);
+            add(clearButton);
+            clearButton.addActionListener(e -> clearFields());
+
+            // Result label setup
+            resultLabel = new JLabel("");
+            resultLabel.setFont(new Font("Times New Roman", Font.PLAIN, 34));
+            resultLabel.setBounds(75, 650, 700, 50);
+            resultLabel.setOpaque(true);
+            resultLabel.setBackground(new Color(184, 228, 202));
+            add(resultLabel);
+        }
+        @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+
+    // Method to calculate the monthly payment
+    private void calculateMonthlyPayment() {
+        try {
+            double loanAmount = Double.parseDouble(loanAmountField.getText());
+            double annualInterestRate = Double.parseDouble(interestRateField.getText());
+            int loanTermYears = Integer.parseInt(loanTermField.getText());
+
+            // Monthly interest rate
+            double monthlyInterestRate = (annualInterestRate / 100) / 12;
+            // Number of payments
+            int numberOfPayments = loanTermYears * 12;
+
+            // Monthly payment calculation
+            double monthlyPayment = (loanAmount * monthlyInterestRate) /
+                    (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
+
+            DecimalFormat df = new DecimalFormat("#.##");
+            resultLabel.setText("Monthly Payment: $" + df.format(monthlyPayment));
+        } catch (NumberFormatException e) {
+            resultLabel.setText("Please enter valid numbers.");
+        }
+    }
+
+    // Method to clear the input fields
+    private void clearFields() {
+        loanAmountField.setText("");
+        interestRateField.setText("");
+        loanTermField.setText("");
+        resultLabel.setText("");
+    }
+}
+
 
 // New JFrame class for the curency calculator
 class CurrencyCalculator extends JFrame{
