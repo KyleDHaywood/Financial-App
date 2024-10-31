@@ -500,8 +500,9 @@ class MortgageAndRealCategory extends JFrame{
                 }
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Mortgage Calculator will come soon");
+                    MortgageCalculator MortgageCalculatorFrame = new MortgageCalculator();
+                    MortgageCalculatorFrame.setVisible(true);
+                    dispose();
                 }
             });
             // Add the label to the panel
@@ -735,12 +736,19 @@ class InvestmentCategory extends JFrame{
 // New JFrame class for the Auto Loan calculator
 class Auto_loan_calculator extends JFrame{
     private final Image backgroundImage;
-
+    private final NumberFormat currencyFormat;
+    private JLabel result_monthly_pay_Label;
+    private JLabel results_Label;
     private JTextField loanAmountField;
     private JTextField interestRateField;
     private JTextField loanTermField;
-    private JLabel resultLabel;
-
+    private JTextField CashIncentivesField;
+    private JTextField downPaymentField;
+    private JTextField TradeInField;
+    private JTextField AmountOwedField;
+    private JTextField SalesTaxField;
+    private JTextField OtherFeeField;
+   
     public Auto_loan_calculator() {
         // Load the background image
         backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/auto_loan_cal_background.jpg")).getImage();
@@ -751,6 +759,9 @@ class Auto_loan_calculator extends JFrame{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         
+        // Create currency formatter for USD
+        currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+       
         // Add content to the JFrame (background panel)
         setContentPane(new ImagePanel());
     }
@@ -762,6 +773,12 @@ class Auto_loan_calculator extends JFrame{
         private final JLabel loanAmountLabel;
         private final JLabel interestRateLabel;
         private final JLabel loanTermLabel;
+        private final JLabel CashIncentivesLabel;
+        private final JLabel downPaymentLabel;
+        private final JLabel TradeInLabel;
+        private final JLabel AmountOwedLabel;
+        private final JLabel SaleTaxLabel;
+        private final JLabel otherFeeLabel;
         private final JButton calculateButton;
         private final JButton clearButton;
 
@@ -782,63 +799,179 @@ class Auto_loan_calculator extends JFrame{
             titleLabel = new JLabel("Auto Loan Calculator");
             titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
             titleLabel.setForeground(Color.BLACK);
-            titleLabel.setBounds(80, 70, 700, 100);
+            titleLabel.setBounds(175, 10, 800, 200);
             add(titleLabel);
+            
+            result_monthly_pay_Label = new JLabel("Monthly Pay: ");
+            result_monthly_pay_Label.setFont(new Font("Times New Roman", Font.BOLD, 36));
+            result_monthly_pay_Label.setForeground(Color.WHITE);
+            result_monthly_pay_Label.setBounds(580,190,500,40);
+            add(result_monthly_pay_Label);
 
             // Loan Amount label and field setup
-            loanAmountLabel = new JLabel("Loan Amount:");
-            loanAmountLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
-            loanAmountLabel.setBounds(75, 250, 200, 30);
+            loanAmountLabel = new JLabel("Auto Price");
+            loanAmountLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            loanAmountLabel.setBounds(50, 200, 200, 40);
             add(loanAmountLabel);
 
-            loanAmountField = new JTextField();
-            loanAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 32));
-            loanAmountField.setBounds(300, 250, 300, 40);
+            loanAmountField = new JTextField("$");
+            loanAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            loanAmountField.setBounds(320, 200, 200, 40);
+            loanAmountField.addFocusListener(new CurrencyFormatFocusListener());
             add(loanAmountField);
 
             // Interest Rate label and field setup
-            interestRateLabel = new JLabel("Interest Rate (%):");
-            interestRateLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
-            interestRateLabel.setBounds(75, 350, 250, 30);
+            interestRateLabel = new JLabel("Interest Rate:");
+            interestRateLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            interestRateLabel.setBounds(50, 250, 200, 40);
             add(interestRateLabel);
 
-            interestRateField = new JTextField();
-            interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 32));
-            interestRateField.setBounds(300, 350, 300, 40);
+            interestRateField = new JTextField("                                             %");
+            interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            interestRateField.setBounds(320, 250, 200, 40);
+            // Add a FocusListener to manage the % symbol
+            interestRateField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().trim() + "%");
+                    }
+                }
+            });
             add(interestRateField);
 
             // Loan Term label and field setup
-            loanTermLabel = new JLabel("Loan Term (Years):");
-            loanTermLabel.setFont(new Font("Times New Roman", Font.BOLD, 32));
-            loanTermLabel.setBounds(75, 450, 250, 30);
+            loanTermLabel = new JLabel("Loan Term (months): ");
+            loanTermLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            loanTermLabel.setBounds(50, 300, 200, 40);
             add(loanTermLabel);
 
-            loanTermField = new JTextField();
-            loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 32));
-            loanTermField.setBounds(300, 450, 300, 40);
+            loanTermField = new JTextField("");
+            loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            loanTermField.setBounds(320, 300, 200, 40);
             add(loanTermField);
+           
+            //cash incentives label and field
+            CashIncentivesLabel = new JLabel("Cash Incentives");
+            CashIncentivesLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            CashIncentivesLabel.setBounds(50, 350, 200, 40);
+            add(CashIncentivesLabel);
 
+            CashIncentivesField = new JTextField("$");
+            CashIncentivesField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            CashIncentivesField.setBounds(320, 350, 200, 40);
+            CashIncentivesField.addFocusListener(new CurrencyFormatFocusListener());
+            add(CashIncentivesField);
+           
+            //downpayment label and field
+            downPaymentLabel = new JLabel("Down Payment");
+            downPaymentLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            downPaymentLabel.setBounds(50, 400, 200, 40);
+            add(downPaymentLabel);
+
+            downPaymentField = new JTextField("$");
+            downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            downPaymentField.setBounds(320, 400, 200, 40);
+            downPaymentField.addFocusListener(new CurrencyFormatFocusListener());
+            add(downPaymentField);
+           
+            //tradeIn label and field
+            TradeInLabel = new JLabel("Trade-In Value");
+            TradeInLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            TradeInLabel.setBounds(50, 450, 200, 40);
+            add(TradeInLabel);
+
+            TradeInField = new JTextField("$");
+            TradeInField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            TradeInField.setBounds(320, 450, 200, 40);
+            TradeInField.addFocusListener(new CurrencyFormatFocusListener());
+            add(TradeInField);
+           
+            //amountowed label and field
+            AmountOwedLabel = new JLabel("<html>Amount Owed<br> on Trade-in</html>");
+            AmountOwedLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            AmountOwedLabel.setBounds(50, 500, 200, 40);
+            add(AmountOwedLabel);
+
+            AmountOwedField = new JTextField("$");
+            AmountOwedField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            AmountOwedField.setBounds(320, 500, 200, 40);
+            AmountOwedField.addFocusListener(new CurrencyFormatFocusListener());
+            add(AmountOwedField);
+           
+            //salesTax label and field
+            SaleTaxLabel = new JLabel("Sales Tax");
+            SaleTaxLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            SaleTaxLabel.setBounds(50, 550, 200, 40);
+            add(SaleTaxLabel);
+
+            SalesTaxField = new JTextField("                                             %");
+            SalesTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            SalesTaxField.setBounds(320, 550, 200, 40);
+            SalesTaxField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (SalesTaxField.getText().endsWith("%")) {
+                        SalesTaxField.setText(SalesTaxField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!SalesTaxField.getText().isEmpty() && !SalesTaxField.getText().endsWith("%")) {
+                        SalesTaxField.setText(SalesTaxField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(SalesTaxField);
+            
+            //fees label and field
+            otherFeeLabel = new JLabel("<html>Title, Registration<br>and Other Fees</html>");
+            otherFeeLabel.setFont(new Font("Times New Roman", Font.BOLD, 20));
+            otherFeeLabel.setBounds(50, 600, 200, 40);
+            add(otherFeeLabel);
+
+            OtherFeeField = new JTextField("$");
+            OtherFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+            OtherFeeField.setBounds(320, 600, 200, 40);
+            OtherFeeField.addFocusListener(new CurrencyFormatFocusListener());
+            add(OtherFeeField);
+            
+            //results labels with all
+            results_Label = new JLabel("");
+            results_Label.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            results_Label.setBounds(580,200,500,300);
+            results_Label.setForeground(Color.BLACK);
+            add(results_Label);
+            
             // Calculate button setup
             calculateButton = new JButton("Calculate");
-            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 32));
-            calculateButton.setBounds(150, 550, 200, 50);
+            calculateButton.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+            calculateButton.setBounds(120, 670, 175, 50);
+            calculateButton.setBackground(new Color(169, 223, 191)); // Set background color to green
             add(calculateButton);
             calculateButton.addActionListener(e -> calculateMonthlyPayment());
 
             // Clear button setup
             clearButton = new JButton("Clear");
-            clearButton.setFont(new Font("Times New Roman", Font.BOLD, 32));
-            clearButton.setBounds(400, 550, 150, 50);
+            clearButton.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+            clearButton.setBounds(310, 670, 130, 50);
+            clearButton.setForeground(Color.WHITE);
+            clearButton.setBackground(Color.GRAY);
             add(clearButton);
             clearButton.addActionListener(e -> clearFields());
 
-            // Result label setup
-            resultLabel = new JLabel("");
-            resultLabel.setFont(new Font("Times New Roman", Font.PLAIN, 34));
-            resultLabel.setBounds(75, 650, 700, 50);
-            resultLabel.setOpaque(true);
-            resultLabel.setBackground(new Color(184, 228, 202));
-            add(resultLabel);
         }
         @Override
             protected void paintComponent(Graphics g) {
@@ -846,36 +979,131 @@ class Auto_loan_calculator extends JFrame{
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
-
-    // Method to calculate the monthly payment
-    private void calculateMonthlyPayment() {
-        try {
-            double loanAmount = Double.parseDouble(loanAmountField.getText());
-            double annualInterestRate = Double.parseDouble(interestRateField.getText());
-            int loanTermYears = Integer.parseInt(loanTermField.getText());
-
-            // Monthly interest rate
-            double monthlyInterestRate = (annualInterestRate / 100) / 12;
-            // Number of payments
-            int numberOfPayments = loanTermYears * 12;
-
-            // Monthly payment calculation
-            double monthlyPayment = (loanAmount * monthlyInterestRate) /
-                    (1 - Math.pow(1 + monthlyInterestRate, -numberOfPayments));
-
-            DecimalFormat df = new DecimalFormat("#.##");
-            resultLabel.setText("Monthly Payment: $" + df.format(monthlyPayment));
-        } catch (NumberFormatException e) {
-            resultLabel.setText("Please enter valid numbers.");
+    
+    // FocusListener to format JTextField input as currency on focus loss
+    private class CurrencyFormatFocusListener extends FocusAdapter {
+        @Override
+        public void focusLost(FocusEvent e) {
+            JTextField source = (JTextField) e.getSource();
+            try {
+                // Parse and format the value as currency
+                double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                source.setText(currencyFormat.format(value));
+            } catch (NumberFormatException ex) {
+                source.setText(""); // Clear field if input is invalid
+            }
         }
     }
 
+    // Method to remove dollar signs and commas for parsing
+    private double parseDollarField(JTextField field) {
+        return Double.parseDouble(field.getText().replaceAll("[$,]", ""));
+    }
+
+    // Method to remove percent signs for parsing
+    private double parsePercentField(JTextField field) {
+        return Double.parseDouble(field.getText().replace("%", ""));
+    }
+
+   // Method to calculate the monthly payment
+// Method to calculate the monthly payment with input validation and error handling
+private void calculateMonthlyPayment() {
+    try {
+        // Step 1: Retrieve and parse the input values with error handling
+        double autoPrice = parseDollarField(loanAmountField);
+        if (autoPrice <= 0) throw new IllegalArgumentException("Auto Price must be positive.");
+
+        double loanTermMonths;
+        try {
+            loanTermMonths = Double.parseDouble(loanTermField.getText().trim());
+            if (loanTermMonths <= 0) throw new IllegalArgumentException("Loan term must be a positive number of months.");
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Loan Term must be a valid integer.");
+        }
+
+        double annualInterestRate;
+        try {
+            annualInterestRate = parsePercentField(interestRateField);
+            if (annualInterestRate < 0) throw new IllegalArgumentException("Interest Rate cannot be negative.");
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Interest Rate must be a valid number.");
+        }
+
+        double downPayment = parseDollarField(downPaymentField);
+        double tradeInValue = parseDollarField(TradeInField);
+        double amountOwedOnTradeIn = parseDollarField(AmountOwedField);
+
+        double salesTaxRate;
+        try {
+            salesTaxRate = parsePercentField(SalesTaxField);
+            if (salesTaxRate < 0) throw new IllegalArgumentException("Sales Tax Rate cannot be negative.");
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Sales Tax must be a valid number.");
+        }
+
+        double titleRegistrationFees = parseDollarField(OtherFeeField);
+        double cashIncentives = parseDollarField(CashIncentivesField);
+
+        // Step 2: Apply sales tax and other adjustments to calculate loan amount
+        double autoLoanPayment = autoPrice - downPayment - tradeInValue + amountOwedOnTradeIn - cashIncentives;
+        double salesTaxAmount = (autoPrice - tradeInValue) * (salesTaxRate / 100);
+        double autoLoanPaymentFees = autoLoanPayment + salesTaxAmount + titleRegistrationFees;
+        double totalLoanAmount = autoLoanPaymentFees;
+
+        // Step 3: Monthly interest rate
+        double monthlyInterestRate = (annualInterestRate / 100) / 12;
+
+        // Step 4: Calculate monthly payment with fees included
+        double paymentWithFees;
+        if (monthlyInterestRate == 0) {
+            paymentWithFees = autoLoanPaymentFees / loanTermMonths;
+        } else {
+            paymentWithFees = (autoLoanPaymentFees * monthlyInterestRate) /
+                              (1 - Math.pow(1 + monthlyInterestRate, -loanTermMonths));
+        }
+        paymentWithFees = Math.round(paymentWithFees * 100) / 100.0;
+
+        // Additional Calculations
+        double totalPayments = paymentWithFees * loanTermMonths;  // Total of all monthly payments
+        double totalLoanInterest = totalPayments - totalLoanAmount;  // Total interest paid
+        double totalCost = autoPrice + totalLoanInterest + salesTaxAmount + titleRegistrationFees;  // Overall cost including interest, tax, and fees
+        double upfrontPayment = downPayment;  // Upfront payment
+
+        // Step 5: Display the results in the result label
+        result_monthly_pay_Label.setText("Monthly Payment: " + currencyFormat.format(paymentWithFees));
+
+        // Display additional results
+        results_Label.setText(
+            "<html>" +
+            "<p>Total Loan Amount: " + currencyFormat.format(totalLoanAmount) + "</p>" +
+            "<p>Sales Tax: " + currencyFormat.format(salesTaxAmount) + "</p>" +
+            "<p>Upfront Payment: " + currencyFormat.format(upfrontPayment) + "</p>" +
+            "<p>Total of " + (int)loanTermMonths + " Loan Payments: " + currencyFormat.format(totalPayments) + "</p>" +
+            "<p>Total Loan Interest: " + currencyFormat.format(totalLoanInterest) + "</p>" +
+            "<p>Total Cost (Price, Interest, Tax, Fees): " + currencyFormat.format(totalCost) + "</p>" +
+            "</html>"
+        );
+    } catch (IllegalArgumentException ex) {
+        // Display error message if any input is invalid
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception ex) {
+        // Display general error message for unexpected exceptions
+        JOptionPane.showMessageDialog(this, "An error occurred during calculation. Please check all inputs.", "Calculation Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
     // Method to clear the input fields
     private void clearFields() {
-        loanAmountField.setText("");
-        interestRateField.setText("");
+        loanAmountField.setText("$");
+        interestRateField.setText("                                             %");
         loanTermField.setText("");
-        resultLabel.setText("");
+        result_monthly_pay_Label.setText("Monthly Pay: ");
+        CashIncentivesField.setText("$");
+        downPaymentField.setText("$");
+        TradeInField.setText("$");
+        AmountOwedField.setText("$");
+        SalesTaxField.setText("                                             %");
+        OtherFeeField.setText("$");
+        results_Label.setText("");
     }
 }
 
@@ -889,8 +1117,29 @@ class CurrencyCalculator extends JFrame{
     private JComboBox<String> toCurrencyComboBox;
     private JLabel resultsLabel;
     
-     // Currency codes and names
+    // Currency codes and names
     private final String[] currencyCodes = {
+        "AUD: Australian Dollar", 
+        "BRL: Brazilian Real", 
+        "BTC: Bitcoin", 
+        "CAD: Canadian Dollar", 
+        "CHF: Swiss Franc", 
+        "CNY: Chinese Yuan", 
+        "EUR: Euro", 
+        "GBP: British Pound", 
+        "HKD: Hong Kong Dollar", 
+        "INR: Indian Rupee", 
+        "JPY: Japanese Yen", 
+        "KRW: South Korean Won", 
+        "MXN: Mexican Peso", 
+        "RUB: Russian Ruble", 
+        "SGD: Singapore Dollar", 
+        "USD: United States Dollar", 
+        "ZAR: South African Rand"
+    };
+    
+    // Currency codes extracted from full names for conversion
+    private final String[] currencyCodesOnly = {
         "AUD", "BRL", "BTC", "CAD", "CHF", "CNY", "EUR", "GBP", "HKD", 
         "INR", "JPY", "KRW", "MXN", "RUB", "SGD", "USD", "ZAR"
     };
@@ -928,7 +1177,7 @@ class CurrencyCalculator extends JFrame{
                 
                 // Create a back button to come back to categorical page
                 backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png"))); // Load back button image
-                backButton.setBounds(1100, 10, 80, 40); // Position the back button (adjust size as necessary)
+                backButton.setBounds(20, 20, 80, 40); // Position the back button (adjust size as necessary)
                 add(backButton);
                 
                 // Add action listener for the back button
@@ -943,7 +1192,7 @@ class CurrencyCalculator extends JFrame{
                 titleLabel = new JLabel("Currency Calculator");
                 titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60)); // Set font
                 titleLabel.setForeground(Color.BLACK); // Set label color to white
-                titleLabel.setBounds(80, 70, 700, 100); // Position and size of the label
+                titleLabel.setBounds(180, 70, 700, 100); // Position and size of the label
                 add(titleLabel); // Add label to the panel
                 
                 // Create and set up the "Results" JLabel
@@ -988,7 +1237,7 @@ class CurrencyCalculator extends JFrame{
                 // Create an input field for amount
                 amountField = new JTextField();
                 amountField.setFont(new Font("Times New Roman", Font.PLAIN, 32));
-                amountField.setBounds(220, 250, 300, 40);
+                amountField.setBounds(220, 250, 350, 40);
                 add(amountField);
 
                 // Create and set up the "From" JLabel
@@ -1000,8 +1249,8 @@ class CurrencyCalculator extends JFrame{
                 
                 // Create an input field from
                 fromCurrencyComboBox = new JComboBox<>(currencyCodes);
-                fromCurrencyComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 32));
-                fromCurrencyComboBox.setBounds(220, 350, 300, 40);
+                fromCurrencyComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+                fromCurrencyComboBox.setBounds(220, 350, 350, 40);
                 add(fromCurrencyComboBox);
 
                 // Create and set up the "To" JLabel
@@ -1013,8 +1262,8 @@ class CurrencyCalculator extends JFrame{
                 
                 // Create an input to
                 toCurrencyComboBox = new JComboBox<>(currencyCodes);
-                toCurrencyComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 32));
-                toCurrencyComboBox.setBounds(220, 450, 300, 40);
+                toCurrencyComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+                toCurrencyComboBox.setBounds(220, 450, 350, 40);
                 add(toCurrencyComboBox);
 
                 // Create and set up the "Calculate" JButton
@@ -1061,12 +1310,19 @@ class CurrencyCalculator extends JFrame{
 
                         // Attempt to parse the amount to a double
                         double amount = Double.parseDouble(amountText);
+                        
+                        // Check if the amount is negative
+                        if (amount < 0) {
+                            showError("Amount cannot be negative. Please enter a positive amount.");
+                            amountField.setForeground(Color.BLACK); // Reset text color
+                            return;
+                        }
 
                         // Reset text color to black if input is valid
                         amountField.setForeground(Color.BLACK);
 
-                        String fromCurrency = fromCurrencyComboBox.getSelectedItem().toString();
-                        String toCurrency = toCurrencyComboBox.getSelectedItem().toString();
+                        String fromCurrency = fromCurrencyComboBox.getSelectedItem().toString().split(":")[0];;
+                        String toCurrency = toCurrencyComboBox.getSelectedItem().toString().split(":")[0];;
 
                         // Get the exchange rate from the Open Exchange Rates API
                         double exchangeRateFromTo = getExchangeRate(fromCurrency, toCurrency);
@@ -1143,6 +1399,408 @@ private void showError(String message) {
             }
     }
 }
+
+// New JFrame class for the Mortgage calculator
+public class MortgageCalculator extends JFrame {
+    private final Image backgroundImage;
+    private final NumberFormat currencyFormat;
+    private JTextField loanAmountField, interestRateField, loanTermField, downPaymentField, yearField;
+    private JLabel monthlyPayResultLabel, HomePriceLabel,HomePriceResultLabel,resultLabel;
+    private JComboBox symbolsComboBox, monthField;
+    
+    public MortgageCalculator() {
+        backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/mortgageCalculator_background.png")).getImage();
+        
+        setTitle("Mortgage Calculator");
+        setSize(1200, 800);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        // Create currency formatter for USD
+        currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        
+        setContentPane(new ImagePanel());
+    }
+
+    private class ImagePanel extends JPanel {
+        private final JButton backButton, calculateButton, clearButton;
+        private final JLabel titleLabel, loanAmountLabel,downPaymentLabel, interestRateLabel, loanTermLabel, yearLabel, startDateLabel;
+        
+        // ComboBox symbols $ and % creation
+            private final String[] symbolsOptions = {
+                "%", "$"};
+        
+        // ComboBox for months
+            private final String[] months = {
+                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+            };
+            
+            
+        public ImagePanel() {
+            setLayout(null);
+
+            titleLabel = new JLabel("Mortgage Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(170, 50, 800, 200);
+            add(titleLabel);
+
+            loanAmountLabel = new JLabel("Home Price: ");
+            loanAmountLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            loanAmountLabel.setBounds(95, 250, 250, 40);
+            add(loanAmountLabel);
+
+            loanAmountField = new JTextField("$");
+            loanAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            loanAmountField.setBounds(300, 250, 200, 40);
+            loanAmountField.addFocusListener(new CurrencyFormatFocusListener());
+            add(loanAmountField);
+            
+            downPaymentLabel = new JLabel("Down Payment: ");
+            downPaymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            downPaymentLabel.setBounds(95, 310, 250, 40);
+            add(downPaymentLabel);
+            
+            downPaymentField = new JTextField("                                    %");
+            downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            downPaymentField.setBounds(300, 310, 200, 40);
+            // Add a FocusListener to manage the % symbol
+            downPaymentField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (downPaymentField.getText().endsWith("%")) {
+                        downPaymentField.setText(downPaymentField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!downPaymentField.getText().isEmpty() && !downPaymentField.getText().endsWith("%")) {
+                        downPaymentField.setText(downPaymentField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(downPaymentField);
+            
+            // ComboBox symbols for down payment
+            symbolsComboBox = new JComboBox<>(symbolsOptions);
+            symbolsComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
+            symbolsComboBox.setBounds(510, 310, 60, 40);
+            add(symbolsComboBox);
+            
+            // ActionListener for ComboBox
+            symbolsComboBox.addActionListener((ActionEvent e) -> {
+                String selectedFormat = (String) symbolsComboBox.getSelectedItem();
+                String text = downPaymentField.getText().replaceAll("[^\\d.]", ""); // Remove previous symbols
+
+                try {
+                    if ("%".equals(selectedFormat)) {
+                        // Convert dollar amount to percentage based on loan amount
+                        double loanAmount = Double.parseDouble(loanAmountField.getText().replace("$", "").replace(",", "").trim());
+                        double value = text.isEmpty() ? 0 : Double.parseDouble(text);
+                        double percentage = (value / loanAmount) * 100;
+                        downPaymentField.setText(String.format("%.2f%%", percentage));
+                    } else if ("$".equals(selectedFormat)) {
+                        // Convert percentage to dollar amount based on loan amount
+                        double loanAmount = Double.parseDouble(loanAmountField.getText().replace("$", "").replace(",", "").trim());
+                        double percentageValue = text.isEmpty() ? 0 : Double.parseDouble(text);
+                        double dollarValue = (percentageValue / 100) * loanAmount;
+                        downPaymentField.setText(NumberFormat.getCurrencyInstance().format(dollarValue));
+                    }
+                } catch (NumberFormatException ex) {
+                    downPaymentField.setText("0.00");
+                }
+            });
+
+            // Add FocusListener to manage the % symbol
+            downPaymentField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (downPaymentField.getText().endsWith("%")) {
+                        downPaymentField.setText(downPaymentField.getText().replace("%", "").trim());
+                    } else if (downPaymentField.getText().startsWith("$")) {
+                        // Remove $ when field is clicked for editing
+                        downPaymentField.setText(downPaymentField.getText().replace("$", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    String selectedFormat = (String) symbolsComboBox.getSelectedItem();
+                    String text = downPaymentField.getText().replaceAll("[^\\d.]", "").trim();
+
+                    if ("%".equals(selectedFormat) && !text.isEmpty()) {
+                        // Append % when focus is lost and "%" is selected
+                        downPaymentField.setText(text + "%");
+                    } else if ("$".equals(selectedFormat) && !text.isEmpty()) {
+                        // Format as currency with "$" symbol
+                        double value = Double.parseDouble(text);
+                        downPaymentField.setText(NumberFormat.getCurrencyInstance().format(value));
+                    }
+                }
+            });
+            
+            loanTermLabel = new JLabel("Loan Term: ");
+            loanTermLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            loanTermLabel.setBounds(95, 370, 250, 40);
+            add(loanTermLabel);
+
+            loanTermField = new JTextField();
+            loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            loanTermField.setBounds(300, 370, 200, 40);
+            add(loanTermField);
+            
+            yearLabel = new JLabel("years");
+            yearLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            yearLabel.setBounds(510, 370, 100, 40);
+            add(yearLabel);
+            
+            interestRateLabel = new JLabel("Interest Rate: ");
+            interestRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            interestRateLabel.setBounds(95, 430, 250, 40);
+            add(interestRateLabel);
+
+            interestRateField = new JTextField("                                    %");
+            interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            interestRateField.setBounds(300, 430, 200, 40);
+            // Add a FocusListener to manage the % symbol
+            interestRateField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(interestRateField);
+            
+            startDateLabel = new JLabel("Start Date ");
+            startDateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            startDateLabel.setBounds(95, 490, 250, 40);
+            add(startDateLabel);
+            
+            monthField = new JComboBox<>(months);
+            monthField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            monthField.setBounds(300, 490, 80, 40);
+            add(monthField);
+            
+            yearField = new JTextField("");
+            yearField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            yearField.setBounds(400, 490, 80, 40);
+            add(yearField);
+            
+            calculateButton = new JButton("Calculate");
+            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            calculateButton.setForeground(Color.BLACK); // Set text color to black
+            calculateButton.setBackground(new Color(169, 223, 191)); // Set background color to green
+            calculateButton.setBounds(130, 600, 230, 60); // Position and size of the button
+            calculateButton.addActionListener(e -> calculateMonthlyPayment());
+            add(calculateButton); // Add button to the panel
+
+            clearButton = new JButton("Clear");
+            clearButton.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font
+            clearButton.setForeground(Color.WHITE); // Set text color to white
+            clearButton.setBackground(Color.GRAY); // Set background color to gray
+            clearButton.setBounds(390, 600, 140, 60);
+            add(clearButton);
+            clearButton.addActionListener(e -> clearFields());
+
+            monthlyPayResultLabel = new JLabel("Monthly Payment: ");
+            monthlyPayResultLabel.setFont(new Font("Times New Roman", Font.BOLD, 34));
+            monthlyPayResultLabel.setBounds(640, 240, 520, 50);
+            monthlyPayResultLabel.setForeground(Color.WHITE);
+            monthlyPayResultLabel.setBackground(Color.WHITE);
+            add(monthlyPayResultLabel);
+            
+            HomePriceLabel = new JLabel(" Home Price");
+            HomePriceLabel.setFont(new Font("Times New Roman", Font.BOLD, 24));
+            HomePriceLabel.setBackground(new Color(169, 223,191));
+            HomePriceLabel.setOpaque(true); // Make label opaque to show background color
+            HomePriceLabel.setBounds(630, 320, 300, 50);
+            HomePriceLabel.setForeground(Color.BLACK);
+            add(HomePriceLabel);
+            
+            HomePriceResultLabel = new JLabel("");
+            HomePriceResultLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+            HomePriceResultLabel.setBackground(new Color(169, 223,191));
+            HomePriceResultLabel.setOpaque(true); // Make label opaque to show background color
+            HomePriceResultLabel.setBounds(955, 320, 195, 50);
+            HomePriceResultLabel.setForeground(Color.BLACK);
+            add(HomePriceResultLabel);
+            
+            resultLabel = new JLabel("<html>"
+                    + "Loan Amount:<br><br>"
+                    + "Down Payment:<br><br>"
+                    + "Total of # Mortgage Payments: <br><br>"
+                    + "Total Interest:<br><br>"
+                    + "Mortgage Payoff Date:"
+                    + "</html>");
+            resultLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            resultLabel.setBounds(630, 340, 520, 300);
+            add(resultLabel);
+
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
+                categoricalFrame.setVisible(true);
+                dispose();
+            });
+        }
+        
+        // FocusListener to format JTextField input as currency on focus loss
+        private class CurrencyFormatFocusListener extends FocusAdapter {
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField source = (JTextField) e.getSource();
+                try {
+                    // Parse and format the value as currency
+                    double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                    source.setText(currencyFormat.format(value));
+                } catch (NumberFormatException ex) {
+                    source.setText(""); // Clear field if input is invalid
+                }
+            }
+        }
+ 
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+    
+    private void calculateMonthlyPayment() {
+    try {
+        // Validate loan amount field
+        if (loanAmountField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Loan Amount field is empty. Please enter a value.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        double loanAmount = Double.parseDouble(loanAmountField.getText().replaceAll("[$,]", ""));
+        if (loanAmount <= 0) {
+            JOptionPane.showMessageDialog(this, "Loan Amount must be a positive number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate interest rate field
+        if (interestRateField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Interest Rate field is empty. Please enter a value.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        double interestRate = Double.parseDouble(interestRateField.getText().replaceAll("[%]", "")) / 100;
+        if (interestRate < 0) {
+            JOptionPane.showMessageDialog(this, "Interest Rate cannot be negative.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate loan term field
+        if (loanTermField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Loan Term field is empty. Please enter a value.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int loanTermYears = Integer.parseInt(loanTermField.getText());
+        if (loanTermYears <= 0) {
+            JOptionPane.showMessageDialog(this, "Loan Term must be a positive number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int loanTermMonths = loanTermYears * 12;
+
+        // Validate down payment field
+        if (downPaymentField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Down Payment field is empty. Please enter a value.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String downPaymentText = downPaymentField.getText();
+        double downPaymentAmount = 0.0;
+
+        if (downPaymentText.endsWith("%")) {
+            double downPaymentPercentage = Double.parseDouble(downPaymentText.replace("%", "").trim());
+            if (downPaymentPercentage < 0) {
+                JOptionPane.showMessageDialog(this, "Down Payment percentage cannot be negative.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            downPaymentAmount = loanAmount * (downPaymentPercentage / 100);
+        } else if (downPaymentText.startsWith("$")) {
+            downPaymentAmount = Double.parseDouble(downPaymentText.replaceAll("[$,]", "").trim());
+            if (downPaymentAmount < 0) {
+                JOptionPane.showMessageDialog(this, "Down Payment amount cannot be negative.", "Input Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        // Calculate loan amount after down payment
+        double loanAmountAfterDownPayment = loanAmount - downPaymentAmount;
+
+        // Monthly interest rate
+        double monthlyInterestRate = interestRate / 12;
+
+        // Monthly payment calculation
+        double monthlyPayment;
+        if (monthlyInterestRate > 0) {
+            monthlyPayment = (loanAmountAfterDownPayment * monthlyInterestRate) /
+                    (1 - Math.pow(1 + monthlyInterestRate, -loanTermMonths));
+        } else {
+            monthlyPayment = loanAmountAfterDownPayment / loanTermMonths;
+        }
+
+        // Total interest and final payoff date
+        double totalPayment = monthlyPayment * loanTermMonths;
+        double totalInterest = totalPayment - loanAmountAfterDownPayment;
+        String payoffDate = "In " + loanTermYears + " years";
+
+        // Display the formatted result with HTML layout
+        resultLabel.setText("<html>"
+                + "Loan Amount: " + currencyFormat.format(loanAmount) + "<br><br>"
+                + "Down Payment: " + currencyFormat.format(downPaymentAmount) + "<br><br>"
+                + "Total of " + loanTermMonths + " Mortgage Payments: " + currencyFormat.format(totalPayment) + "<br><br>"
+                + "Total Interest: " + currencyFormat.format(totalInterest) + "<br><br>"
+                + "Mortgage Payoff Date: " + payoffDate
+                + "</html>");
+                
+        // Update the monthly payment label specifically
+        monthlyPayResultLabel.setText("Monthly Payment: " + currencyFormat.format(monthlyPayment));
+        HomePriceResultLabel.setText(" " + currencyFormat.format(loanAmount));
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid input detected. Please ensure all fields contain valid numeric values.", "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    
+    private void clearFields() {
+        loanAmountField.setText("");
+        interestRateField.setText("");
+        loanTermField.setText("");
+        resultLabel.setText("<html>"
+                    + "Loan Amount:<br><br>"
+                    + "Down Payment:<br><br>"
+                    + "Total of # Mortgage Payments: <br><br>"
+                    + "Total Interest:<br><br>"
+                    + "Mortgage Payoff Date:"
+                    + "</html>");
+        downPaymentField.setText("                                    %");
+        yearField.setText("");
+        symbolsComboBox.setSelectedIndex(0);
+        monthField.setSelectedIndex(0);
+        monthlyPayResultLabel.setText("Monthly Payment: ");
+    }
+}
+
 
 // New JFrame class for the House Affordability calculator
 class HouseAffordabilityCalc extends JFrame{
@@ -1674,7 +2332,8 @@ class HouseAffordabilityCalc extends JFrame{
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
    } 
-        // FocusListener to format JTextField input as currency on focus loss
+    
+    // FocusListener to format JTextField input as currency on focus loss
     private class CurrencyFormatFocusListener extends FocusAdapter {
         @Override
         public void focusLost(FocusEvent e) {
