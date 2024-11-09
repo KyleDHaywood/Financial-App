@@ -473,8 +473,9 @@ class MortgageAndRealCategory extends JFrame{
 
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Rent vs. Buy Calculator will come soon");
+                    RentVsBuyCalculator RentVsBuyCalculatorFrame = new RentVsBuyCalculator();
+                    RentVsBuyCalculatorFrame.setVisible(true);
+                    dispose();
                 }
             });
             // Add the label to the panel
@@ -1108,6 +1109,884 @@ private void calculateMonthlyPayment() {
 }
 
 
+// New JFrame class for the currency calculator
+class RentVsBuyCalculator extends JFrame{
+    private final Image backgroundImage;
+    private final NumberFormat currencyFormat;
+    private JComboBox TaxStatusComboBox;
+    private JTextField homePriceField, downPaymentField, interestRateField;
+    private JTextField loanTermField, buyingClosingField, propertyTaxField;
+    private JTextField propertyTaxIncreaseField, homeInsuranceField, HOAFeeField;
+    private JTextField maintenanceCostField,homeValueField, CostIncreaseField, sellingCostsField;
+    private JTextField monthlyRentalFeeField, rentalFeeIncreaseField, renterInsuranceField,securityDepositField, upfrontCostField;
+    private JTextField averageReturnField, marginalFederalField,marginalStateField;
+    private JButton calculateButton, clearButton;
+    
+    public RentVsBuyCalculator() {
+       // Load the background image
+       backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/RentVsBuyCalculator_background.jpg")).getImage();
+       // Set up the JFrame
+        setTitle("Rent Vs. Buy Calculator");
+        setSize(1200, 800);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        
+        // Create currency formatter for USD
+        currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+       
+        // Add content to the JFrame (background panel)
+        setContentPane(new ImagePanel());
+    }
+    
+    // Inner class to handle the background image panel
+    private class ImagePanel extends JPanel{
+        private final JButton backButton;
+        private final JLabel titleLabel, homePurchaseLabel, homeRentLabel, infoLabel;
+        private final JLabel homePriceLabel, downPaymentLabel, interestRateLabel, loanTermLabel,
+                buyingClosingLabel, propertyTaxLabel, propertyTaxIncreaseLabel, homeInsuranceLabel, HOAFeeLabel, maintenanceCostLabel,
+                homeValueAppreciationLabel, costIncreaseLabel, sellingCostsLabel;
+        private final JLabel monthlyRentalFeeLabel, rentalFeeIncreaseLabel, renterInsuranceLabel, securityDepositLabel, upfrontCostLabel;
+        private final JLabel averageReturnLabel, marginalFederalLabel, marginalStateLabel, taxFilingLabel;
+        
+        
+        private final String[] TaxStatusOptions = {
+            "single", "married filing jointly",
+            "married filing separately", "head of household",
+            "qualified widow"
+        }; 
+        
+        public ImagePanel(){
+            setLayout(null);
+            
+            // Back button setup
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                MortgageAndRealCategory MortgageAndRealCategoryFrame = new MortgageAndRealCategory();
+                MortgageAndRealCategoryFrame.setVisible(true);
+                dispose();
+            });
+            
+            // Title label setup
+            titleLabel = new JLabel("Rent Vs. Buy Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(175, 10, 800, 200);
+            add(titleLabel);
+            
+            // Home purchase label setup
+            homePurchaseLabel = new JLabel("Home Purchase");
+            homePurchaseLabel.setFont(new Font("Times New Roman", Font.BOLD, 28));
+            homePurchaseLabel.setForeground(Color.WHITE);
+            homePurchaseLabel.setBounds(55,180,250,40);
+            add(homePurchaseLabel);
+            
+            // Home Renr label setup
+            homeRentLabel = new JLabel("Home Rent");
+            homeRentLabel.setFont(new Font("Times New Roman", Font.BOLD, 28));
+            homeRentLabel.setForeground(Color.WHITE);
+            homeRentLabel.setBounds(590,180,250,40);
+            add(homeRentLabel);
+            
+            // Your Information label setup
+            infoLabel = new JLabel("Your Information");
+            infoLabel.setFont(new Font("Times New Roman", Font.BOLD, 26));
+            infoLabel.setForeground(Color.WHITE);
+            infoLabel.setBounds(590,440,250,40);
+            add(infoLabel);
+            
+            // home price label setup
+            homePriceLabel = new JLabel("Home price");
+            homePriceLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            homePriceLabel.setForeground(Color.BLACK);
+            homePriceLabel.setBounds(50,220,220,40);
+            add(homePriceLabel);
+            
+            // down payment label setup
+            downPaymentLabel = new JLabel("Down payment");
+            downPaymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            downPaymentLabel.setForeground(Color.BLACK);
+            downPaymentLabel.setBounds(50,260,220,40);
+            add(downPaymentLabel);
+            
+            // Interest rate label setup
+            interestRateLabel = new JLabel("Interest rate");
+            interestRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            interestRateLabel.setForeground(Color.BLACK);
+            interestRateLabel.setBounds(50,300,220,40);
+            add(interestRateLabel);
+            
+            // Loan term label setup
+            loanTermLabel = new JLabel("Loan term");
+            loanTermLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            loanTermLabel.setForeground(Color.BLACK);
+            loanTermLabel.setBounds(50,340,220,40);
+            add(loanTermLabel);
+            
+            // Buying closing costs label setup
+            buyingClosingLabel = new JLabel("Buying closing costs");
+            buyingClosingLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            buyingClosingLabel.setForeground(Color.BLACK);
+            buyingClosingLabel.setBounds(50,380,220,40);
+            add(buyingClosingLabel);
+            
+            // Property tax label setup
+            propertyTaxLabel = new JLabel("Property Tax");
+            propertyTaxLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            propertyTaxLabel.setForeground(Color.BLACK);
+            propertyTaxLabel.setBounds(50,420,220,40);
+            add(propertyTaxLabel);
+            
+            // property Tax Increase Label setup
+            propertyTaxIncreaseLabel = new JLabel("Property tax increase");
+            propertyTaxIncreaseLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            propertyTaxIncreaseLabel.setForeground(Color.BLACK);
+            propertyTaxIncreaseLabel.setBounds(50,460,220,40);
+            add(propertyTaxIncreaseLabel);
+            
+            // home insurance Label setup
+            homeInsuranceLabel = new JLabel("Home insurance");
+            homeInsuranceLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            homeInsuranceLabel.setForeground(Color.BLACK);
+            homeInsuranceLabel.setBounds(50,500,220,40);
+            add(homeInsuranceLabel);
+            
+            // HOA Fee Label setup
+            HOAFeeLabel = new JLabel("HOA fee");
+            HOAFeeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            HOAFeeLabel.setForeground(Color.BLACK);
+            HOAFeeLabel.setBounds(50,540,220,40);
+            add(HOAFeeLabel);
+            
+            // maintenance Cost Label setup
+            maintenanceCostLabel = new JLabel("Maintenance cost");
+            maintenanceCostLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            maintenanceCostLabel.setForeground(Color.BLACK);
+            maintenanceCostLabel.setBounds(50,580,220,40);
+            add(maintenanceCostLabel);
+            
+            // home Value Appreciation Label setup
+            homeValueAppreciationLabel = new JLabel("Home value appreciation");
+            homeValueAppreciationLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            homeValueAppreciationLabel.setForeground(Color.BLACK);
+            homeValueAppreciationLabel.setBounds(50,620,220,40);
+            add(homeValueAppreciationLabel);
+            
+            // cost Increase Label setup
+            costIncreaseLabel = new JLabel("Cost/Insurance increase");
+            costIncreaseLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            costIncreaseLabel.setForeground(Color.BLACK);
+            costIncreaseLabel.setBounds(50,660,220,40);
+            add(costIncreaseLabel);
+            
+            // selling Costs Label setup
+            sellingCostsLabel = new JLabel("Selling closing costs");
+            sellingCostsLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            sellingCostsLabel.setForeground(Color.BLACK);
+            sellingCostsLabel.setBounds(50,700,220,40);
+            add(sellingCostsLabel);
+            
+            // monthly Rental Fee Label setup
+            monthlyRentalFeeLabel = new JLabel("Monthly rental fee");
+            monthlyRentalFeeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            monthlyRentalFeeLabel.setForeground(Color.BLACK);
+            monthlyRentalFeeLabel.setBounds(590,220,220,40);
+            add(monthlyRentalFeeLabel);
+            
+            // Rental Fee Increase Label setup
+            rentalFeeIncreaseLabel = new JLabel("Rental fee increase");
+            rentalFeeIncreaseLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            rentalFeeIncreaseLabel.setForeground(Color.BLACK);
+            rentalFeeIncreaseLabel.setBounds(590,260,220,40);
+            add(rentalFeeIncreaseLabel);
+            
+            // renter Insurance Label setup
+            renterInsuranceLabel = new JLabel("Renter's insurance");
+            renterInsuranceLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            renterInsuranceLabel.setForeground(Color.BLACK);
+            renterInsuranceLabel.setBounds(590,300,220,40);
+            add(renterInsuranceLabel);
+            
+            // security Deposit Label setup
+            securityDepositLabel = new JLabel("Security deposit");
+            securityDepositLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            securityDepositLabel.setForeground(Color.BLACK);
+            securityDepositLabel.setBounds(590,340,220,40);
+            add(securityDepositLabel);
+            
+            // upfront Cost Label setup
+            upfrontCostLabel = new JLabel("Upfront cost");
+            upfrontCostLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            upfrontCostLabel.setForeground(Color.BLACK);
+            upfrontCostLabel.setBounds(590,380,220,40);
+            add(upfrontCostLabel);
+            
+            // average Return Label setup
+            averageReturnLabel = new JLabel("Average investment return");
+            averageReturnLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            averageReturnLabel.setForeground(Color.BLACK);
+            averageReturnLabel.setBounds(590,480,250,40);
+            add(averageReturnLabel);
+            
+            // marginal Federal Label setup
+            marginalFederalLabel = new JLabel("Marginal federal tax rate");
+            marginalFederalLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            marginalFederalLabel.setForeground(Color.BLACK);
+            marginalFederalLabel.setBounds(590,520,220,40);
+            add(marginalFederalLabel);
+            
+            // marginal State Label setup
+            marginalStateLabel = new JLabel("Marginal state tax return");
+            marginalStateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            marginalStateLabel.setForeground(Color.BLACK);
+            marginalStateLabel.setBounds(590,560,220,40);
+            add(marginalStateLabel);
+            
+            // tax Filing Label setup
+            taxFilingLabel = new JLabel("Tax filing status:");
+            taxFilingLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            taxFilingLabel.setForeground(Color.BLACK);
+            taxFilingLabel.setBounds(590,600,220,40);
+            add(taxFilingLabel);
+            
+            // home price Field setup
+            homePriceField = new JTextField("$0");
+            homePriceField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            homePriceField.setBounds(320, 222, 200, 35);
+           // homePriceField.setBackground(new Color(169,223,191)); // Set background color
+            homePriceField.addFocusListener(new CurrencyFormatFocusListener());
+            homePriceField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear field when focused if it's the default "$0"
+                    if (homePriceField.getText().equals("$0")) {
+                        homePriceField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "$0" if field is left empty
+                    if (homePriceField.getText().isEmpty()) {
+                        homePriceField.setText("$0");
+                    } else if (!homePriceField.getText().startsWith("$")) {
+                        // Ensure field starts with "$" if not empty
+                        homePriceField.setText("$" + homePriceField.getText().trim());
+                    }
+                }
+            });
+            add(homePriceField);
+            
+            // down payment Field setup
+            downPaymentField = new JTextField("0%");
+            downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            downPaymentField.setBounds(320, 263, 200, 35);
+          //  downPaymentField.setBackground(new Color(169,223,191));
+            downPaymentField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear "%" when field is clicked for editing
+                    if (downPaymentField.getText().equals("0%")) {
+                        downPaymentField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "0%" if field is left empty
+                    if (downPaymentField.getText().isEmpty()) {
+                        downPaymentField.setText("0%");
+                    } else if (!downPaymentField.getText().endsWith("%")) {
+                        // Append "%" if not empty and doesn't already end with "%"
+                        downPaymentField.setText(downPaymentField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(downPaymentField);
+            
+            // interest rate Field setup
+            interestRateField = new JTextField("0%");
+            interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            interestRateField.setBounds(320, 302, 200, 35);
+           // interestRateField.setBackground(new Color(169,223,191));
+            interestRateField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Clear "%" when field is clicked for editing
+                if (interestRateField.getText().equals("0%")) {
+                    interestRateField.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Set default "0%" if field is left empty
+                if (interestRateField.getText().isEmpty()) {
+                    interestRateField.setText("0%");
+                } else if (!interestRateField.getText().endsWith("%")) {
+                    // Append "%" if not empty and doesn't already end with "%"
+                    interestRateField.setText(interestRateField.getText().trim() + "%");
+                }
+            }
+        });
+        add(interestRateField);
+        
+        // loan term Field setup
+        loanTermField = new JTextField("0");
+        loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        loanTermField.setBounds(320, 342, 160, 35);
+        //loanTermField.setBackground(new Color(169,223,191));
+        loanTermField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+            // Clear field when focused if it's the default "$0"
+            if (loanTermField.getText().equals("0")) {
+                    loanTermField.setText("");
+                }
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Set default "$0" if field is left empty
+                if (loanTermField.getText().isEmpty()) {
+                    loanTermField.setText("0");
+                } else if (!loanTermField.getText().startsWith("")) {
+                    // Ensure field starts with "$" if not empty
+                    loanTermField.setText(loanTermField.getText().trim());
+                }
+            }
+        });
+        add(loanTermField);
+            
+        // property tax Field setup
+        buyingClosingField = new JTextField("0%");
+        buyingClosingField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        buyingClosingField.setBounds(320, 382, 160, 35);
+        //buyingClosingField.setBackground(new Color(169,223,191));
+        buyingClosingField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (buyingClosingField.getText().equals("0%")) {
+                buyingClosingField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (buyingClosingField.getText().isEmpty()) {
+                buyingClosingField.setText("0%");
+            } else if (!buyingClosingField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                buyingClosingField.setText(buyingClosingField.getText().trim() + "%");
+                }
+            }
+        });
+        add(buyingClosingField);
+        
+        // property tax Field setup
+        propertyTaxField = new JTextField("0%");
+        propertyTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        propertyTaxField.setBounds(320, 422, 160, 35);
+       // propertyTaxField.setBackground(new Color(169,223,191));
+        propertyTaxField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (propertyTaxField.getText().equals("0%")) {
+                propertyTaxField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (propertyTaxField.getText().isEmpty()) {
+                propertyTaxField.setText("0%");
+            } else if (!propertyTaxField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                propertyTaxField.setText(propertyTaxField.getText().trim() + "%");
+                }
+            }
+        });
+        add(propertyTaxField);
+        
+        // property tax increase Field setup
+        propertyTaxIncreaseField = new JTextField("0%");
+        propertyTaxIncreaseField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        propertyTaxIncreaseField.setBounds(320, 462, 160, 35);
+        //propertyTaxIncreaseField.setBackground(new Color(169,223,191));
+        propertyTaxIncreaseField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (propertyTaxIncreaseField.getText().equals("0%")) {
+                propertyTaxIncreaseField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (propertyTaxIncreaseField.getText().isEmpty()) {
+                propertyTaxIncreaseField.setText("0%");
+            } else if (!propertyTaxIncreaseField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                propertyTaxIncreaseField.setText(propertyTaxIncreaseField.getText().trim() + "%");
+                }
+            }
+        });
+        add(propertyTaxIncreaseField);
+        
+        // home insurance Field setup
+            homeInsuranceField = new JTextField("$0");
+            homeInsuranceField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            homeInsuranceField.setBounds(320, 502, 160, 35);
+            //homeInsuranceField.setBackground(new Color(169,223,191));
+            homeInsuranceField.addFocusListener(new CurrencyFormatFocusListener());
+            homeInsuranceField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear field when focused if it's the default "$0"
+                    if (homeInsuranceField.getText().equals("$0")) {
+                        homeInsuranceField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "$0" if field is left empty
+                    if (homeInsuranceField.getText().isEmpty()) {
+                        homeInsuranceField.setText("$0");
+                    } else if (!homeInsuranceField.getText().startsWith("$")) {
+                        // Ensure field starts with "$" if not empty
+                        homeInsuranceField.setText("$" + homeInsuranceField.getText().trim());
+                    }
+                }
+            });
+            add(homeInsuranceField);
+            
+        // home insurance Field setup
+            HOAFeeField = new JTextField("$0");
+            HOAFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            HOAFeeField.setBounds(320, 542, 160, 35);
+           // HOAFeeField.setBackground(new Color(169,223,191));
+            HOAFeeField.addFocusListener(new CurrencyFormatFocusListener());
+            HOAFeeField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear field when focused if it's the default "$0"
+                    if (HOAFeeField.getText().equals("$0")) {
+                        HOAFeeField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "$0" if field is left empty
+                    if (HOAFeeField.getText().isEmpty()) {
+                        HOAFeeField.setText("$0");
+                    } else if (!HOAFeeField.getText().startsWith("$")) {
+                        // Ensure field starts with "$" if not empty
+                        HOAFeeField.setText("$" + HOAFeeField.getText().trim());
+                    }
+                }
+            });
+            add(HOAFeeField);
+        
+        // maintenance cost Field setup
+        maintenanceCostField = new JTextField("0%");
+        maintenanceCostField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        maintenanceCostField.setBounds(320, 582, 160, 35);
+        //maintenanceCostField.setBackground(new Color(169,223,191));
+        maintenanceCostField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (maintenanceCostField.getText().equals("0%")) {
+                maintenanceCostField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (maintenanceCostField.getText().isEmpty()) {
+                maintenanceCostField.setText("0%");
+            } else if (!maintenanceCostField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                maintenanceCostField.setText(maintenanceCostField.getText().trim() + "%");
+                }
+            }
+        });
+        add(maintenanceCostField);    
+        
+        // Home value Field setup
+        homeValueField = new JTextField("0%");
+        homeValueField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        homeValueField.setBounds(320, 622, 160, 35);
+        //homeValueField.setBackground(new Color(169,223,191));
+        homeValueField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (homeValueField.getText().equals("0%")) {
+                homeValueField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (homeValueField.getText().isEmpty()) {
+                homeValueField.setText("0%");
+            } else if (!homeValueField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                homeValueField.setText(homeValueField.getText().trim() + "%");
+                }
+            }
+        });
+        add(homeValueField);
+        
+        // cost increase Field setup
+        CostIncreaseField = new JTextField("0%");
+        CostIncreaseField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        CostIncreaseField.setBounds(320, 662, 160, 35);
+        //CostIncreaseField.setBackground(new Color(169,223,191));
+        CostIncreaseField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (CostIncreaseField.getText().equals("0%")) {
+                CostIncreaseField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (CostIncreaseField.getText().isEmpty()) {
+                CostIncreaseField.setText("0%");
+            } else if (!CostIncreaseField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                CostIncreaseField.setText(CostIncreaseField.getText().trim() + "%");
+                }
+            }
+        });
+        add(CostIncreaseField);
+        
+        // selling costs Field setup
+        sellingCostsField = new JTextField("0%");
+        sellingCostsField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        sellingCostsField.setBounds(320, 702, 160, 35);
+        //sellingCostsField.setBackground(new Color(169,223,191));
+        sellingCostsField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (sellingCostsField.getText().equals("0%")) {
+                sellingCostsField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (sellingCostsField.getText().isEmpty()) {
+                sellingCostsField.setText("0%");
+            } else if (!sellingCostsField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                sellingCostsField.setText(sellingCostsField.getText().trim() + "%");
+                }
+            }
+        });
+        add(sellingCostsField);
+        
+        // monthly Rental Fee Field setup
+            monthlyRentalFeeField = new JTextField("$0");
+            monthlyRentalFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            monthlyRentalFeeField.setBounds(840, 225, 160, 35);
+           // monthlyRentalFeeField.setBackground(new Color(169,223,191));
+            monthlyRentalFeeField.addFocusListener(new CurrencyFormatFocusListener());
+            monthlyRentalFeeField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear field when focused if it's the default "$0"
+                    if (monthlyRentalFeeField.getText().equals("$0")) {
+                        monthlyRentalFeeField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "$0" if field is left empty
+                    if (monthlyRentalFeeField.getText().isEmpty()) {
+                        monthlyRentalFeeField.setText("$0");
+                    } else if (!monthlyRentalFeeField.getText().startsWith("$")) {
+                        // Ensure field starts with "$" if not empty
+                        monthlyRentalFeeField.setText("$" + monthlyRentalFeeField.getText().trim());
+                    }
+                }
+            });
+            add(monthlyRentalFeeField);
+        
+        // rental Fee Increase Field setup
+        rentalFeeIncreaseField = new JTextField("0%");
+        rentalFeeIncreaseField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        rentalFeeIncreaseField.setBounds(840, 265, 160, 35);
+        //rentalFeeIncreaseField.setBackground(new Color(169,223,191));
+        rentalFeeIncreaseField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (rentalFeeIncreaseField.getText().equals("0%")) {
+                rentalFeeIncreaseField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (rentalFeeIncreaseField.getText().isEmpty()) {
+                rentalFeeIncreaseField.setText("0%");
+            } else if (!rentalFeeIncreaseField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                rentalFeeIncreaseField.setText(rentalFeeIncreaseField.getText().trim() + "%");
+                }
+            }
+        });
+        add(rentalFeeIncreaseField);
+            
+        // renter Insurance Field setup
+            renterInsuranceField = new JTextField("$0");
+            renterInsuranceField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            renterInsuranceField.setBounds(840, 305, 160, 35);
+           // renterInsuranceField.setBackground(new Color(169,223,191));
+            renterInsuranceField.addFocusListener(new CurrencyFormatFocusListener());
+            renterInsuranceField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear field when focused if it's the default "$0"
+                    if (renterInsuranceField.getText().equals("$0")) {
+                        renterInsuranceField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "$0" if field is left empty
+                    if (renterInsuranceField.getText().isEmpty()) {
+                        renterInsuranceField.setText("$0");
+                    } else if (!renterInsuranceField.getText().startsWith("$")) {
+                        // Ensure field starts with "$" if not empty
+                        renterInsuranceField.setText("$" + renterInsuranceField.getText().trim());
+                    }
+                }
+            });
+            add(renterInsuranceField);
+        
+        // security Deposit Field setup
+            securityDepositField = new JTextField("$0");
+            securityDepositField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            securityDepositField.setBounds(840, 345, 160, 35);
+           // securityDepositField.setBackground(new Color(169,223,191));
+            securityDepositField.addFocusListener(new CurrencyFormatFocusListener());
+            securityDepositField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear field when focused if it's the default "$0"
+                    if (securityDepositField.getText().equals("$0")) {
+                        securityDepositField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "$0" if field is left empty
+                    if (securityDepositField.getText().isEmpty()) {
+                        securityDepositField.setText("$0");
+                    } else if (!securityDepositField.getText().startsWith("$")) {
+                        // Ensure field starts with "$" if not empty
+                        securityDepositField.setText("$" + securityDepositField.getText().trim());
+                    }
+                }
+            });
+            add(securityDepositField);
+            
+        // upfront Cost Field setup
+            upfrontCostField = new JTextField("$0");
+            upfrontCostField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            upfrontCostField.setBounds(840, 385, 160, 35);
+           // upfrontCostField.setBackground(new Color(169,223,191));
+            upfrontCostField.addFocusListener(new CurrencyFormatFocusListener());
+            upfrontCostField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Clear field when focused if it's the default "$0"
+                    if (upfrontCostField.getText().equals("$0")) {
+                        upfrontCostField.setText("");
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Set default "$0" if field is left empty
+                    if (upfrontCostField.getText().isEmpty()) {
+                        upfrontCostField.setText("$0");
+                    } else if (!upfrontCostField.getText().startsWith("$")) {
+                        // Ensure field starts with "$" if not empty
+                        upfrontCostField.setText("$" + upfrontCostField.getText().trim());
+                    }
+                }
+            });
+            add(upfrontCostField);
+        
+        // average Return Field setup
+        averageReturnField = new JTextField("0%");
+        averageReturnField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        averageReturnField.setBounds(870, 485, 160, 35);
+        //averageReturnField.setBackground(new Color(169,223,191));
+        averageReturnField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (averageReturnField.getText().equals("0%")) {
+                averageReturnField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (averageReturnField.getText().isEmpty()) {
+                averageReturnField.setText("0%");
+            } else if (!averageReturnField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                averageReturnField.setText(averageReturnField.getText().trim() + "%");
+                }
+            }
+        });
+        add(averageReturnField);
+        
+        // marginal Federal Field setup
+        marginalFederalField = new JTextField("0%");
+        marginalFederalField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        marginalFederalField.setBounds(870, 525, 160, 35);
+        //marginalFederalField.setBackground(new Color(169,223,191));
+        marginalFederalField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (marginalFederalField.getText().equals("0%")) {
+                marginalFederalField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (marginalFederalField.getText().isEmpty()) {
+                marginalFederalField.setText("0%");
+            } else if (!marginalFederalField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                marginalFederalField.setText(marginalFederalField.getText().trim() + "%");
+                }
+            }
+        });
+        add(marginalFederalField);
+        
+        // marginal State Field setup
+        marginalStateField = new JTextField("0%");
+        marginalStateField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        marginalStateField.setBounds(870, 565, 160, 35);
+        //marginalStateField.setBackground(new Color(169,223,191));
+        marginalStateField.addFocusListener(new FocusAdapter() {
+        @Override
+        public void focusGained(FocusEvent e) {
+            // Clear "%" when field is clicked for editing
+            if (marginalStateField.getText().equals("0%")) {
+                marginalStateField.setText("");
+            }
+        }
+        @Override
+        public void focusLost(FocusEvent e) {
+            // Set default "0%" if field is left empty
+            if (marginalStateField.getText().isEmpty()) {
+                marginalStateField.setText("0%");
+            } else if (!marginalStateField.getText().endsWith("%")) {
+                // Append "%" if not empty and doesn't already end with "%"
+                marginalStateField.setText(marginalStateField.getText().trim() + "%");
+                }
+            }
+        });
+        add(marginalStateField);
+        
+        TaxStatusComboBox = new JComboBox<>(TaxStatusOptions);
+        TaxStatusComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+        TaxStatusComboBox.setBounds(590,635,240,35);
+        add(TaxStatusComboBox);
+        
+        // Calculate button setup
+        calculateButton = new JButton("Calculate");
+        calculateButton.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+        calculateButton.setBounds(680, 690, 175, 50);
+        calculateButton.setBackground(new Color(169, 223, 191)); // Set background color to green
+        add(calculateButton);
+        calculateButton.addActionListener(e -> calculateResults());
+
+            // Clear button setup
+        clearButton = new JButton("Clear");
+        clearButton.setFont(new Font("Times New Roman", Font.PLAIN, 24));
+        clearButton.setBounds(880, 690, 130, 50);
+        clearButton.setForeground(Color.WHITE);
+        clearButton.setBackground(Color.GRAY);
+        add(clearButton);
+        clearButton.addActionListener(e -> clearFields());
+          
+        }
+        
+        private void calculateResults(){
+            
+        }
+        private void clearFields(){
+        // Set up default empty or zero values
+            TaxStatusComboBox.setSelectedIndex(0); // Unselect any option initially
+            homePriceField.setText("");
+            downPaymentField.setText("");
+            interestRateField.setText("");
+            loanTermField.setText("");
+            buyingClosingField.setText("");
+            propertyTaxField.setText("");
+            propertyTaxIncreaseField.setText("");
+            homeInsuranceField.setText("");
+            HOAFeeField.setText("");
+            maintenanceCostField.setText("");
+            homeValueField.setText("");
+            CostIncreaseField.setText("");
+            sellingCostsField.setText("");
+            monthlyRentalFeeField.setText("");
+            rentalFeeIncreaseField.setText("");
+            renterInsuranceField.setText("");
+            securityDepositField.setText("");
+            upfrontCostField.setText("");
+            averageReturnField.setText("");
+            marginalFederalField.setText("");
+            marginalStateField.setText("");
+    }
+        
+        @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+    }
+// FocusListener to format JTextField input as currency on focus loss
+    private class CurrencyFormatFocusListener extends FocusAdapter {
+        @Override
+        public void focusLost(FocusEvent e) {
+            JTextField source = (JTextField) e.getSource();
+            try {
+                // Parse and format the value as currency
+                double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                source.setText(currencyFormat.format(value));
+            } catch (NumberFormatException ex) {
+                source.setText(""); // Clear field if input is invalid
+            }
+        }
+    }
+}
+
 // New JFrame class for the curency calculator
 class CurrencyCalculator extends JFrame{
     private final Image backgroundImage;
@@ -1656,8 +2535,8 @@ public class MortgageCalculator extends JFrame {
             backButton.setBounds(20, 20, 80, 40);
             add(backButton);
             backButton.addActionListener(e -> {
-                CategoricalCalcs categoricalFrame = new CategoricalCalcs();
-                categoricalFrame.setVisible(true);
+                MortgageAndRealCategory MortgageAndRealCategoryFrame = new MortgageAndRealCategory();
+                MortgageAndRealCategoryFrame.setVisible(true);
                 dispose();
             });
         }
@@ -1795,6 +2674,7 @@ public class MortgageCalculator extends JFrame {
                     + "</html>");
         downPaymentField.setText("                                    %");
         yearField.setText("");
+        HomePriceResultLabel.setText("");
         symbolsComboBox.setSelectedIndex(0);
         monthField.setSelectedIndex(0);
         monthlyPayResultLabel.setText("Monthly Payment: ");
@@ -2224,20 +3104,46 @@ class HouseAffordabilityCalc extends JFrame{
         double annualIncome = parseDouble(incomeField.getText());
         double loanTerm = parseDouble(loanTermField.getText());
         double interestRate = parseDouble(interestRateField.getText());
-        double propertyTax = parseDouble(propertyTaxField.getText());
         double hoaFee = parseDouble(hoaFeeField.getText());
         double insurance = parseDouble(insuranceField.getText());
+        
+        // Get property tax input based on selected symbol in symbolsComboBox2
+        String propertyTaxText = propertyTaxField.getText().trim();
+        String selectedPropertyTaxFormat = (String) symbolsComboBox2.getSelectedItem();
+        double propertyTax;
 
+        if ("%".equals(selectedPropertyTaxFormat)) {
+            // Parse property tax as a percentage
+            double propertyTaxPercent = parseDouble(propertyTaxText.replace("%", "").trim());
+            propertyTax = propertyTaxPercent / 1200; // Convert annual percentage to monthly rate
+        } else if ("$".equals(selectedPropertyTaxFormat)) {
+            // Parse property tax as an annual dollar amount
+            propertyTax = parseDouble(propertyTaxText.replace("$", "").replace(",", "").trim()) / 12; // Convert annual dollar to monthly rate
+        } else {
+            propertyTax = 0; // Fallback in case no valid option is selected
+        }
+        
         // Adjust input values
         interestRate /= 1200;       // Convert annual rate to monthly
-        propertyTax /= 1200;        // Convert annual property tax rate to monthly
         insurance /= 1200;          // Convert annual insurance rate to monthly
         hoaFee /= 1200;             // Convert HOA fees to monthly
         loanTerm *= 12;             // Convert loan term to months
+        
+         // Get selected DTI ratio from ComboBox and parse percentage value
+            String selectedDtiOption = (String) dtiRatioComboBox.getSelectedItem();
+            double dtiRatio = 0.28; // Default to 28% for Conventional loan
 
+            if (selectedDtiOption.equals("Conventional loan (28/36 rule)")) {
+                dtiRatio = 0.28;
+            } else if (selectedDtiOption.equals("FHA loan (31% front-end, 43% back-end)")) {
+                dtiRatio = 0.31;
+            } else if (selectedDtiOption.endsWith("%")) {
+                dtiRatio = parseDouble(selectedDtiOption.replace("%", "").trim()) / 100;
+            }
+        
         // Calculate monthly income and maximum monthly housing cost (40% of income)
         double monthlyIncome = annualIncome / 12;
-        double monthlyCost = monthlyIncome * 0.28;
+        double monthlyCost = monthlyIncome * dtiRatio;
 
         // Check down payment field input (percentage or dollar amount)
         String downPaymentText = downPaymentField.getText().trim();
