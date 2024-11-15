@@ -1,6 +1,7 @@
 package javaapplication_x;
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -15,6 +16,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
 import java.util.Locale;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 import java.text.DecimalFormat;
 import org.json.JSONObject;
 
@@ -28,6 +34,7 @@ public class JavaApplication_X extends JFrame {
         // Set up the JFrame
         setTitle("FinCalC Pro");
         setSize(1200, 800); // Set the size of the window
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Center the window
 
@@ -84,7 +91,7 @@ class CategoricalCalcs extends JFrame{
         setSize(1200,800); // Set size of the new window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
         setLocationRelativeTo(null); // Center the window
-        
+        setResizable(false);
         //Add the custom panel with background image
         setContentPane(new ImagePanel());
     }
@@ -226,7 +233,7 @@ class AutoCategory extends JFrame{
         setSize(1200,800); // Set the size of the new window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
         setLocationRelativeTo(null); // Center the window
-        
+        setResizable(false);
         // Add the content panel with the background image
         setContentPane(new ImagePanel());
     }
@@ -306,7 +313,7 @@ class RetirementCategory extends JFrame{
         setSize(1200, 800); // Set the size of the new window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
         setLocationRelativeTo(null); // Center the window
-
+        setResizable(false);
         // Add the content panel with the background image
         setContentPane(new ImagePanel());
         }
@@ -358,8 +365,9 @@ class RetirementCategory extends JFrame{
                 }
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Retirement Calculator will come soon");
+                     Retirment_Calculator  Retirment_CalculatorFrame = new  Retirment_Calculator();
+                      Retirment_CalculatorFrame.setVisible(true);
+                      dispose();
                 }
             });
             // Add the label to the panel
@@ -414,7 +422,7 @@ class MortgageAndRealCategory extends JFrame{
     setSize(1200, 800); // Set the size of the new window
     setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
     setLocationRelativeTo(null); // Center the window
-    
+    setResizable(false);
     // Add the content panel with the background image
     setContentPane(new ImagePanel());
 }
@@ -667,7 +675,7 @@ class InvestmentCategory extends JFrame{
         setSize(1200,800); // Set the size of the new window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this window when the 'X' is clicked
         setLocationRelativeTo(null); // Center the window
-        
+        setResizable(false);
         // Add the content panel with the background image
         setContentPane(new ImagePanel());
     }
@@ -759,7 +767,7 @@ class Auto_loan_calculator extends JFrame{
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+        setResizable(false);
         // Create currency formatter for USD
         currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
        
@@ -1130,7 +1138,7 @@ class RentVsBuyCalculator extends JFrame{
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+        setResizable(false);
         // Create currency formatter for USD
         currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
        
@@ -2032,7 +2040,7 @@ class CurrencyCalculator extends JFrame{
         setSize(1200,800); //Set sixe of the new window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //Close only this window when the 'X' is clicked
         setLocationRelativeTo(null); // Center the window
-        
+        setResizable(false);
         // Add content to the JFrame (background panel)
         setContentPane(new ImagePanel());
     }
@@ -2294,7 +2302,7 @@ public class MortgageCalculator extends JFrame {
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-
+        setResizable(false);
         // Create currency formatter for USD
         currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
         
@@ -2696,7 +2704,7 @@ class HouseAffordabilityCalc extends JFrame{
         setSize(1200,800); //Set sixe of the new window
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); //Close only this window when the 'X' is clicked
         setLocationRelativeTo(null); // Center the window
-        
+        setResizable(false);
         // Create currency formatter for USD
         currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
         
@@ -2748,7 +2756,7 @@ class HouseAffordabilityCalc extends JFrame{
             private final String[] dtiRatioOptions = {
                 "Conventional loan (28/36 rule)",
             "FHA loan (31% front-end, 43% back-end)",
-            "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%"
+            "10%", "15%", "20%", "25%", "30%", "35%", "40%"
             };
             
             // ComboBox symbols $ and % creation
@@ -2804,9 +2812,9 @@ class HouseAffordabilityCalc extends JFrame{
             mortgageRateLabel = new JLabel("<html>"
         + "<b><span style='font-size:26px;'>Latest Mortgage</span></b><br>"
         + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><span style='font-size:26px;'>Rate:</span></b><br>"
-        + "&nbsp;&nbsp;&nbsp;&nbsp;30 Years: <span style='color:3161b7; text-decoration:underline;'>6.727%</span><br>"
-        + "&nbsp;&nbsp;&nbsp;&nbsp;15 Years: <span style='color:3161b7; text-decoration:underline;'>6.079%</span><br>"
-        + "&nbsp;&nbsp;&nbsp;&nbsp;10 Years: <span style='color:3161b7; text-decoration:underline;'>6.021%</span>"
+        + "&nbsp;&nbsp;&nbsp;&nbsp;30 Years: <span style='color:3161b7; text-decoration:underline;'>6.699%</span><br>"
+        + "&nbsp;&nbsp;&nbsp;&nbsp;15 Years: <span style='color:3161b7; text-decoration:underline;'>6.047%</span><br>"
+        + "&nbsp;&nbsp;&nbsp;&nbsp;10 Years: <span style='color:3161b7; text-decoration:underline;'>6.017%</span>"
         + "</html>");
             mortgageRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font
             mortgageRateLabel.setForeground(Color.BLACK); // Set label color to white
@@ -2868,17 +2876,17 @@ class HouseAffordabilityCalc extends JFrame{
 
             perYearLabel1 = new JLabel("per year");
             perYearLabel1.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-            perYearLabel1.setBounds(675, 450, 200, 40);
+            perYearLabel1.setBounds(610, 450, 200, 40);
             add(perYearLabel1);
 
             perYearLabel2 = new JLabel("per year");
             perYearLabel2.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-            perYearLabel2.setBounds(675, 500, 200, 40);
+            perYearLabel2.setBounds(610, 500, 200, 40);
             add(perYearLabel2);
 
             perYearLabel3 = new JLabel("per year");
             perYearLabel3.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-            perYearLabel3.setBounds(675, 550, 200, 40);
+            perYearLabel3.setBounds(610, 550, 200, 40);
             add(perYearLabel3);
             
             // Create JTextFields for user input next to the corresponding JLabels
@@ -2897,24 +2905,24 @@ class HouseAffordabilityCalc extends JFrame{
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             interestRateField.setBounds(400, 300, 200, 40); // Position next to interestRateLabel
             
-        // Add a FocusListener to manage the % symbol
-        interestRateField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                // Remove % when field is clicked for editing
-                if (interestRateField.getText().endsWith("%")) {
-                    interestRateField.setText(interestRateField.getText().replace("%", "").trim());
+            // Add a FocusListener to manage the % symbol
+            interestRateField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
+                    }
                 }
-            }
 
-            @Override
-            public void focusLost(FocusEvent e) {
-                // Append % when focus is lost
-                if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
-                    interestRateField.setText(interestRateField.getText().trim() + "%");
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().trim() + "%");
+                    }
                 }
-            }
-        });
+            });
             add(interestRateField);
 
             debtPaybackField = new JTextField("$");
@@ -2923,7 +2931,7 @@ class HouseAffordabilityCalc extends JFrame{
             debtPaybackField.addFocusListener(new CurrencyFormatFocusListener());
             add(debtPaybackField);
 
-            downPaymentField = new JTextField();
+            downPaymentField = new JTextField("                                    %");
             downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             downPaymentField.setBounds(400, 400, 200, 40); // Position next to downPaymentLabel
             add(downPaymentField);
@@ -2932,7 +2940,7 @@ class HouseAffordabilityCalc extends JFrame{
             symbolsComboBox = new JComboBox<>(symbolsOptions);
             symbolsComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             symbolsComboBox.setBounds(605, 400, 60, 40);
-            add(symbolsComboBox);
+            //add(symbolsComboBox);
             
             // ActionListener for ComboBox
             symbolsComboBox.addActionListener((ActionEvent e) -> {
@@ -2965,7 +2973,7 @@ class HouseAffordabilityCalc extends JFrame{
                 }
             });
 
-            propertyTaxField = new JTextField();
+            propertyTaxField = new JTextField("                                    %");
             propertyTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             propertyTaxField.setBounds(400, 450, 200, 40); // Position next to propertyTaxLabel
             add(propertyTaxField);
@@ -2974,7 +2982,7 @@ class HouseAffordabilityCalc extends JFrame{
             symbolsComboBox2 = new JComboBox<>(symbolsOptions);
             symbolsComboBox2.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             symbolsComboBox2.setBounds(605, 450, 60, 40);
-            add(symbolsComboBox2);
+            //add(symbolsComboBox2);
             
             // ActionListener for ComboBox
             symbolsComboBox2.addActionListener((ActionEvent e) -> {
@@ -3007,7 +3015,7 @@ class HouseAffordabilityCalc extends JFrame{
                 }
             });
 
-            hoaFeeField = new JTextField();
+            hoaFeeField = new JTextField("                                    %");
             hoaFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             hoaFeeField.setBounds(400, 500, 200, 40); // Position next to hoaFeeLabel
             add(hoaFeeField);
@@ -3016,7 +3024,7 @@ class HouseAffordabilityCalc extends JFrame{
             symbolsComboBox3 = new JComboBox<>(symbolsOptions);
             symbolsComboBox3.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             symbolsComboBox3.setBounds(605, 500, 60, 40);
-            add(symbolsComboBox3);
+            //add(symbolsComboBox3);
             
             // ActionListener for ComboBox
             symbolsComboBox3.addActionListener((ActionEvent e) -> {
@@ -3048,7 +3056,7 @@ class HouseAffordabilityCalc extends JFrame{
                 }
             });
             
-            insuranceField = new JTextField();
+            insuranceField = new JTextField("                                    %");
             insuranceField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             insuranceField.setBounds(400, 550, 200, 40); // Position next to insuranceLabel
             add(insuranceField);
@@ -3057,7 +3065,7 @@ class HouseAffordabilityCalc extends JFrame{
             symbolsComboBox4 = new JComboBox<>(symbolsOptions);
             symbolsComboBox4.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             symbolsComboBox4.setBounds(605, 550, 60, 40);
-            add(symbolsComboBox4);
+            //add(symbolsComboBox4);
             
             // ActionListener for ComboBox
             symbolsComboBox4.addActionListener((ActionEvent e) -> {
@@ -3096,125 +3104,143 @@ class HouseAffordabilityCalc extends JFrame{
             add(dtiRatioComboBox);
             
             }
-        private class CalculateButtonListener implements ActionListener {
+            
+    private class CalculateButtonListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
-    try {
-        // Extract only numeric values from the input fields
-        double annualIncome = parseDouble(incomeField.getText());
-        double loanTerm = parseDouble(loanTermField.getText());
-        double interestRate = parseDouble(interestRateField.getText());
-        double hoaFee = parseDouble(hoaFeeField.getText());
-        double insurance = parseDouble(insuranceField.getText());
-        
-        // Get property tax input based on selected symbol in symbolsComboBox2
-        String propertyTaxText = propertyTaxField.getText().trim();
-        String selectedPropertyTaxFormat = (String) symbolsComboBox2.getSelectedItem();
-        double propertyTax;
+        try {
+            // Extract values from fields
+            double annualIncome = parseDouble(incomeField.getText());
+            double loanTerm = parseDouble(loanTermField.getText());
+            double interestRate = parseDouble(interestRateField.getText());
+            double hoaFee = parseDouble(hoaFeeField.getText());
+            double insurance = parseDouble(insuranceField.getText());
 
-        if ("%".equals(selectedPropertyTaxFormat)) {
-            // Parse property tax as a percentage
-            double propertyTaxPercent = parseDouble(propertyTaxText.replace("%", "").trim());
-            propertyTax = propertyTaxPercent / 1200; // Convert annual percentage to monthly rate
-        } else if ("$".equals(selectedPropertyTaxFormat)) {
-            // Parse property tax as an annual dollar amount
-            propertyTax = parseDouble(propertyTaxText.replace("$", "").replace(",", "").trim()) / 12; // Convert annual dollar to monthly rate
-        } else {
-            propertyTax = 0; // Fallback in case no valid option is selected
-        }
-        
-        // Adjust input values
-        interestRate /= 1200;       // Convert annual rate to monthly
-        insurance /= 1200;          // Convert annual insurance rate to monthly
-        hoaFee /= 1200;             // Convert HOA fees to monthly
-        loanTerm *= 12;             // Convert loan term to months
-        
-         // Get selected DTI ratio from ComboBox and parse percentage value
+            // Property tax parsing
+            String propertyTaxText = propertyTaxField.getText().trim();
+            String selectedPropertyTaxFormat = (String) symbolsComboBox2.getSelectedItem();
+            double propertyTax;
+            if ("%".equals(selectedPropertyTaxFormat)) {
+                double propertyTaxPercent = parseDouble(propertyTaxText.replace("%", "").trim());
+                propertyTax = propertyTaxPercent / 1200;
+            } else if ("$".equals(selectedPropertyTaxFormat)) {
+                propertyTax = parseDouble(propertyTaxText.replace("$", "").replace(",", "").trim()) / 12;
+            } else {
+                propertyTax = 0;
+            }
+
+            interestRate /= 1200;
+            insurance /= 1200;
+            hoaFee /= 1200;
+            loanTerm *= 12;
+
+            // Get selected DTI ratio from ComboBox
             String selectedDtiOption = (String) dtiRatioComboBox.getSelectedItem();
             double dtiRatio = 0.28; // Default to 28% for Conventional loan
-
             if (selectedDtiOption.equals("Conventional loan (28/36 rule)")) {
                 dtiRatio = 0.28;
             } else if (selectedDtiOption.equals("FHA loan (31% front-end, 43% back-end)")) {
                 dtiRatio = 0.31;
-            } else if (selectedDtiOption.endsWith("%")) {
-                dtiRatio = parseDouble(selectedDtiOption.replace("%", "").trim()) / 100;
             }
-        
-        // Calculate monthly income and maximum monthly housing cost (40% of income)
-        double monthlyIncome = annualIncome / 12;
-        double monthlyCost = monthlyIncome * dtiRatio;
 
-        // Check down payment field input (percentage or dollar amount)
-        String downPaymentText = downPaymentField.getText().trim();
-        double downPaymentAmount;
-        double fullPrice;
-        boolean isPercentage = downPaymentText.endsWith("%");
+            // Calculate monthly income and maximum monthly housing cost
+            double monthlyIncome = annualIncome / 12;
+            double monthlyCost = monthlyIncome * dtiRatio;
 
-        if (isPercentage) {
-            // Parse down payment as a percentage and calculate full house price
-            double downPaymentPercent = parseDouble(downPaymentText.replace("%", "").trim());
-            double downPaymentReduced = 1 - (downPaymentPercent / 100); // Convert to decimal
+            // Handle down payment as percentage or dollar amount
+            String downPaymentText = downPaymentField.getText().trim();
+            double downPaymentAmount;
+            double fullPrice;
+            boolean isPercentage = downPaymentText.endsWith("%");
 
-            // Calculate combined monthly rate for taxes, HOA, insurance, and mortgage
-            double restCalculations = propertyTax + insurance + hoaFee +
-                (downPaymentReduced * (interestRate * Math.pow(1 + interestRate, loanTerm)) / 
-                (Math.pow(1 + interestRate, loanTerm) - 1));
+            if (isPercentage) {
+                double downPaymentPercent = parseDouble(downPaymentText.replace("%", "").trim());
+                double downPaymentReduced = 1 - (downPaymentPercent / 100);
 
-            // Calculate maximum house price and down payment amount
-            fullPrice = Math.round(monthlyCost / restCalculations);
-            downPaymentAmount = Math.round(fullPrice * downPaymentPercent / 100);
+                double restCalculations = propertyTax + insurance + hoaFee +
+                    (downPaymentReduced * (interestRate * Math.pow(1 + interestRate, loanTerm)) / 
+                    (Math.pow(1 + interestRate, loanTerm) - 1));
 
-        } else {
-            // Parse down payment as a dollar amount and calculate full house price
-            downPaymentAmount = parseDouble(downPaymentText.replace("$", "").replace(",", "").trim());
+                fullPrice = Math.round(monthlyCost / restCalculations);
+                downPaymentAmount = Math.round(fullPrice * downPaymentPercent / 100);
+            } else {
+                downPaymentAmount = parseDouble(downPaymentText.replace("$", "").replace(",", "").trim());
+                double restCalculations = propertyTax + insurance + hoaFee + 
+                    (interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
 
-            // Calculate combined monthly rate for taxes, HOA, insurance, and mortgage
-            double restCalculations = propertyTax + insurance + hoaFee + 
-                (interestRate * Math.pow(1 + interestRate, loanTerm)) / (Math.pow(1 + interestRate, loanTerm) - 1);
+                fullPrice = Math.round((monthlyCost / restCalculations) + downPaymentAmount);
+            }
 
-            // Calculate maximum house price based on monthly cost minus the down payment amount
-            fullPrice = Math.round((monthlyCost / restCalculations) + downPaymentAmount);
+            double estimatedClosingCost = Math.round(fullPrice * 0.03);
+            double totalOneTimePayment = downPaymentAmount + estimatedClosingCost;
+            double annualPropertyTax = Math.round(fullPrice * propertyTax * 12);
+            double annualInsurance = Math.round(fullPrice * insurance * 12);
+            double annualHoa = Math.round(fullPrice * hoaFee * 12);
+            double loanAmount = Math.round(fullPrice - downPaymentAmount);
+
+            // Format the result message
+            DecimalFormat currencyFormat = new DecimalFormat("$###,###,###.##");
+
+            // Set up the result in table format
+            String[] columnNames = {"Description", "Amount"};
+            Object[][] data = {
+                {"You can borrow", currencyFormat.format(loanAmount)},
+                {"Total price of the house", "<html><b>" + currencyFormat.format(fullPrice) + "</b></html>"},
+                {"Down payment", currencyFormat.format(downPaymentAmount)},
+                {"Estimated closing cost", currencyFormat.format(estimatedClosingCost)},
+                {"Front-end DTI ratio", String.format("%.2f%%", dtiRatio * 100)},
+                {"Back-end DTI ratio", String.format("%.2f%%", dtiRatio * 100)},
+                {"Total one-time payment at closing", currencyFormat.format(totalOneTimePayment)},
+                {"Monthly mortgage payment", currencyFormat.format(loanAmount / loanTerm)},  // Approximation
+                {"Annual property tax", currencyFormat.format(annualPropertyTax)},
+                {"Annual HOA or co-op fee", currencyFormat.format(annualHoa)},
+                {"Annual insurance cost", currencyFormat.format(annualInsurance)},
+                {"Estimated annual maintenance cost", currencyFormat.format(fullPrice * 0.015)},
+                {"Total monthly cost on the house", "<html><b>" + currencyFormat.format(loanAmount / loanTerm + annualPropertyTax / 12 + annualHoa / 12 + annualInsurance / 12) + "</b></html>"}
+            };
+
+            // Create table model
+            DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+            JTable table = new JTable(tableModel);
+            table.setRowHeight(30);
+            table.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+
+            // Customize table appearance
+            table.setBackground(new Color(169, 223, 191));
+            table.setForeground(Color.BLACK);
+            table.setSelectionBackground(Color.GRAY);
+            table.setSelectionForeground(Color.WHITE);
+
+            // Create result window with table
+            JFrame resultWindow = new JFrame("House Affordability Result");
+            resultWindow.setSize(600, 400);
+            resultWindow.setLocationRelativeTo(null);  // Center window
+            setResizable(false);
+            resultWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+            // Add table to a JScrollPane
+            JScrollPane scrollPane = new JScrollPane(table);
+            resultWindow.add(scrollPane);
+
+            // Display the result window
+            resultWindow.setVisible(true);
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(HouseAffordabilityCalc.this, 
+                "Please enter valid input values.", 
+                "Input Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
-
-        // Adjust calculations for other costs based on fullPrice
-        double estimatedClosingCost = Math.round(fullPrice * 0.03);  // Assuming closing cost at 3% of house price
-        double totalOneTimePayment = downPaymentAmount + estimatedClosingCost;
-        double annualPropertyTax = Math.round(fullPrice * propertyTax * 12);
-        double annualInsurance = Math.round(fullPrice * insurance * 12);
-        double annualHoa = Math.round(fullPrice * hoaFee * 12);
-        double loanAmount = Math.round(fullPrice - downPaymentAmount);
-
-        // Create the result message
-        String resultMessage = String.format(
-            "You can borrow up to %s.\nHouse price: %s\nDown payment: %s\nEstimated closing cost: %s\nTotal one-time payment: %s\nAnnual property tax: %s\nAnnual insurance: %s\nAnnual HOA: %s",
-            currencyFormat.format(loanAmount),
-            currencyFormat.format(fullPrice),
-            currencyFormat.format(downPaymentAmount),
-            currencyFormat.format(estimatedClosingCost),
-            currencyFormat.format(totalOneTimePayment),
-            currencyFormat.format(annualPropertyTax),
-            currencyFormat.format(annualInsurance),
-            currencyFormat.format(annualHoa)
-        );
-
-        // Show the result in a message box
-        JOptionPane.showMessageDialog(HouseAffordabilityCalc.this, resultMessage, "Affordability Result", JOptionPane.INFORMATION_MESSAGE);
-
-    } catch (NumberFormatException ex) {
-        JOptionPane.showMessageDialog(HouseAffordabilityCalc.this, "Please enter valid input values.", "Input Error", JOptionPane.ERROR_MESSAGE);
     }
 }
-
 
     // Helper method to parse double and remove unwanted characters
     private double parseDouble(String input) {
         // Remove everything except digits and decimal point
         String cleanInput = input.replaceAll("[^\\d.]", "");
         return Double.parseDouble(cleanInput);
-    }
-}
-            
+        }
+    
             // Method to clear input fields and result label
             private void clearFields() {
                 incomeField.setText("$"); // Clear the Income field
@@ -3231,13 +3257,13 @@ class HouseAffordabilityCalc extends JFrame{
                 symbolsComboBox3.setSelectedIndex(0); // Reset "symbols" to "%"
                 symbolsComboBox4.setSelectedIndex(0); // Reset "symbols" to "%"
             }
-
+                 
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
-   } 
+    
     
     // FocusListener to format JTextField input as currency on focus loss
     private class CurrencyFormatFocusListener extends FocusAdapter {
@@ -3252,6 +3278,612 @@ class HouseAffordabilityCalc extends JFrame{
                 source.setText(""); // Clear field if input is invalid
             }
         }
+    }
+}
+}
+
+
+public class Retirment_Calculator extends JFrame {
+    private final Image backgroundImage;
+    private JComboBox<String> symbolsComboBox1;
+    private JComboBox<String> symbolsComboBox2;
+    private JTextField CurrentAgeField;
+    private JTextField PlannedRetirementField;
+    private JTextField LifeExpectancyField;
+    private JLabel resultScreen;
+    private JPanel graph_result;
+    private JTextField PreTaxField;
+    private JTextField CurrentIncomeField;
+    private JTextField IncomeNeededField;
+    private JTextField AverageInvestmentField;
+    private JTextField InflationRateField;
+    private JTextField OtherIncomeField;
+    private JTextField CurrentSavingsField;
+    private JTextField FutureSavingsField;
+    private NumberFormat currencyFormat;
+
+    public Retirment_Calculator() {
+        // Load the background image
+        backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/retirement_calculator_background.png")).getImage();
+
+        // Set up the JFrame
+        setTitle("Retirement Calculator");
+        setSize(1200, 800);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        // Create currency formatter for USD
+        currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+
+        // Add content to the JFrame (background panel)
+        setContentPane(new ImagePanel());
+    }
+
+    // Inner class to handle the background image panel
+    private class ImagePanel extends JPanel {
+        private final JButton backButton;
+        private final JLabel titleLabel;
+        private final JLabel resultLabel;
+        private final JLabel CurrentAgeLabel;
+        private final JLabel PlannedRetirementLabel;
+        private final JLabel LifeExpectancyLabel;
+        private final JLabel PreTaxLabel;
+        private final JLabel CurrentIncomeLabel;
+        private final JLabel IncomeNeededLabel;
+        private final JLabel AverageInvestmentLabel;
+        private final JLabel InflationRateLabel;
+        private final JLabel OtherIncomeLabel;
+        private final JLabel CurrentSavingsLabel;
+        private final JLabel FutureSavingsLabel;
+        private final JButton calculateButton;
+        private final JButton clearButton;
+        private final JLabel yearLabel1,yearLabel2, yearLabel3, yearLabel4, monthLabel;
+       
+        // ComboBox symbols $ and % creation
+            private final String[] symbolsOptions = {
+                "%", "$"};
+
+        public ImagePanel() {
+            setLayout(null);
+
+            // Back button setup
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                RetirementCategory RetirementCategoryFrame = new RetirementCategory();
+                RetirementCategoryFrame.setVisible(true);
+                dispose();
+            });
+
+            // Title label setup
+            titleLabel = new JLabel("Retirement Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(190, 10, 800, 200);
+            add(titleLabel);
+
+            // Setting up fields and labels for input data
+           
+            // Current Age label and field
+            CurrentAgeLabel = new JLabel("Current Age:");
+            CurrentAgeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            CurrentAgeLabel.setBounds(40, 180, 200, 40);
+            add(CurrentAgeLabel);
+
+            CurrentAgeField = new JTextField();
+            CurrentAgeField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            CurrentAgeField.setBounds(380, 180, 200, 35);
+            add(CurrentAgeField);
+           
+            // Planned Retirement label and field
+            PlannedRetirementLabel = new JLabel("Planned Retirement Age:");
+            PlannedRetirementLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            PlannedRetirementLabel.setBounds(40, 220, 300, 40);
+            add(PlannedRetirementLabel);
+
+            PlannedRetirementField = new JTextField();
+            PlannedRetirementField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            PlannedRetirementField.setBounds(380, 220, 200, 35);
+            add(PlannedRetirementField);
+           
+            // Life Expectancy lable and field
+            LifeExpectancyLabel = new JLabel("Life Expectancy:");
+            LifeExpectancyLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            LifeExpectancyLabel.setBounds(40, 260, 200, 40);
+            add(LifeExpectancyLabel);
+
+            LifeExpectancyField = new JTextField();
+            LifeExpectancyField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            LifeExpectancyField.setBounds(380, 260, 200, 35);
+            add(LifeExpectancyField);
+
+           
+            // Current Pre Tax income
+            PreTaxLabel = new JLabel("Current Pre-Tax Income:");
+            PreTaxLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            PreTaxLabel.setBounds(40, 300, 300, 40);
+            add(PreTaxLabel);
+            
+            yearLabel1 = new JLabel("/year");
+            yearLabel1.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            yearLabel1.setBounds(580,300,100,40);
+            add(yearLabel1);
+            
+            PreTaxField = new JTextField("$");
+            PreTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            PreTaxField.setBounds(380, 300, 200, 35);
+            PreTaxField.addFocusListener(new CurrencyFormatFocusListener());
+            add(PreTaxField);
+           
+            // Current income label and field
+            CurrentIncomeLabel = new JLabel("Current Income Increase:");
+            CurrentIncomeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            CurrentIncomeLabel.setBounds(40, 340, 350, 40);
+            add(CurrentIncomeLabel);
+
+            CurrentIncomeField = new JTextField("                                    %");
+            CurrentIncomeField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            CurrentIncomeField.setBounds(380, 340, 200, 35);
+            // Add a FocusListener to manage the % symbol
+            CurrentIncomeField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (CurrentIncomeField.getText().endsWith("%")) {
+                        CurrentIncomeField.setText(CurrentIncomeField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!CurrentIncomeField.getText().isEmpty() && !CurrentIncomeField.getText().endsWith("%")) {
+                        CurrentIncomeField.setText(CurrentIncomeField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(CurrentIncomeField);
+            
+            yearLabel2 = new JLabel("/year");
+            yearLabel2.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            yearLabel2.setBounds(580,340,100,40);
+            add(yearLabel2);
+           
+            // Income Needed label and field
+            IncomeNeededLabel = new JLabel("Income Needed After Retirement:");
+            IncomeNeededLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            IncomeNeededLabel.setBounds(40, 380, 350, 40);
+            add(IncomeNeededLabel);
+
+            IncomeNeededField = new JTextField("                                            %");
+            IncomeNeededField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            IncomeNeededField.setBounds(380, 380, 200, 35);
+            add(IncomeNeededField);
+
+            // ComboxBox for income needed
+            symbolsComboBox1 = new JComboBox<>(symbolsOptions);
+            symbolsComboBox1.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
+            symbolsComboBox1.setBounds(580, 380, 60, 35);
+            add(symbolsComboBox1);
+            
+            // ActionListener for ComboBox symbolsComboBox1
+            symbolsComboBox1.addActionListener((ActionEvent e) -> {
+            String selectedFormat = (String) symbolsComboBox1.getSelectedItem();
+            String text = IncomeNeededField.getText().replaceAll("[^\\d.]", ""); // Remove previous symbols
+            double pretaxIncome = parseCurrencyField(PreTaxField.getText()); // Convert PreTaxField value to double
+
+            if ("%".equals(selectedFormat)) {
+                // Convert from $ to %
+                if (pretaxIncome != 0 && !text.isEmpty()) {
+                    double valueInDollars = Double.parseDouble(text);
+                    double percentageValue = (valueInDollars / pretaxIncome) * 100;
+                    IncomeNeededField.setText(String.format("%.2f%%", percentageValue));
+                }
+            } else if ("$".equals(selectedFormat)) {
+                // Convert from % to $
+                if (!text.isEmpty()) {
+                    double percentageValue = Double.parseDouble(text);
+                    double valueInDollars = (percentageValue / 100) * pretaxIncome;
+                    IncomeNeededField.setText(NumberFormat.getCurrencyInstance().format(valueInDollars));
+                }
+            }
+        });
+
+            // Add FocusListener to downPaymentField
+            IncomeNeededField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusLost(FocusEvent e) {
+                    String selectedFormat = (String) symbolsComboBox1.getSelectedItem();
+                    String text = IncomeNeededField.getText().replaceAll("[^\\d.]", ""); // Remove symbols
+
+                    if ("%".equals(selectedFormat) && !text.isEmpty()) {
+                        // Append % when focus is lost and "%" is selected
+                        IncomeNeededField.setText(text + "%");
+                    } else if ("$".equals(selectedFormat) && !text.isEmpty()) {
+                        // Format as currency with "$" symbol
+                        double value = Double.parseDouble(text);
+                        IncomeNeededField.setText(NumberFormat.getCurrencyInstance().format(value));
+                    }
+                }
+            });
+            
+            // Average investment label and field
+            AverageInvestmentLabel = new JLabel("Average Investment Return:");
+            AverageInvestmentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            AverageInvestmentLabel.setBounds(40, 420, 350, 40);
+            add(AverageInvestmentLabel);
+
+            AverageInvestmentField = new JTextField("                                            %");
+            AverageInvestmentField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            AverageInvestmentField.setBounds(380, 420, 200, 35);
+            // Add a FocusListener to manage the % symbol
+            AverageInvestmentField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (AverageInvestmentField.getText().endsWith("%")) {
+                        AverageInvestmentField.setText(AverageInvestmentField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!AverageInvestmentField.getText().isEmpty() && !AverageInvestmentField.getText().endsWith("%")) {
+                        AverageInvestmentField.setText(AverageInvestmentField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(AverageInvestmentField);
+            
+            yearLabel3 = new JLabel("/year");
+            yearLabel3.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            yearLabel3.setBounds(580,420,100,40);
+            add(yearLabel3);
+           
+            // Inflation Rate label and field
+            InflationRateLabel = new JLabel("Inflation Rate:");
+            InflationRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            InflationRateLabel.setBounds(40, 460, 200, 40);
+            add(InflationRateLabel);
+
+            InflationRateField = new JTextField("                                            %");
+            InflationRateField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            InflationRateField.setBounds(380, 460, 200, 35);
+            // Add a FocusListener to manage the % symbol
+            InflationRateField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (InflationRateField.getText().endsWith("%")) {
+                        InflationRateField.setText(InflationRateField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!InflationRateField.getText().isEmpty() && !InflationRateField.getText().endsWith("%")) {
+                        InflationRateField.setText(InflationRateField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(InflationRateField);
+            
+            yearLabel4 = new JLabel("/year");
+            yearLabel4.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            yearLabel4.setBounds(580,460,100,40);
+            add(yearLabel4);
+           
+            // Other Income label and field
+            OtherIncomeLabel = new JLabel("Other Income After Retirement:");
+            OtherIncomeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            OtherIncomeLabel.setBounds(40, 500, 350, 40);
+            add(OtherIncomeLabel);
+
+            OtherIncomeField = new JTextField("$");
+            OtherIncomeField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            OtherIncomeField.setBounds(380, 500, 200, 35);
+            OtherIncomeField.addFocusListener(new CurrencyFormatFocusListener());
+            add(OtherIncomeField);
+            
+            monthLabel = new JLabel("/month");
+            monthLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            monthLabel.setBounds(580,500,100,40);
+            add(monthLabel);
+           
+            // Current savings label and field
+            CurrentSavingsLabel = new JLabel("Current Retirement Savings:");
+            CurrentSavingsLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            CurrentSavingsLabel.setBounds(40, 540, 350, 40);
+            add(CurrentSavingsLabel);
+
+            CurrentSavingsField = new JTextField("$");
+            CurrentSavingsField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            CurrentSavingsField.setBounds(380, 540, 200, 35);
+            CurrentSavingsField.addFocusListener(new CurrencyFormatFocusListener());
+            add(CurrentSavingsField);
+
+           
+            // Future savings label and field
+            FutureSavingsLabel = new JLabel("Future Retirement Savings:");
+            FutureSavingsLabel.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            FutureSavingsLabel.setBounds(40, 580, 350, 40);
+            add(FutureSavingsLabel);
+
+            FutureSavingsField = new JTextField("                                            %");
+            FutureSavingsField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            FutureSavingsField.setBounds(380, 580, 200, 35);
+            add(FutureSavingsField);
+
+            // ComboBox symbols for future savings
+            symbolsComboBox2 = new JComboBox<>(symbolsOptions);
+            symbolsComboBox2.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
+            symbolsComboBox2.setBounds(580, 580, 60, 35);
+            add(symbolsComboBox2);
+            
+            // ActionListener for ComboBox symbolsComboBox2 (Future Savings)
+            symbolsComboBox2.addActionListener((ActionEvent e) -> {
+                String selectedFormat = (String) symbolsComboBox2.getSelectedItem();
+                String text = FutureSavingsField.getText().replaceAll("[^\\d.]", ""); // Remove previous symbols
+                double pretaxIncome = parseCurrencyField(PreTaxField.getText()); // Convert PreTaxField value to double
+
+                if ("%".equals(selectedFormat)) {
+                    // Convert from $ to %
+                    if (pretaxIncome != 0 && !text.isEmpty()) {
+                        double valueInDollars = Double.parseDouble(text);
+                        double percentageValue = (valueInDollars / pretaxIncome) * 100;
+                        FutureSavingsField.setText(String.format("%.2f%%", percentageValue));
+                    }
+                } else if ("$".equals(selectedFormat)) {
+                    // Convert from % to $
+                    if (!text.isEmpty()) {
+                        double percentageValue = Double.parseDouble(text);
+                        double valueInDollars = (percentageValue / 100) * pretaxIncome;
+                        FutureSavingsField.setText(NumberFormat.getCurrencyInstance().format(valueInDollars));
+                    }
+                }
+            });
+
+            // Add FocusListener to downPaymentField
+            FutureSavingsField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusLost(FocusEvent e) {
+                    String selectedFormat = (String) symbolsComboBox2.getSelectedItem();
+                    String text = FutureSavingsField.getText().replaceAll("[^\\d.]", ""); // Remove symbols
+
+                    if ("%".equals(selectedFormat) && !text.isEmpty()) {
+                        // Append % when focus is lost and "%" is selected
+                        FutureSavingsField.setText(text + "%");
+                    } else if ("$".equals(selectedFormat) && !text.isEmpty()) {
+                        // Format as currency with "$" symbol
+                        double value = Double.parseDouble(text);
+                        FutureSavingsField.setText(NumberFormat.getCurrencyInstance().format(value));
+                    }
+                }
+            });
+            
+            // Calculate button setup
+            calculateButton = new JButton("Calculate");
+            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 24));
+            calculateButton.setBounds(150, 650, 175, 50);
+            calculateButton.setBackground(new Color(169, 223, 191));
+            add(calculateButton);
+            calculateButton.addActionListener(e -> calculateRetirementEquation());
+
+            // Clear button setup
+            clearButton = new JButton("Clear");
+            clearButton.setFont(new Font("Times New Roman", Font.BOLD, 24));
+            clearButton.setBounds(370, 650, 130, 50);
+            clearButton.setForeground(Color.WHITE);
+            clearButton.setBackground(Color.GRAY);
+            add(clearButton);
+            clearButton.addActionListener(e -> clearFields());
+            
+            // result name
+            resultLabel = new JLabel("Results");
+            resultLabel.setFont(new Font("Times New Roman", Font.BOLD, 34));
+            resultLabel.setBounds(690,180,120,40);
+            resultLabel.setForeground(Color.WHITE);
+            add(resultLabel);
+            
+            // Result label setup
+            resultScreen = new JLabel("");
+            resultScreen.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            resultScreen.setBounds(680, 240, 490, 95);
+            //resultScreen.setOpaque(true);
+            //resultScreen.setBackground(new Color(184, 228, 202));
+            add(resultScreen);
+            
+            // Graph result
+            graph_result = new JPanel();
+            graph_result.setFont(new Font("Times New Roman", Font.PLAIN, 20));
+            graph_result.setBounds(680, 340, 490, 400);
+            graph_result.setBackground(Color.WHITE);
+            graph_result.setLayout(new BorderLayout());
+            add(graph_result);
+            
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+    
+    // Utility method to parse currency fields
+    private double parseCurrencyField(String text) {
+        try {
+            // Remove any non-numeric characters before parsing
+            String numericText = text.replaceAll("[^\\d.]", "");
+            return Double.parseDouble(numericText);
+        } catch (NumberFormatException ex) {
+            return 0.0;
+        }
+    }
+    
+    // FocusListener to format JTextField input as currency on focus loss
+    private class CurrencyFormatFocusListener extends FocusAdapter {
+        @Override
+        public void focusLost(FocusEvent e) {
+            JTextField source = (JTextField) e.getSource();
+            try {
+                // Parse and format the value as currency
+                double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                source.setText(currencyFormat.format(value));
+            } catch (NumberFormatException ex) {
+                source.setText(""); // Clear field if input is invalid
+            }
+        }
+    }
+
+    public void calculateRetirementEquation() {
+        try{
+            // Get values from fields, stripping out symbols where necessary
+           int currentAge = Integer.parseInt(CurrentAgeField.getText().trim());
+           int retirementAge = Integer.parseInt(PlannedRetirementField.getText().trim());
+           int lifeExpectancy = Integer.parseInt(LifeExpectancyField.getText().trim());
+           double preTaxIncome = parseCurrency(PreTaxField.getText());
+           double currentIncomeIncrease = parsePercentage(CurrentIncomeField.getText());
+           double incomeNeededAfterRetirement = parseCurrencyOrPercentage(IncomeNeededField, symbolsComboBox1);
+           double avgInvestmentReturn = parsePercentage(AverageInvestmentField.getText());
+           double inflationRate = parsePercentage(InflationRateField.getText());
+           double otherIncomeAfterRetirement = parseCurrency(OtherIncomeField.getText());
+           double currentSavings = parseCurrency(CurrentSavingsField.getText());
+           double futureSavings = parseCurrencyOrPercentage(FutureSavingsField, symbolsComboBox2);
+           
+           // Calculate years until retirement and years in retirement
+           int yearsToRetirement = retirementAge - currentAge;
+           int yearsInRetirement = lifeExpectancy - retirementAge;
+
+           // Calculate final income before retirement
+           double finalIncome = preTaxIncome * Math.pow(1 + (currentIncomeIncrease/100), yearsToRetirement);
+
+           // Check if incomeNeededAfterRetirement is a percentage or a dollar amount
+            if (IncomeNeededField.getText().contains("%")) {
+                // If it's a percentage, divide by 100 to convert to decimal form
+                incomeNeededAfterRetirement /= 100;
+            } else if (IncomeNeededField.getText().contains("$")) {
+                // If it's a dollar amount, convert it to percentage of preTaxIncome
+                incomeNeededAfterRetirement = (incomeNeededAfterRetirement / preTaxIncome);
+            }
+            
+            // Check if futureSavings is a percentage or a dollar amount
+            if (FutureSavingsField.getText().contains("%")) {
+                // If it's a percentage, divide by 100 to convert to decimal form
+                futureSavings /= 100;
+            } else if (FutureSavingsField.getText().contains("$")) {
+                // If it's a dollar amount, convert it to percentage of preTaxIncome
+                futureSavings = (futureSavings / preTaxIncome);
+            }
+           
+           
+           // Calculate annual income needed in retirement (in future dollars)
+           double annualRetirementIncomeNeeded = finalIncome * incomeNeededAfterRetirement;
+           double annualOtherIncome = otherIncomeAfterRetirement * 12;
+
+           // Adjust for inflation
+           double realReturnRate = (1 + (avgInvestmentReturn/100)) / (1 + (inflationRate/100)) - 1;
+
+           // Calculate total retirement savings needed
+           double netAnnualNeed = annualRetirementIncomeNeeded - annualOtherIncome;
+           double totalNeeded = netAnnualNeed * (1 - Math.pow(1 + realReturnRate, -yearsInRetirement)) / realReturnRate;
+
+           // Calculate projected savings at retirement
+           double projectedSavings = currentSavings * Math.pow(1 + (avgInvestmentReturn/100), yearsToRetirement);
+
+           // Calculate and add future contributions
+           for (int year = 0; year < yearsToRetirement; year++) {
+               double currentIncomeYear = preTaxIncome * Math.pow(1 + (currentIncomeIncrease/100), year);
+               double annualContribution = currentIncomeYear * futureSavings;
+               int yearsToGrow = yearsToRetirement - year - 1;
+               projectedSavings += annualContribution * Math.pow(1 + (avgInvestmentReturn/100), yearsToGrow);
+           }
+
+           
+        // Format the result text with HTML for display
+        DecimalFormat df = new DecimalFormat("###,###,###.##");
+        resultScreen.setText ("<html>You will need about <b><u>$" + df.format(totalNeeded / 1e6) + "M</u></b> at age " + retirementAge + " to retire.<br>" +
+                            "Based on your current plan, you will have about $" + df.format(projectedSavings / 1e6) + "M at age " + retirementAge + ", " +
+                            (projectedSavings >= totalNeeded 
+                             ? "which means you are on track for retirement." 
+                             : "which is less than what you need for retirement.") + "<br>" + "</html>");
+        
+        
+        // Create the dataset for the bar chart
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        dataset.addValue(projectedSavings / 1e6, "Savings", "You will have");
+        dataset.addValue(totalNeeded / 1e6, "Needs", "You will need");
+
+        // Create the bar chart
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "Retirement Savings Comparison at Age " + retirementAge,
+                "Category",
+                "Amount in Millions ($)",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true, true, false);
+
+        // Create a ChartPanel to hold the bar chart
+        ChartPanel chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new Dimension(400, 300));
+
+        // Display the chart in graph_result panel
+        graph_result.removeAll();  // Clear previous contents
+        graph_result.add(chartPanel, BorderLayout.CENTER); // Add chartPanel to graph_result
+        graph_result.revalidate();
+        graph_result.repaint();
+
+    }catch  (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Please ensure all fields are filled with valid numbers.", "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
+    
+        // Helper method to parse currency inputs (removes "$" and commas)
+    private double parseCurrency(String text) {
+        text = text.replaceAll("[^\\d.]", ""); // Remove everything except digits and decimals
+        return text.isEmpty() ? 0 : Double.parseDouble(text);
+    }
+
+    // Helper method to parse percentage inputs (removes "%")
+    private double parsePercentage(String text) {
+        text = text.replaceAll("[^\\d.]", ""); // Remove everything except digits and decimals
+        return text.isEmpty() ? 0 : Double.parseDouble(text);
+    }
+
+    // Helper method to parse either currency or percentage based on ComboBox selection
+    private double parseCurrencyOrPercentage(JTextField field, JComboBox<String> comboBox) {
+        String selectedFormat = (String) comboBox.getSelectedItem();
+        String text = field.getText().replaceAll("[^\\d.]", "");
+
+        double value = text.isEmpty() ? 0 : Double.parseDouble(text);
+        if ("%".equals(selectedFormat)) {
+            return value; // As percentage
+        } else {
+            return value; // As dollar amount
+        }
+    }
+    private void clearFields() {
+        CurrentAgeField.setText("");
+        PlannedRetirementField.setText("");
+        LifeExpectancyField.setText("");
+        PreTaxField.setText("");
+        CurrentIncomeField.setText("");
+        IncomeNeededField.setText("0");
+        AverageInvestmentField.setText("");
+        InflationRateField.setText("");
+        OtherIncomeField.setText("");
+        CurrentSavingsField.setText("");
+        FutureSavingsField.setText("0");
+        resultScreen.setText("");
+        // Clear the graph result panel
+        graph_result.removeAll();
+        graph_result.revalidate(); // Refresh the layout to show it's cleared
+        graph_result.repaint();    // Repaint to make the change visible
+        symbolsComboBox1.setSelectedIndex(0);
+        symbolsComboBox2.setSelectedIndex(0);
     }
 }
 
