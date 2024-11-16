@@ -22,6 +22,8 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 import java.text.DecimalFormat;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import org.json.JSONObject;
 
 public class JavaApplication_X extends JFrame {
@@ -593,8 +595,9 @@ class MortgageAndRealCategory extends JFrame{
                 }
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Refinance Calculator will come soon");
+                    RefinanceCalculator RefinanceCalculatorFrame = new RefinanceCalculator();
+                    RefinanceCalculatorFrame.setVisible(true);
+                    dispose();
                 }
             });
             // Add the label to the panel
@@ -2780,7 +2783,7 @@ class HouseAffordabilityCalc extends JFrame{
                 calculateButton.addActionListener(new CalculateButtonListener());
                 add(calculateButton); // Add button to the panel
                 
-                 // Create and set up the "Clear" JButton
+                // Create and set up the "Clear" JButton
                 clearButton = new JButton("Clear");
                 clearButton.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font
                 clearButton.setForeground(Color.WHITE); // Set text color to white
@@ -3841,7 +3844,7 @@ public class Retirment_Calculator extends JFrame {
     }
     }
     
-        // Helper method to parse currency inputs (removes "$" and commas)
+    // Helper method to parse currency inputs (removes "$" and commas)
     private double parseCurrency(String text) {
         text = text.replaceAll("[^\\d.]", ""); // Remove everything except digits and decimals
         return text.isEmpty() ? 0 : Double.parseDouble(text);
@@ -3884,6 +3887,414 @@ public class Retirment_Calculator extends JFrame {
         graph_result.repaint();    // Repaint to make the change visible
         symbolsComboBox1.setSelectedIndex(0);
         symbolsComboBox2.setSelectedIndex(0);
+    }
+}
+public class RefinanceCalculator extends JFrame {    
+    private final Image backgroundImage;
+    private JTextField remainingBalanceField, monthlyPaymentField, currentRateField, 
+                        newTermYearsField, newRateField, pointsField, costsFeesField, cashOutField;
+    private JLabel resultLabel,result_monthlyLabel;
+    private NumberFormat currencyFormat;
+
+    public RefinanceCalculator() {        
+        // Load the background image
+        backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/refinance_calculator_background.png")).getImage();
+
+        // Setting up the JFrame
+        setTitle("Refinance Calculator");
+        setSize(1200, 800);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        // Create currency formatter for USD
+        currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        
+        // Add content to the JFrame (background panel)
+        setContentPane(new ImagePanel()); 
+}
+   // Inner class to handle the background image panel
+    private class ImagePanel extends JPanel {
+        private final JLabel titleLabel;
+        private final JLabel remaining_balanceLabel, monthly_paymentLabel, current_interestRateLabel,
+                            new_term_yearLabel, new_interest_rateLabel, pointsLabel, costsFeesLabel, cashOutLabel;
+        private final JButton calculateButton, backButton, clearButton;
+        
+        public ImagePanel() {
+            setLayout(null);
+            
+            titleLabel = new JLabel("Refinance Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD,60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(180,70,800,100);
+            add(titleLabel);
+            
+            // Back button setup
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                MortgageAndRealCategory MortgageAndRealCategoryFrame = new MortgageAndRealCategory();
+                MortgageAndRealCategoryFrame.setVisible(true);
+                dispose(); // Close the current frame
+            });
+            
+            result_monthlyLabel = new JLabel("New Monthly Pay:");
+            result_monthlyLabel.setFont(new Font("Times New Roman", Font.BOLD,40));
+            result_monthlyLabel.setForeground(Color.WHITE);
+            result_monthlyLabel.setBounds(590,190,600,50);
+            add(result_monthlyLabel);
+            
+            remaining_balanceLabel = new JLabel("Remaining Balance");
+            remaining_balanceLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            remaining_balanceLabel.setBounds(40,200,250,40);
+            add(remaining_balanceLabel);
+
+            remainingBalanceField = new JTextField("$");
+            remainingBalanceField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            remainingBalanceField.setBounds(320,200,200,40);
+            remainingBalanceField.addFocusListener(new CurrencyFormatFocusListener());
+            add(remainingBalanceField);
+
+            monthly_paymentLabel = new JLabel("Monthly Payment");
+            monthly_paymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            monthly_paymentLabel.setBounds(40,250,250,40);
+            add(monthly_paymentLabel);
+
+            monthlyPaymentField = new JTextField("$");
+            monthlyPaymentField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            monthlyPaymentField.setBounds(320, 250,200,40);
+            monthlyPaymentField.addFocusListener(new CurrencyFormatFocusListener());
+            add(monthlyPaymentField);
+
+            current_interestRateLabel = new JLabel("Current Interest Rate");
+            current_interestRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            current_interestRateLabel.setBounds(40,300,250,40);
+            add(current_interestRateLabel);
+
+            currentRateField = new JTextField("                                              %");
+            currentRateField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            currentRateField.setBounds(320,300,200,40);
+            // Add a FocusListener to manage the % symbol
+            currentRateField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (currentRateField.getText().endsWith("%")) {
+                        currentRateField.setText(currentRateField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!currentRateField.getText().isEmpty() && !currentRateField.getText().endsWith("%")) {
+                        currentRateField.setText(currentRateField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(currentRateField);
+
+            new_term_yearLabel = new JLabel("New loan term (years)");
+            new_term_yearLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            new_term_yearLabel.setBounds(40,350,250,40);
+            add(new_term_yearLabel);
+
+            newTermYearsField = new JTextField("");
+            newTermYearsField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            newTermYearsField.setBounds(320,350,200,40);
+            // Add KeyListener to validate input
+            newTermYearsField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+            add(newTermYearsField);
+
+            new_interest_rateLabel = new JLabel("New Interest Rate");
+            new_interest_rateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            new_interest_rateLabel.setBounds(40,400,250,40);
+            add(new_interest_rateLabel);
+
+            newRateField = new JTextField("                                              %");
+            newRateField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            newRateField.setBounds(320,400,200,40);
+            // Add a FocusListener to manage the % symbol
+            newRateField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (newRateField.getText().endsWith("%")) {
+                        newRateField.setText(newRateField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!newRateField.getText().isEmpty() && !newRateField.getText().endsWith("%")) {
+                        newRateField.setText(newRateField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(newRateField);
+
+            pointsLabel = new JLabel("Points");
+            pointsLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            pointsLabel.setBounds(40,450,250,40);
+            add(pointsLabel);
+
+            pointsField = new JTextField("");
+            pointsField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            pointsField.setBounds(320,450,200,40);
+            // Add KeyListener to validate input
+            pointsField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+            add(pointsField);
+
+            costsFeesLabel = new JLabel("Costs and Fees");
+            costsFeesLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            costsFeesLabel.setBounds(40,500,250,40);
+            add(costsFeesLabel);
+
+            costsFeesField = new JTextField("$");
+            costsFeesField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            costsFeesField.setBounds(320,500,200,40);
+            costsFeesField.addFocusListener(new CurrencyFormatFocusListener());
+            add(costsFeesField);
+
+            cashOutLabel = new JLabel("Cash out amount");
+            cashOutLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            cashOutLabel.setBounds(40,550,250,40);
+            add(cashOutLabel);
+
+            cashOutField = new JTextField("$");
+            cashOutField.setFont(new Font("Times New Roman", Font.PLAIN,24));
+            cashOutField.setBounds(320,550,200,40);
+            cashOutField.addFocusListener(new CurrencyFormatFocusListener());
+            add(cashOutField);
+
+            // Clear button setup
+            clearButton = new JButton("Clear");
+            clearButton.setFont(new Font("Times New Roman", Font.BOLD, 24));
+            clearButton.setBounds(320, 630, 130, 50);
+            clearButton.setForeground(Color.WHITE);
+            clearButton.setBackground(Color.GRAY);
+            add(clearButton);
+            clearButton.addActionListener(e -> clearFields());
+            
+            // Button to calculate
+            calculateButton = new JButton("Calculate");
+            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 24));
+            calculateButton.setBackground(new Color(169, 223, 191));
+            calculateButton.setBounds(100, 630, 175, 50);
+            add(calculateButton);
+
+            // Action listener for the button
+            calculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Get the values from input fields
+                    double remainingBalance = parseCurrency(remainingBalanceField.getText());
+                    double monthlyPayment = parseCurrency(monthlyPaymentField.getText());
+                    double currentRate = parsePercentage(currentRateField.getText());
+                    int newTermYears = Integer.parseInt(newTermYearsField.getText().trim());
+                    double newRate = parsePercentage(newRateField.getText());
+                    double points = Integer.parseInt(pointsField.getText().trim());
+                    double costsFees = parseCurrency(costsFeesField.getText());
+                    double cashOut = parseCurrency(cashOutField.getText());
+
+                    // Call the refinance calculation method
+                    RefinanceResults results = refinanceCalculator(remainingBalance, monthlyPayment, currentRate, 
+                                                                   newTermYears, newRate, points, costsFees, cashOut);
+
+                    // Build the results text
+                    String resultText = "<html>";
+
+                    // APR: Always bold and black
+                    resultText += "The APR for the new loan: <b>" + formatCurrency(results.APR) + "%</b><br>";
+
+                    // Monthly Savings or Extra Cost
+                    if (results.monthlySavings >= 0) {
+                        resultText += "Saving in monthly pay: <b><span style='color:green;'>"
+                                + formatCurrency(results.monthlySavings) + "/month</span></b><br>";
+                    } else {
+                        resultText += "Extra cost in monthly pay: <b><span style='color:red;'>"
+                                + formatCurrency(Math.abs(results.monthlySavings)) + "/month</span></b><br>";
+                    }
+
+                    // Time Saved or Time Extended
+                    if (results.timeSaved >= 0) {
+                        resultText += "Time Saved (months): <b><span style='color:green;'>"
+                                + results.timeSaved + " months</span></b><br>";
+                    } else {
+                        resultText += "Time Extended (months): <b><span style='color:red;'>"
+                                + Math.abs(results.timeSaved) + " months</span></b><br>";
+                    }
+
+                    // Lifetime Savings or Total Extra Cost
+                    if (results.lifetimeSavings >= 0) {
+                        resultText += "Lifetime Savings: <b><span style='color:green;'>"
+                                + formatCurrency(results.lifetimeSavings) + "</span></b><br>";
+                    } else {
+                        resultText += "Total extra cost for the new loan: <b><span style='color:red;'>"
+                                + formatCurrency(Math.abs(results.lifetimeSavings)) + "</span></b><br>";
+                    }
+
+                    // Upfront Cost: Always red
+                    resultText += "Upfront Cost: <b><span style='color:red;'>"
+                            + formatCurrency(results.upfrontCost) + "</span></b><br>";
+
+                    resultText += "</html>";
+
+                    // Set the results to the labels
+                    resultLabel.setText(resultText);
+
+                    // New Monthly Pay: Remains unchanged
+                    result_monthlyLabel.setText("New Monthly Pay: " + formatCurrency(results.newMonthlyPayment));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter valid numeric values.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Result label
+        resultLabel = new JLabel("");
+        resultLabel.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+        resultLabel.setBounds(578, 230, 570, 300);
+        //resultLabel.setOpaque(true);
+        //resultLabel.setBackground(new Color(169, 223, 191));
+        add(resultLabel);
+    }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+    
+    // Helper method to parse currency inputs (removes "$" and commas)
+    public double parseCurrency(String text) {
+        text = text.replaceAll("[^\\d.]", ""); // Remove everything except digits and decimals
+        return text.isEmpty() ? 0 : Double.parseDouble(text);
+    }
+    
+    // Helper method to parse percentage inputs (removes "%")
+    private double parsePercentage(String text) {
+        text = text.replaceAll("[^\\d.]", ""); // Remove everything except digits and decimals
+        return text.isEmpty() ? 0 : Double.parseDouble(text);
+    }
+        
+    // Method for refinance calculation
+    public RefinanceResults refinanceCalculator(double remainingBalance, double monthlyPayment, double currentRate, 
+                                                int newTermYears, double newRate, double points, double costsFees, double cashOut) {
+        final int MONTHS_IN_YEAR = 12;
+        
+        // Current Loan Calculation
+        double rCurrent = currentRate / 100 / MONTHS_IN_YEAR;
+        double PCurrent = remainingBalance;
+        
+        // Calculate remaining payments more accurately
+        double nCurrent = -Math.log(1 - (rCurrent * PCurrent) / monthlyPayment) / Math.log(1 + rCurrent);
+        nCurrent = Math.ceil(nCurrent); // Round up to nearest month
+        
+        // Calculate remaining interest on current loan
+        double remainingInterestCurrent = (monthlyPayment * nCurrent) - PCurrent;
+        
+        // New Loan Calculation
+        double PNew = remainingBalance + cashOut;
+        double rNew = newRate / 100 / MONTHS_IN_YEAR;
+        int nNew = newTermYears * MONTHS_IN_YEAR;
+        
+        // Calculate new monthly payment
+        double MNew = PNew * (rNew * Math.pow(1 + rNew, nNew)) / (Math.pow(1 + rNew, nNew) - 1);
+        
+        // Calculate total interest on new loan
+        double totalNewPayments = MNew * nNew;
+        double totalInterestNew = totalNewPayments - PNew;
+        
+        // Calculate lifetime savings
+        double lifetimeSavings = remainingInterestCurrent - totalInterestNew - upfrontCosts(PNew, points, costsFees) - monthlyPayment;
+        
+        // Calculate other metrics
+        double monthlySavings = monthlyPayment - MNew;
+        long timeSaved = (long)nCurrent - nNew;
+        double upfrontCost = upfrontCosts(PNew, points, costsFees);
+        
+        // Calculate APR (simplified)
+        double APR = newRate + (upfrontCost / PNew) * MONTHS_IN_YEAR;
+
+        return new RefinanceResults(APR, MNew, monthlySavings, timeSaved, lifetimeSavings, upfrontCost);
+    }
+
+    // Method to calculate upfront costs
+    public double upfrontCosts(double loanAmount, double points, double costsFees) {
+        return (points / 100 * loanAmount) + costsFees;
+    }
+
+    // Method to format numbers as currency
+    public String formatCurrency(double value) {
+         return currencyFormat.format(value);
+    }
+
+    // Class to hold refinance results
+    public static class RefinanceResults {
+        double APR, newMonthlyPayment, monthlySavings, lifetimeSavings, upfrontCost;
+        long timeSaved;
+
+        public RefinanceResults(double APR, double newMonthlyPayment, double monthlySavings, long timeSaved, 
+                                double lifetimeSavings, double upfrontCost) {
+            this.APR = APR;
+            this.newMonthlyPayment = newMonthlyPayment;
+            this.monthlySavings = monthlySavings;
+            this.timeSaved = timeSaved;
+            this.lifetimeSavings = lifetimeSavings;
+            this.upfrontCost = upfrontCost;
+        }
+    }
+    
+    // FocusListener to format JTextField input as currency on focus loss
+    private class CurrencyFormatFocusListener extends FocusAdapter {
+        @Override
+        public void focusLost(FocusEvent e) {
+            JTextField source = (JTextField) e.getSource();
+            try {
+                // Parse and format the value as currency
+                double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                source.setText(currencyFormat.format(value));
+            } catch (NumberFormatException ex) {
+                source.setText(""); // Clear field if input is invalid
+            }
+        }
+    }
+    
+    private void clearFields(){
+        remainingBalanceField.setText("$");
+        monthlyPaymentField.setText("$");
+        currentRateField.setText("%");
+        newTermYearsField.setText("");
+        newRateField.setText("%");
+        pointsField.setText("");
+        costsFeesField.setText("$");
+        cashOutField.setText("$");
+        resultLabel.setText("");
+        result_monthlyLabel.setText("New Monthly Pay:");
     }
 }
 
