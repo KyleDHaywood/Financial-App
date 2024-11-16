@@ -623,8 +623,9 @@ class MortgageAndRealCategory extends JFrame{
                 }
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Down Payment Calculator will come soon");
+                    DownPaymentCalculator DownPaymentCalculatorFrame = new DownPaymentCalculator();
+                    DownPaymentCalculatorFrame.setVisible(true);
+                    dispose();
                 }
             });
             // Add the label to the panel
@@ -870,6 +871,18 @@ class Auto_loan_calculator extends JFrame{
             loanTermField = new JTextField("");
             loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 18));
             loanTermField.setBounds(320, 300, 200, 40);
+            // Add KeyListener to validate input
+            loanTermField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(loanTermField);
            
             //cash incentives label and field
@@ -1444,29 +1457,21 @@ class RentVsBuyCalculator extends JFrame{
         add(interestRateField);
         
         // loan term Field setup
-        loanTermField = new JTextField("0");
+        loanTermField = new JTextField("");
         loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         loanTermField.setBounds(320, 342, 160, 35);
-        //loanTermField.setBackground(new Color(169,223,191));
-        loanTermField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-            // Clear field when focused if it's the default "$0"
-            if (loanTermField.getText().equals("0")) {
-                    loanTermField.setText("");
+        // Add KeyListener to validate input
+            loanTermField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
                 }
-            }
-            @Override
-            public void focusLost(FocusEvent e) {
-                // Set default "$0" if field is left empty
-                if (loanTermField.getText().isEmpty()) {
-                    loanTermField.setText("0");
-                } else if (!loanTermField.getText().startsWith("")) {
-                    // Ensure field starts with "$" if not empty
-                    loanTermField.setText(loanTermField.getText().trim());
-                }
-            }
-        });
+            });
         add(loanTermField);
             
         // property tax Field setup
@@ -2170,7 +2175,7 @@ class CurrencyCalculator extends JFrame{
                 });
                 add(calculateButton); // Add button to the panel
                 
-                 // Create and set up the "Clear" JButton
+                // Create and set up the "Clear" JButton
                 clearButton = new JButton("Clear");
                 clearButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
                 clearButton.setForeground(Color.WHITE); // Set text color to white
@@ -2442,6 +2447,18 @@ public class MortgageCalculator extends JFrame {
             loanTermField = new JTextField();
             loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
             loanTermField.setBounds(300, 370, 200, 40);
+            // Add KeyListener to validate input
+            loanTermField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(loanTermField);
             
             yearLabel = new JLabel("years");
@@ -2902,6 +2919,18 @@ class HouseAffordabilityCalc extends JFrame{
             loanTermField = new JTextField();
             loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             loanTermField.setBounds(400, 250, 200, 40); // Position next to loanTermLabel
+            // Add KeyListener to validate input
+            loanTermField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(loanTermField);
 
             interestRateField = new JTextField("                                    %");
@@ -3377,6 +3406,18 @@ public class Retirment_Calculator extends JFrame {
             CurrentAgeField = new JTextField();
             CurrentAgeField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             CurrentAgeField.setBounds(380, 180, 200, 35);
+            // Add KeyListener to validate input
+            CurrentAgeField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(CurrentAgeField);
            
             // Planned Retirement label and field
@@ -3388,6 +3429,18 @@ public class Retirment_Calculator extends JFrame {
             PlannedRetirementField = new JTextField();
             PlannedRetirementField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             PlannedRetirementField.setBounds(380, 220, 200, 35);
+            // Add KeyListener to validate input
+            PlannedRetirementField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(PlannedRetirementField);
            
             // Life Expectancy lable and field
@@ -3399,6 +3452,18 @@ public class Retirment_Calculator extends JFrame {
             LifeExpectancyField = new JTextField();
             LifeExpectancyField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             LifeExpectancyField.setBounds(380, 260, 200, 35);
+            // Add KeyListener to validate input
+            LifeExpectancyField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(LifeExpectancyField);
 
            
@@ -4297,6 +4362,361 @@ public class RefinanceCalculator extends JFrame {
         result_monthlyLabel.setText("New Monthly Pay:");
     }
 }
+
+// New JFrame class for the currency calculator
+class DownPaymentCalculator extends JFrame{
+    private final Image backgroundImage;
+    private final NumberFormat currencyFormat;
+    private JButton calculateButton, clearButton;
+    private JTextField cashAvailableField, downPaymentField, closingCostsField;
+    private JTextField interestRateField, loanTermField;
+    private JLabel homePriceResult, downPaymentResult, closingCostsResult;
+    private JLabel loanAmountResult, monthlyPaymentResult;
+    
+    public DownPaymentCalculator() {
+       // Load the background image
+       backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/downpayment_calculator_background.png")).getImage();
+       // Set up the JFrame
+       setTitle("Down Payment Calculator");
+       setSize(1200, 800);
+       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       setLocationRelativeTo(null);
+       setResizable(false);
+       // Create currency formatter for USD
+       currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+       
+       // Add content to the JFrame (background panel)
+       setContentPane(new ImagePanel());
+    }
+    
+    // Inner class to handle the background image panel
+    private class ImagePanel extends JPanel{
+        private final JButton backButton;
+        private final JLabel titleLabel;
+        private final JLabel cashAvailableLabel, downPaymentLabel, closingCostsLabel;
+        private final JLabel interestRateLabel, loanTermLabel;
+        private final JLabel homePriceLabel, homePriceLabel2, downPaymentLabelName, closingCostsLabelName;
+        private final JLabel loanAmountLabel, monthlyPaymentLabel;
+        
+        public ImagePanel(){
+            setLayout(null);
+            
+            // Back button setup
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                MortgageAndRealCategory MortgageAndRealCategoryFrame = new MortgageAndRealCategory();
+                MortgageAndRealCategoryFrame.setVisible(true);
+                dispose();
+            });
+            
+            // Title label setup
+            titleLabel = new JLabel("Down Payment Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(175, 10, 800, 200);
+            add(titleLabel);
+            
+            // Create and set up the "Calculate" JButton
+            calculateButton = new JButton("Calculate");
+            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
+            calculateButton.setForeground(Color.BLACK); // Set text color to black
+            calculateButton.setBackground(new Color(169, 223, 191)); // Set background color to green
+            calculateButton.setBounds(100, 630, 200, 50); // Position and size of the button
+            add(calculateButton); // Add button to the panel
+            calculateButton.addActionListener(e -> calculate_home_puurchase());
+            
+            // Create and set up the "Clear" JButton
+            clearButton = new JButton("Clear");
+            clearButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
+            clearButton.setForeground(Color.WHITE); // Set text color to white
+            clearButton.setBackground(Color.GRAY); // Set background color to gray
+            clearButton.setBounds(350, 630, 150, 50); // Position and size of the button
+            add(clearButton); // Add button to the panel
+            clearButton.addActionListener(e -> clearFields());
+            
+            cashAvailableLabel = new JLabel("Upfront Cash Avail.");
+            cashAvailableLabel.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font and style
+            cashAvailableLabel.setForeground(Color.BLACK); // Set text color
+            cashAvailableLabel.setBounds(40, 200, 300, 40);
+            add(cashAvailableLabel);
+            
+            cashAvailableField = new JTextField("$");
+            cashAvailableField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+            cashAvailableField.setForeground(Color.BLACK);
+            cashAvailableField.setBounds(340, 200, 200,50);
+            cashAvailableField.addFocusListener(new CurrencyFormatFocusListener());
+            add(cashAvailableField);
+            
+            downPaymentLabel = new JLabel("Down Payment");
+            downPaymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font and style
+            downPaymentLabel.setForeground(Color.BLACK); // Set text color
+            downPaymentLabel.setBounds(40, 280, 250, 40);
+            add(downPaymentLabel);
+            
+            downPaymentField = new JTextField("                                           %");
+            downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+            downPaymentField.setForeground(Color.BLACK);
+            downPaymentField.setBounds(340, 280, 200,50);
+            // Add a FocusListener to manage the % symbol
+            downPaymentField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (downPaymentField.getText().endsWith("%")) {
+                        downPaymentField.setText(downPaymentField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!downPaymentField.getText().isEmpty() && !downPaymentField.getText().endsWith("%")) {
+                        downPaymentField.setText(downPaymentField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(downPaymentField);
+            
+            closingCostsLabel = new JLabel("Closing Costs");
+            closingCostsLabel.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font and style
+            closingCostsLabel.setForeground(Color.BLACK); // Set text color
+            closingCostsLabel.setBounds(40, 360, 250, 40);
+            add(closingCostsLabel);
+            
+            closingCostsField = new JTextField("                                   %");
+            closingCostsField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+            closingCostsField.setForeground(Color.BLACK);
+            closingCostsField.setBounds(340, 360, 200,50);
+            // Add a FocusListener to manage the % symbol
+            closingCostsField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (closingCostsField.getText().endsWith("%")) {
+                        closingCostsField.setText(closingCostsField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!closingCostsField.getText().isEmpty() && !closingCostsField.getText().endsWith("%")) {
+                        closingCostsField.setText(closingCostsField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(closingCostsField);
+            
+            interestRateLabel = new JLabel("Interest Rate");
+            interestRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font and style
+            interestRateLabel.setForeground(Color.BLACK); // Set text color
+            interestRateLabel.setBounds(40, 440, 250, 40);
+            add(interestRateLabel);
+            
+            interestRateField = new JTextField("                                %");
+            interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+            interestRateField.setForeground(Color.BLACK);
+            interestRateField.setBounds(340, 440, 200,50);
+            // Add a FocusListener to manage the % symbol
+            interestRateField.addFocusListener(new FocusAdapter() {
+                @Override
+                public void focusGained(FocusEvent e) {
+                    // Remove % when field is clicked for editing
+                    if (interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
+                    }
+                }
+
+                @Override
+                public void focusLost(FocusEvent e) {
+                    // Append % when focus is lost
+                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
+                        interestRateField.setText(interestRateField.getText().trim() + "%");
+                    }
+                }
+            });
+            add(interestRateField);
+            
+            loanTermLabel = new JLabel("Loan Term (years)");
+            loanTermLabel.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font and style
+            loanTermLabel.setForeground(Color.BLACK); // Set text color
+            loanTermLabel.setBounds(40, 520, 250, 40);
+            add(loanTermLabel);
+            
+            loanTermField = new JTextField("");
+            loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+            loanTermField.setForeground(Color.BLACK);
+            loanTermField.setBounds(340, 520, 200,50);
+            // Add KeyListener to validate input
+            loanTermField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+            add(loanTermField);
+            
+            homePriceLabel = new JLabel("Home Price:");
+            homePriceLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
+            homePriceLabel.setForeground(Color.WHITE);
+            homePriceLabel.setBounds(590,200,600,50);
+            add(homePriceLabel);
+            
+            homePriceLabel2 = new JLabel("Home Price ");
+            homePriceLabel2.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            homePriceLabel2.setForeground(Color.BLACK);
+            homePriceLabel2.setBounds(590,310,250,50);
+            add(homePriceLabel2);
+            
+            downPaymentLabelName = new JLabel("Down Payment");
+            downPaymentLabelName.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            downPaymentLabelName.setForeground(Color.BLACK);
+            downPaymentLabelName.setBounds(590,380,250,50);
+            add(downPaymentLabelName);
+            
+            closingCostsLabelName = new JLabel("Closing Costs");
+            closingCostsLabelName.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            closingCostsLabelName.setForeground(Color.BLACK);
+            closingCostsLabelName.setBounds(590,450,250,50);
+            add(closingCostsLabelName);
+            
+            loanAmountLabel = new JLabel("Loan Amount");
+            loanAmountLabel.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            loanAmountLabel.setForeground(Color.BLACK);
+            loanAmountLabel.setBounds(590,520,250,50);
+            add(loanAmountLabel);
+            
+            monthlyPaymentLabel = new JLabel("Monthly Payment");
+            monthlyPaymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 32));
+            monthlyPaymentLabel.setForeground(Color.BLACK);
+            monthlyPaymentLabel.setBounds(590,590,250,50);
+            add(monthlyPaymentLabel);
+            
+            homePriceResult = new JLabel("");
+            homePriceResult.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            homePriceResult.setForeground(Color.BLACK);
+            homePriceResult.setBounds(880,310,250,50);
+            add(homePriceResult);
+            
+            downPaymentResult = new JLabel("");
+            downPaymentResult.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            downPaymentResult.setForeground(Color.BLACK);
+            downPaymentResult.setBounds(880,380,250,50);
+            add(downPaymentResult);
+            
+            closingCostsResult = new JLabel("");
+            closingCostsResult.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            closingCostsResult.setForeground(Color.BLACK);
+            closingCostsResult.setBounds(880,450,250,50);
+            add(closingCostsResult);
+            
+            loanAmountResult = new JLabel("");
+            loanAmountResult.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            loanAmountResult.setForeground(Color.BLACK);
+            loanAmountResult.setBounds(880,520,250,50);
+            add(loanAmountResult);
+            
+            monthlyPaymentResult = new JLabel("");
+            monthlyPaymentResult.setFont(new Font("Times New Roman", Font.BOLD, 32));
+            monthlyPaymentResult.setForeground(Color.BLACK);
+            monthlyPaymentResult.setBounds(880,590,250,50);
+            add(monthlyPaymentResult);
+            
+        }
+        
+        // FocusListener to format JTextField input as currency on focus loss
+        private class CurrencyFormatFocusListener extends FocusAdapter {
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField source = (JTextField) e.getSource();
+                try {
+                    // Parse and format the value as currency
+                    double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                    source.setText(currencyFormat.format(value));
+                } catch (NumberFormatException ex) {
+                    source.setText(""); // Clear field if input is invalid
+                }
+            }
+        }
+        
+        public void calculate_home_puurchase(){
+            try{
+                double cashAvailable = parseCurrency(cashAvailableField.getText());
+                double downPayment_pct = parsePercentage(downPaymentField.getText());
+                double closingCosts_pct = parsePercentage(closingCostsField.getText());
+                double interestRate = parsePercentage(interestRateField.getText());
+                double loanTerm = Integer.parseInt(loanTermField.getText().trim());
+                
+                double down_payment_rate = downPayment_pct / 100;
+                double closing_cost_rate = closingCosts_pct / 100;
+                
+                double home_price = cashAvailable / (down_payment_rate + closing_cost_rate);
+                
+                double down_payment = home_price * down_payment_rate;
+                double closing_costs = home_price * closing_cost_rate;
+                double loan_amount = home_price - down_payment;
+                
+                double monthly_rate = (interestRate/100) / 12;
+                double num_payments = loanTerm * 12;
+                
+                double monthly_payment = loan_amount * (monthly_rate * Math.pow(1 + monthly_rate, num_payments)) / 
+                         (Math.pow(1 + monthly_rate, num_payments) - 1);
+                
+                // Display results
+                homePriceResult.setText(currencyFormat.format(home_price));
+                downPaymentResult.setText(currencyFormat.format(down_payment));
+                closingCostsResult.setText(currencyFormat.format(closing_costs));
+                loanAmountResult.setText(currencyFormat.format(loan_amount));
+                monthlyPaymentResult.setText(currencyFormat.format(monthly_payment));
+                homePriceLabel.setText("Home Price: " + currencyFormat.format(home_price));
+
+                
+        }catch  (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Please ensure all fields are filled with valid numbers.", "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }
+        // Helper method to parse currency inputs (removes "$" and commas)
+        private double parseCurrency(String text) {
+            text = text.replaceAll("[^\\d.]", ""); // Remove everything except digits and decimals
+            return text.isEmpty() ? 0 : Double.parseDouble(text);
+        }
+        
+        // Helper method to parse percentage inputs (removes "%")
+        private double parsePercentage(String text) {
+            text = text.replaceAll("[^\\d.]", ""); // Remove everything except digits and decimals
+            return text.isEmpty() ? 0 : Double.parseDouble(text);
+        }
+
+        private void clearFields(){
+            cashAvailableField.setText("$");
+            downPaymentField.setText("");
+            closingCostsField.setText("");
+            interestRateField.setText("");
+            loanTermField.setText("");
+            homePriceLabel.setText("Home Price: ");
+            homePriceResult.setText("");
+            downPaymentResult.setText("");
+            closingCostsResult.setText("");
+            loanAmountResult.setText("");
+            monthlyPaymentResult.setText("");
+        }
+        
+        @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+    }
+    
+}
+
 
     public static void main(String[] args) {
         // Create and display the form
