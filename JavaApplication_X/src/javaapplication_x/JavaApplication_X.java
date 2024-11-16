@@ -568,8 +568,9 @@ class MortgageAndRealCategory extends JFrame{
                 }
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Rent Calculator will come soon");
+                    RentCalculator RentCalculatorFrame = new RentCalculator();
+                    RentCalculatorFrame.setVisible(true);
+                    dispose();
                 }
             });
             // Add the label to the panel
@@ -4717,6 +4718,198 @@ class DownPaymentCalculator extends JFrame{
     
 }
 
+class RentCalculator extends JFrame{
+    private final Image backgroundImage;
+    private final NumberFormat currencyFormat;
+    private JButton calculateButton, clearButton;
+    private JTextField preTaxIncomeField, debtPaybackFField;
+    private JComboBox selectionComboBox;
+    private JLabel resultsInfoLabel;
+    
+    public RentCalculator(){
+       // Load the background image
+       backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/rentCalculator_background.png")).getImage();
+       // Set up the JFrame
+       setTitle("Rent Calculator");
+       setSize(1200, 800);
+       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       setLocationRelativeTo(null);
+       setResizable(false);
+       // Create currency formatter for USD
+       currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+       
+       // Add content to the JFrame (background panel)
+       setContentPane(new ImagePanel());
+    }
+    
+    // Inner class to handle the background image panel
+    private class ImagePanel extends JPanel{
+        private final JButton backButton, calculateButton, clearButton;
+        private final JLabel titleLabel, resultLabel, preTaxIncomeLabel, debtPaybackLabel;
+        private final JLabel restOfInfo;
+        private final String[] selectionIncome = {
+          "per year", "per month"  
+        };
+        
+        public ImagePanel(){
+            setLayout(null);
+            
+            // Back button setup
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                MortgageAndRealCategory MortgageAndRealCategoryFrame = new MortgageAndRealCategory();
+                MortgageAndRealCategoryFrame.setVisible(true);
+                dispose();
+            });
+            
+            // Title label setup
+            titleLabel = new JLabel("Rent Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(175, 10, 800, 200);
+            add(titleLabel);
+            
+            // Create and set up the "Calculate" JButton
+            calculateButton = new JButton("Calculate");
+            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
+            calculateButton.setForeground(Color.BLACK); // Set text color to black
+            calculateButton.setBackground(new Color(169, 223, 191)); // Set background color to green
+            calculateButton.setBounds(400, 430, 200, 50); // Position and size of the button
+            add(calculateButton); // Add button to the panel
+            calculateButton.addActionListener(e -> calculate_rent_payment());
+            
+            // Create and set up the "Clear" JButton
+            clearButton = new JButton("Clear");
+            clearButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
+            clearButton.setForeground(Color.WHITE); // Set text color to white
+            clearButton.setBackground(Color.GRAY); // Set background color to gray
+            clearButton.setBounds(650, 430, 150, 50); // Position and size of the button
+            add(clearButton); // Add button to the panel
+            clearButton.addActionListener(e -> clearFields());
+            
+            preTaxIncomeLabel = new JLabel("Your pre-tax income");
+            preTaxIncomeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+            preTaxIncomeLabel.setForeground(Color.BLACK);
+            preTaxIncomeLabel.setBounds(90,210,350,50);
+            add(preTaxIncomeLabel);
+            
+            preTaxIncomeField = new JTextField("");
+            preTaxIncomeField.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+            preTaxIncomeField.setForeground(Color.BLACK);
+            preTaxIncomeField.setBounds(460,215,250,40);
+            preTaxIncomeField.addFocusListener(new CurrencyFormatFocusListener());
+            add(preTaxIncomeField);
+            
+            selectionComboBox = new JComboBox<>(selectionIncome);
+            selectionComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+            selectionComboBox.setBounds(720,215,170,40);
+            add(selectionComboBox);
+            
+            debtPaybackLabel = new JLabel("Your monthly debt payback");
+            debtPaybackLabel.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+            debtPaybackLabel.setForeground(Color.BLACK);
+            debtPaybackLabel.setBounds(90,300,350,50);
+            add(debtPaybackLabel);
+            
+            debtPaybackFField = new JTextField("");
+            debtPaybackFField.setFont(new Font("Times New Roman", Font.PLAIN, 30));
+            debtPaybackFField.setForeground(Color.BLACK);
+            debtPaybackFField.setBounds(460,300,250,50);
+            debtPaybackFField.addFocusListener(new CurrencyFormatFocusListener());
+            add(debtPaybackFField);
+            
+            restOfInfo = new JLabel("car/student loan, credit cards, etc.");
+            restOfInfo.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+            restOfInfo.setForeground(Color.BLACK);
+            restOfInfo.setBounds(720,305,500,50);
+            add(restOfInfo);
+            
+            resultLabel = new JLabel("Result");
+            resultLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
+            resultLabel.setForeground(Color.WHITE);
+            resultLabel.setBounds(90,530,150,50);
+            add(resultLabel);
+            
+            resultsInfoLabel = new JLabel("");
+            resultsInfoLabel.setFont(new Font("Times New Roman", Font.PLAIN, 36));
+            resultsInfoLabel.setForeground(Color.BLACK);
+            resultsInfoLabel.setBounds(85,540,1100,200);
+            add(resultsInfoLabel);
+        }
+        
+        public void calculate_rent_payment() {
+            try {
+                // Parse the pre-tax income
+                double preTaxIncome = Double.parseDouble(preTaxIncomeField.getText().replace(",", "").replace("$", ""));
+
+                // Determine if the input is annual or monthly
+                String incomeSelection = (String) selectionComboBox.getSelectedItem();
+                if ("per year".equals(incomeSelection)) {
+                    preTaxIncome /= 12; // Convert annual income to monthly income
+                }
+
+                // Parse the monthly debt payback
+                double monthlyDebt = Double.parseDouble(debtPaybackFField.getText().replace(",", "").replace("$", ""));
+
+                // Calculate affordability
+                double maxRent3Percent = preTaxIncome * 0.36 - monthlyDebt; // Maximum based on 40% rule
+                double recommendedRent = preTaxIncome * 0.28 - monthlyDebt; // Conservative recommendation (28% rule)
+
+                // Check if affordability is viable
+                if (maxRent3Percent <= 0 || recommendedRent <= 0) {
+                    resultsInfoLabel.setText("<html><div style='color:red;'>"
+                            + "At that income and debt level, it will be hard to meet rent payments."
+                            + "</div></html>");
+                } else {
+                    // Format results as currency, without decimals
+                    DecimalFormat currencyFormat = new DecimalFormat("$#,##0");
+
+                    // Format results
+                    String maxRentFormatted = currencyFormat.format(maxRent3Percent);
+                    String recommendedRentFormatted = currencyFormat.format(recommendedRent);
+
+                    // Display results with numbers in green and bold
+            resultsInfoLabel.setText("<html>"
+                    + "You can afford up to <span style='color:green; font-weight:bold;'>" + maxRentFormatted + "</span> per month on a rental payment. "
+                    + "It is recommended to keep your rental payment below <span style='color:green; font-weight:bold;'>" + recommendedRentFormatted + "</span> per month."
+                    + "</html>");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Please enter valid numeric values for all fields.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+
+        private void clearFields(){
+            preTaxIncomeField.setText("$");
+            selectionComboBox.setSelectedIndex(0);
+            debtPaybackFField.setText("$");
+            resultsInfoLabel.setText("");
+        }
+        
+        // FocusListener to format JTextField input as currency on focus loss
+        private class CurrencyFormatFocusListener extends FocusAdapter {
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField source = (JTextField) e.getSource();
+                try {
+                    // Parse and format the value as currency
+                    double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                    source.setText(currencyFormat.format(value));
+                } catch (NumberFormatException ex) {
+                    source.setText(""); // Clear field if input is invalid
+                }
+            }
+        }
+        @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+    }
+}
 
     public static void main(String[] args) {
         // Create and display the form
