@@ -4636,6 +4636,18 @@ class DownPaymentCalculator extends JFrame{
             downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             downPaymentField.setForeground(Color.BLACK);
             downPaymentField.setBounds(340, 280, 200,50);
+            // Add KeyListener to validate input
+            downPaymentField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             // Add a FocusListener to manage the % symbol
             downPaymentField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -4666,6 +4678,18 @@ class DownPaymentCalculator extends JFrame{
             closingCostsField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             closingCostsField.setForeground(Color.BLACK);
             closingCostsField.setBounds(340, 360, 200,50);
+             // Add KeyListener to validate input
+            closingCostsField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             // Add a FocusListener to manage the % symbol
             closingCostsField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -4696,6 +4720,18 @@ class DownPaymentCalculator extends JFrame{
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             interestRateField.setForeground(Color.BLACK);
             interestRateField.setBounds(340, 440, 200,50);
+            // Add KeyListener to validate input
+            interestRateField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             // Add a FocusListener to manage the % symbol
             interestRateField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -5284,6 +5320,19 @@ public class InterestCalculator extends JFrame {
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             interestRateField.setForeground(Color.BLACK);
             interestRateField.setBounds(340,350,220,40);
+            // Add KeyListener to validate input
+            interestRateField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+            
              // Add a FocusListener to manage the % symbol
             interestRateField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -5352,6 +5401,18 @@ public class InterestCalculator extends JFrame {
             taxRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             taxRateField.setForeground(Color.BLACK);
             taxRateField.setBounds(340,500,220,40);
+            // Add KeyListener to validate input
+            taxRateField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
              // Add a FocusListener to manage the % symbol
             taxRateField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -5383,6 +5444,18 @@ public class InterestCalculator extends JFrame {
             inflationRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             inflationRateField.setForeground(Color.BLACK);
             inflationRateField.setBounds(340,550,220,40);
+            // Add KeyListener to validate input
+            inflationRateField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
              // Add a FocusListener to manage the % symbol
             inflationRateField.addFocusListener(new FocusAdapter() {
                 @Override
