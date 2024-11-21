@@ -3573,6 +3573,19 @@ public class Retirment_Calculator extends JFrame {
             CurrentIncomeField = new JTextField("                                    %");
             CurrentIncomeField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             CurrentIncomeField.setBounds(380, 340, 200, 35);
+            // Add KeyListener to validate input
+            CurrentIncomeField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+
             // Add a FocusListener to manage the % symbol
             CurrentIncomeField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -3607,6 +3620,18 @@ public class Retirment_Calculator extends JFrame {
             IncomeNeededField = new JTextField("                                            %");
             IncomeNeededField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             IncomeNeededField.setBounds(380, 380, 200, 35);
+            // Add KeyListener to validate input
+            IncomeNeededField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(IncomeNeededField);
 
             // ComboxBox for income needed
@@ -3665,6 +3690,18 @@ public class Retirment_Calculator extends JFrame {
             AverageInvestmentField = new JTextField("                                            %");
             AverageInvestmentField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             AverageInvestmentField.setBounds(380, 420, 200, 35);
+            // Add KeyListener to validate input
+            AverageInvestmentField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             // Add a FocusListener to manage the % symbol
             AverageInvestmentField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -3699,6 +3736,18 @@ public class Retirment_Calculator extends JFrame {
             InflationRateField = new JTextField("                                            %");
             InflationRateField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             InflationRateField.setBounds(380, 460, 200, 35);
+            // Add KeyListener to validate input
+            InflationRateField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             // Add a FocusListener to manage the % symbol
             InflationRateField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -3763,6 +3812,18 @@ public class Retirment_Calculator extends JFrame {
             FutureSavingsField = new JTextField("                                            %");
             FutureSavingsField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             FutureSavingsField.setBounds(380, 580, 200, 35);
+            // Add KeyListener to validate input
+            FutureSavingsField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(FutureSavingsField);
 
             // ComboBox symbols for future savings
