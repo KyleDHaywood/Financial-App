@@ -2566,6 +2566,18 @@ public class MortgageCalculator extends JFrame {
             yearField = new JTextField("");
             yearField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
             yearField.setBounds(400, 490, 80, 40);
+            // Add KeyListener to validate input
+            yearField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             add(yearField);
             
             calculateButton = new JButton("Calculate");
