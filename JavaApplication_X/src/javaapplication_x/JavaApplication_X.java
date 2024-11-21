@@ -4193,6 +4193,18 @@ public class RefinanceCalculator extends JFrame {
             currentRateField = new JTextField("                                              %");
             currentRateField.setFont(new Font("Times New Roman", Font.PLAIN,24));
             currentRateField.setBounds(320,300,200,40);
+            // Add KeyListener to validate input
+            currentRateField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             // Add a FocusListener to manage the % symbol
             currentRateField.addFocusListener(new FocusAdapter() {
                 @Override
@@ -4243,6 +4255,18 @@ public class RefinanceCalculator extends JFrame {
             newRateField = new JTextField("                                              %");
             newRateField.setFont(new Font("Times New Roman", Font.PLAIN,24));
             newRateField.setBounds(320,400,200,40);
+            // Add KeyListener to validate input
+            newRateField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
             // Add a FocusListener to manage the % symbol
             newRateField.addFocusListener(new FocusAdapter() {
                 @Override
