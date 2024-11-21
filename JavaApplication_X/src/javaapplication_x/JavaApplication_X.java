@@ -36,6 +36,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import java.awt.Color;
 import java.awt.BasicStroke;
+import javax.swing.table.DefaultTableCellRenderer;
 import org.json.JSONObject;
 
 
@@ -2805,7 +2806,9 @@ class HouseAffordabilityCalc extends JFrame{
         private class ImagePanel extends JPanel{
             private final JButton backButton;
             private final JLabel HouseAffordabilityLabel;
-            private final JLabel mortgageRateLabel;
+            private final JTable resultsTable;
+            private final DefaultTableModel tableModel;
+            private final JScrollPane tableScrollPane;
             
             // Create JLabels for various inputs
             private final JLabel incomeLabel;
@@ -2817,6 +2820,7 @@ class HouseAffordabilityCalc extends JFrame{
             private final JLabel hoaFeeLabel;
             private final JLabel insuranceLabel;
             private final JLabel dtiRatioLabel;
+            private final JLabel resultNameLabel;
             
             // Create JTextFields for user input
             private final JTextField incomeField;
@@ -2856,7 +2860,26 @@ class HouseAffordabilityCalc extends JFrame{
             
             public ImagePanel(){
                 setLayout(null); // Use null layout for absolute positioning
+                
+               // Initialize the table with column names
+                String[] columnNames = {"Description", "Amount"};
+                tableModel = new DefaultTableModel(columnNames, 0);
+                resultsTable = new JTable(tableModel);
 
+                // Configure table appearance
+                resultsTable.setRowHeight(30);
+                resultsTable.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+                resultsTable.setForeground(Color.BLACK);
+                resultsTable.setSelectionBackground(new Color(169, 223, 191));
+                resultsTable.setSelectionForeground(Color.WHITE);
+
+                // Create scroll pane for the table
+                tableScrollPane = new JScrollPane(resultsTable);
+                tableScrollPane.setBounds(655, 225, 520, 413); // Position below resultNameLabel
+                tableScrollPane.setVisible(false); // Make table initially invisible
+                add(tableScrollPane);  
+                
+                
             // Create a back button to return to the categorical page
             backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
             backButton.setBounds(20, 20, 80, 40); // Position the back button
@@ -2867,7 +2890,7 @@ class HouseAffordabilityCalc extends JFrame{
                 calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
                 calculateButton.setForeground(Color.BLACK); // Set text color to black
                 calculateButton.setBackground(new Color(169, 223, 191)); // Set background color to green
-                calculateButton.setBounds(200, 680, 250, 60); // Position and size of the button
+                calculateButton.setBounds(110, 660, 250, 60); // Position and size of the button
                 calculateButton.addActionListener(new CalculateButtonListener());
                 add(calculateButton); // Add button to the panel
                 
@@ -2876,13 +2899,8 @@ class HouseAffordabilityCalc extends JFrame{
                 clearButton.setFont(new Font("Times New Roman", Font.PLAIN, 32)); // Set font
                 clearButton.setForeground(Color.WHITE); // Set text color to white
                 clearButton.setBackground(Color.GRAY); // Set background color to gray
-                clearButton.setBounds(500, 680, 150, 60); // Position and size of the button
-                clearButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        clearFields(); // Call the clearFields method when clicked
-                    }
-                });
+                clearButton.setBounds(410, 660, 150, 60); // Position and size of the button
+                clearButton.addActionListener((ActionEvent e) -> {clearFields();});
                 add(clearButton); // Add button to the panel
             
             // Add action listener for the back button
@@ -2899,18 +2917,11 @@ class HouseAffordabilityCalc extends JFrame{
             HouseAffordabilityLabel.setBounds(150, 15, 800, 200); // Position and size of the label
             add(HouseAffordabilityLabel); // Add label to the panel
             
-            // Create a Jlabel for the latest mortgage rate
-            mortgageRateLabel = new JLabel("<html>"
-        + "<b><span style='font-size:26px;'>Latest Mortgage</span></b><br>"
-        + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><span style='font-size:26px;'>Rate:</span></b><br>"
-        + "&nbsp;&nbsp;&nbsp;&nbsp;30 Years: <span style='color:3161b7; text-decoration:underline;'>6.699%</span><br>"
-        + "&nbsp;&nbsp;&nbsp;&nbsp;15 Years: <span style='color:3161b7; text-decoration:underline;'>6.047%</span><br>"
-        + "&nbsp;&nbsp;&nbsp;&nbsp;10 Years: <span style='color:3161b7; text-decoration:underline;'>6.017%</span>"
-        + "</html>");
-            mortgageRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 24)); // Set font
-            mortgageRateLabel.setForeground(Color.BLACK); // Set label color to white
-            mortgageRateLabel.setBounds(920, 65, 300, 400); // Position and size of the label
-            add(mortgageRateLabel); // Add label to the panel
+            resultNameLabel = new JLabel("Results");
+            resultNameLabel.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
+            resultNameLabel.setForeground(Color.WHITE); // Set label color to white
+            resultNameLabel.setBounds(665, 175, 200, 50); // Position and size of the label
+            add(resultNameLabel);
             
             // Create JLabels for other fields
             incomeLabel = new JLabel("<html><b><span style='font-size:16px;'>Annual household income</span></b></html>");
@@ -2953,43 +2964,43 @@ class HouseAffordabilityCalc extends JFrame{
             salaryLabel = new JLabel("salary + other incomes (before tax)");
             salaryLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
             salaryLabel.setBounds(610, 200, 350, 40);
-            add(salaryLabel);
+            //add(salaryLabel);
 
             yearsLabel = new JLabel("years");
             yearsLabel.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-            yearsLabel.setBounds(610, 250, 200, 40);
+            yearsLabel.setBounds(530, 250, 200, 40);
             add(yearsLabel);
 
             longTermDebtLabel = new JLabel("long-term debts, car, student loan, etc");
             longTermDebtLabel.setFont(new Font("Times New Roman", Font.PLAIN, 17));
             longTermDebtLabel.setBounds(610, 350, 350, 40);
-            add(longTermDebtLabel);
+            //add(longTermDebtLabel);
 
             perYearLabel1 = new JLabel("per year");
             perYearLabel1.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-            perYearLabel1.setBounds(610, 450, 200, 40);
+            perYearLabel1.setBounds(530, 450, 200, 40);
             add(perYearLabel1);
 
             perYearLabel2 = new JLabel("per year");
             perYearLabel2.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-            perYearLabel2.setBounds(610, 500, 200, 40);
+            perYearLabel2.setBounds(530, 500, 200, 40);
             add(perYearLabel2);
 
             perYearLabel3 = new JLabel("per year");
             perYearLabel3.setFont(new Font("Times New Roman", Font.PLAIN, 18));
-            perYearLabel3.setBounds(610, 550, 200, 40);
+            perYearLabel3.setBounds(530, 550, 200, 40);
             add(perYearLabel3);
             
             // Create JTextFields for user input next to the corresponding JLabels
             incomeField = new JTextField("$");
             incomeField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            incomeField.setBounds(400, 200, 200, 40); // Position next to incomeLabel
+            incomeField.setBounds(320, 200, 200, 40); // Position next to incomeLabel
             incomeField.addFocusListener(new CurrencyFormatFocusListener());
             add(incomeField);
 
             loanTermField = new JTextField();
             loanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            loanTermField.setBounds(400, 250, 200, 40); // Position next to loanTermLabel
+            loanTermField.setBounds(320, 250, 200, 40); // Position next to loanTermLabel
             // Add KeyListener to validate input
             loanTermField.addKeyListener(new KeyAdapter() {
                 @Override
@@ -3006,7 +3017,7 @@ class HouseAffordabilityCalc extends JFrame{
 
             interestRateField = new JTextField("                                    %");
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            interestRateField.setBounds(400, 300, 200, 40); // Position next to interestRateLabel
+            interestRateField.setBounds(320, 300, 200, 40); // Position next to interestRateLabel
             
             // Add a FocusListener to manage the % symbol
             interestRateField.addFocusListener(new FocusAdapter() {
@@ -3030,13 +3041,13 @@ class HouseAffordabilityCalc extends JFrame{
 
             debtPaybackField = new JTextField("$");
             debtPaybackField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            debtPaybackField.setBounds(400, 350, 200, 40); // Position next to debtPaybackLabel
+            debtPaybackField.setBounds(320, 350, 200, 40); // Position next to debtPaybackLabel
             debtPaybackField.addFocusListener(new CurrencyFormatFocusListener());
             add(debtPaybackField);
 
             downPaymentField = new JTextField("                                    %");
             downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            downPaymentField.setBounds(400, 400, 200, 40); // Position next to downPaymentLabel
+            downPaymentField.setBounds(320, 400, 200, 40); // Position next to downPaymentLabel
             add(downPaymentField);
             
             // ComboBox symbols for down payment
@@ -3078,7 +3089,7 @@ class HouseAffordabilityCalc extends JFrame{
 
             propertyTaxField = new JTextField("                                    %");
             propertyTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            propertyTaxField.setBounds(400, 450, 200, 40); // Position next to propertyTaxLabel
+            propertyTaxField.setBounds(320, 450, 200, 40); // Position next to propertyTaxLabel
             add(propertyTaxField);
             
             // ComboBox symbols for property Tax field
@@ -3120,7 +3131,7 @@ class HouseAffordabilityCalc extends JFrame{
 
             hoaFeeField = new JTextField("                                    %");
             hoaFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            hoaFeeField.setBounds(400, 500, 200, 40); // Position next to hoaFeeLabel
+            hoaFeeField.setBounds(320, 500, 200, 40); // Position next to hoaFeeLabel
             add(hoaFeeField);
             
             // ComboBox symbols for hoa fee
@@ -3161,7 +3172,7 @@ class HouseAffordabilityCalc extends JFrame{
             
             insuranceField = new JTextField("                                    %");
             insuranceField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            insuranceField.setBounds(400, 550, 200, 40); // Position next to insuranceLabel
+            insuranceField.setBounds(320, 550, 200, 40); // Position next to insuranceLabel
             add(insuranceField);
             
             // ComboBox symbols for Insurance
@@ -3203,7 +3214,7 @@ class HouseAffordabilityCalc extends JFrame{
             
             dtiRatioComboBox = new JComboBox<>(dtiRatioOptions);
             dtiRatioComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
-            dtiRatioComboBox.setBounds(400, 600, 350, 40); // Position next to dtiRatioLabel
+            dtiRatioComboBox.setBounds(320, 600, 300, 40); // Position next to dtiRatioLabel
             add(dtiRatioComboBox);
             
             }
@@ -3301,12 +3312,15 @@ class HouseAffordabilityCalc extends JFrame{
             double annualInsurance = Math.round(fullPrice * insurance * 12);
             double annualHoa = Math.round(fullPrice * hoaFee * 12);
             double loanAmount = Math.round(fullPrice - downPaymentAmount);
-
+            
+            // Clear existing table data
+                while (tableModel.getRowCount() > 0) {
+                    tableModel.removeRow(0);}
+            
             // Format the result message
             DecimalFormat currencyFormat = new DecimalFormat("$###,###,###.##");
 
             // Set up the result in table format
-            String[] columnNames = {"Description", "Amount"};
             Object[][] data = {
                 {"You can borrow", currencyFormat.format(loanAmount)},
                 {"Total price of the house", "<html><b>" + currencyFormat.format(fullPrice) + "</b></html>"},
@@ -3323,31 +3337,36 @@ class HouseAffordabilityCalc extends JFrame{
                 {"Total monthly cost on the house", "<html><b>" + currencyFormat.format((loanAmount / loanTerm + annualPropertyTax / 12 + annualHoa / 12 + annualInsurance / 12)*2) + "</b></html>"}
             };
 
-            // Create table model
-            DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
-            JTable table = new JTable(tableModel);
-            table.setRowHeight(30);
-            table.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-
-            // Customize table appearance
-            table.setBackground(new Color(169, 223, 191));
-            table.setForeground(Color.BLACK);
-            table.setSelectionBackground(Color.GRAY);
-            table.setSelectionForeground(Color.WHITE);
-
-            // Create result window with table
-            JFrame resultWindow = new JFrame("House Affordability Result");
-            resultWindow.setSize(600, 400);
-            resultWindow.setLocationRelativeTo(null);  // Center window
-            setResizable(false);
-            resultWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-            // Add table to a JScrollPane
-            JScrollPane scrollPane = new JScrollPane(table);
-            resultWindow.add(scrollPane);
-
-            // Display the result window
-            resultWindow.setVisible(true);
+            // Add data to the table model
+                for (Object[] row : data) {
+                    tableModel.addRow(row);
+                }
+                // Make the table visible after calculations
+                tableScrollPane.setVisible(true);
+                
+                // Adjust column widths
+                resultsTable.getColumnModel().getColumn(0).setPreferredWidth(250);
+                resultsTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+                
+                // Make important rows bold
+                DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+                        @Override
+                        public Component getTableCellRendererComponent(JTable table, Object value,
+                                boolean isSelected, boolean hasFocus, int row, int column) {
+                            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                            if (row == 1 || row == 12) { // Total price and Total monthly cost rows
+                                setFont(getFont().deriveFont(Font.BOLD));
+                            } else {
+                                setFont(getFont().deriveFont(Font.PLAIN));
+                            }
+                            return c;
+                        }
+                    };
+                
+                // Apply renderer to both columns
+                resultsTable.getColumnModel().getColumn(0).setCellRenderer(renderer);
+                resultsTable.getColumnModel().getColumn(1).setCellRenderer(renderer);
+                
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(HouseAffordabilityCalc.this, 
@@ -3380,7 +3399,12 @@ class HouseAffordabilityCalc extends JFrame{
                 symbolsComboBox2.setSelectedIndex(0); // Reset "symbols" to "%"
                 symbolsComboBox3.setSelectedIndex(0); // Reset "symbols" to "%"
                 symbolsComboBox4.setSelectedIndex(0); // Reset "symbols" to "%"
-            }
+                // Clear the table and hide it
+                    while (tableModel.getRowCount() > 0) {
+                        tableModel.removeRow(0);
+                    }
+                    tableScrollPane.setVisible(false);
+                }
                  
             @Override
             protected void paintComponent(Graphics g) {
