@@ -16,9 +16,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.text.NumberFormat;
 import java.util.Locale;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.SwingConstants;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -861,24 +863,7 @@ class Auto_loan_calculator extends JFrame{
             interestRateField = new JTextField("                                             %");
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             interestRateField.setBounds(320, 250, 200, 40);
-            // Add a FocusListener to manage the % symbol
-            interestRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(interestRateField);
             add(interestRateField);
 
             // Loan Term label and field setup
@@ -961,23 +946,7 @@ class Auto_loan_calculator extends JFrame{
             SalesTaxField = new JTextField("                                             %");
             SalesTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             SalesTaxField.setBounds(320, 550, 200, 40);
-            SalesTaxField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (SalesTaxField.getText().endsWith("%")) {
-                        SalesTaxField.setText(SalesTaxField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!SalesTaxField.getText().isEmpty() && !SalesTaxField.getText().endsWith("%")) {
-                        SalesTaxField.setText(SalesTaxField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(SalesTaxField);
             add(SalesTaxField);
             
             //fees label and field
@@ -1435,7 +1404,7 @@ class RentVsBuyCalculator extends JFrame{
             add(taxFilingLabel);
             
             // home price Field setup
-            homePriceField = new JTextField("$0");
+            homePriceField = new JTextField("$");
             homePriceField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             homePriceField.setBounds(320, 222, 200, 35);
            // homePriceField.setBackground(new Color(169,223,191)); // Set background color
@@ -1463,58 +1432,18 @@ class RentVsBuyCalculator extends JFrame{
             add(homePriceField);
             
             // down payment Field setup
-            downPaymentField = new JTextField("0%");
+            downPaymentField = new JTextField("                                  %");
             downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             downPaymentField.setBounds(320, 263, 200, 35);
-          //  downPaymentField.setBackground(new Color(169,223,191));
-            downPaymentField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Clear "%" when field is clicked for editing
-                    if (downPaymentField.getText().equals("0%")) {
-                        downPaymentField.setText("");
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Set default "0%" if field is left empty
-                    if (downPaymentField.getText().isEmpty()) {
-                        downPaymentField.setText("0%");
-                    } else if (!downPaymentField.getText().endsWith("%")) {
-                        // Append "%" if not empty and doesn't already end with "%"
-                        downPaymentField.setText(downPaymentField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(downPaymentField);
             add(downPaymentField);
             
             // interest rate Field setup
-            interestRateField = new JTextField("0%");
+            interestRateField = new JTextField("                                    %");
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             interestRateField.setBounds(320, 302, 200, 35);
-           // interestRateField.setBackground(new Color(169,223,191));
-            interestRateField.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusGained(FocusEvent e) {
-                // Clear "%" when field is clicked for editing
-                if (interestRateField.getText().equals("0%")) {
-                    interestRateField.setText("");
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-                // Set default "0%" if field is left empty
-                if (interestRateField.getText().isEmpty()) {
-                    interestRateField.setText("0%");
-                } else if (!interestRateField.getText().endsWith("%")) {
-                    // Append "%" if not empty and doesn't already end with "%"
-                    interestRateField.setText(interestRateField.getText().trim() + "%");
-                }
-            }
-        });
-        add(interestRateField);
+            PercentageFieldHelper.setupPercentageField(interestRateField);
+            add(interestRateField);
         
         // loan term Field setup
         loanTermField = new JTextField("");
@@ -1535,85 +1464,28 @@ class RentVsBuyCalculator extends JFrame{
         add(loanTermField);
             
         // property tax Field setup
-        buyingClosingField = new JTextField("0%");
+        buyingClosingField = new JTextField("                                    %");
         buyingClosingField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         buyingClosingField.setBounds(320, 382, 160, 35);
-        //buyingClosingField.setBackground(new Color(169,223,191));
-        buyingClosingField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (buyingClosingField.getText().equals("0%")) {
-                buyingClosingField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (buyingClosingField.getText().isEmpty()) {
-                buyingClosingField.setText("0%");
-            } else if (!buyingClosingField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                buyingClosingField.setText(buyingClosingField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(buyingClosingField);
         add(buyingClosingField);
         
         // property tax Field setup
-        propertyTaxField = new JTextField("0%");
+        propertyTaxField = new JTextField("                                        %");
         propertyTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         propertyTaxField.setBounds(320, 422, 160, 35);
-       // propertyTaxField.setBackground(new Color(169,223,191));
-        propertyTaxField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (propertyTaxField.getText().equals("0%")) {
-                propertyTaxField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (propertyTaxField.getText().isEmpty()) {
-                propertyTaxField.setText("0%");
-            } else if (!propertyTaxField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                propertyTaxField.setText(propertyTaxField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(propertyTaxField);
         add(propertyTaxField);
         
         // property tax increase Field setup
-        propertyTaxIncreaseField = new JTextField("0%");
+        propertyTaxIncreaseField = new JTextField("                                %");
         propertyTaxIncreaseField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         propertyTaxIncreaseField.setBounds(320, 462, 160, 35);
-        //propertyTaxIncreaseField.setBackground(new Color(169,223,191));
-        propertyTaxIncreaseField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (propertyTaxIncreaseField.getText().equals("0%")) {
-                propertyTaxIncreaseField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (propertyTaxIncreaseField.getText().isEmpty()) {
-                propertyTaxIncreaseField.setText("0%");
-            } else if (!propertyTaxIncreaseField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                propertyTaxIncreaseField.setText(propertyTaxIncreaseField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(propertyTaxIncreaseField);
         add(propertyTaxIncreaseField);
         
         // home insurance Field setup
-            homeInsuranceField = new JTextField("$0");
+            homeInsuranceField = new JTextField("$");
             homeInsuranceField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             homeInsuranceField.setBounds(320, 502, 160, 35);
             //homeInsuranceField.setBackground(new Color(169,223,191));
@@ -1641,7 +1513,7 @@ class RentVsBuyCalculator extends JFrame{
             add(homeInsuranceField);
             
         // home insurance Field setup
-            HOAFeeField = new JTextField("$0");
+            HOAFeeField = new JTextField("$");
             HOAFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             HOAFeeField.setBounds(320, 542, 160, 35);
            // HOAFeeField.setBackground(new Color(169,223,191));
@@ -1669,111 +1541,35 @@ class RentVsBuyCalculator extends JFrame{
             add(HOAFeeField);
         
         // maintenance cost Field setup
-        maintenanceCostField = new JTextField("0%");
+        maintenanceCostField = new JTextField("                                      %");
         maintenanceCostField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         maintenanceCostField.setBounds(320, 582, 160, 35);
-        //maintenanceCostField.setBackground(new Color(169,223,191));
-        maintenanceCostField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (maintenanceCostField.getText().equals("0%")) {
-                maintenanceCostField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (maintenanceCostField.getText().isEmpty()) {
-                maintenanceCostField.setText("0%");
-            } else if (!maintenanceCostField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                maintenanceCostField.setText(maintenanceCostField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(maintenanceCostField);
         add(maintenanceCostField);    
         
         // Home value Field setup
-        homeValueField = new JTextField("0%");
+        homeValueField = new JTextField("                                        %");
         homeValueField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         homeValueField.setBounds(320, 622, 160, 35);
-        //homeValueField.setBackground(new Color(169,223,191));
-        homeValueField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (homeValueField.getText().equals("0%")) {
-                homeValueField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (homeValueField.getText().isEmpty()) {
-                homeValueField.setText("0%");
-            } else if (!homeValueField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                homeValueField.setText(homeValueField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(homeValueField);
         add(homeValueField);
         
         // cost increase Field setup
-        CostIncreaseField = new JTextField("0%");
+        CostIncreaseField = new JTextField("                                       %");
         CostIncreaseField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         CostIncreaseField.setBounds(320, 662, 160, 35);
-        //CostIncreaseField.setBackground(new Color(169,223,191));
-        CostIncreaseField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (CostIncreaseField.getText().equals("0%")) {
-                CostIncreaseField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (CostIncreaseField.getText().isEmpty()) {
-                CostIncreaseField.setText("0%");
-            } else if (!CostIncreaseField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                CostIncreaseField.setText(CostIncreaseField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(CostIncreaseField);
         add(CostIncreaseField);
         
         // selling costs Field setup
-        sellingCostsField = new JTextField("0%");
+        sellingCostsField = new JTextField("                                       %");
         sellingCostsField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         sellingCostsField.setBounds(320, 702, 160, 35);
-        //sellingCostsField.setBackground(new Color(169,223,191));
-        sellingCostsField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (sellingCostsField.getText().equals("0%")) {
-                sellingCostsField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (sellingCostsField.getText().isEmpty()) {
-                sellingCostsField.setText("0%");
-            } else if (!sellingCostsField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                sellingCostsField.setText(sellingCostsField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(sellingCostsField);
         add(sellingCostsField);
         
         // monthly Rental Fee Field setup
-            monthlyRentalFeeField = new JTextField("$0");
+            monthlyRentalFeeField = new JTextField("$");
             monthlyRentalFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             monthlyRentalFeeField.setBounds(840, 225, 160, 35);
            // monthlyRentalFeeField.setBackground(new Color(169,223,191));
@@ -1801,33 +1597,14 @@ class RentVsBuyCalculator extends JFrame{
             add(monthlyRentalFeeField);
         
         // rental Fee Increase Field setup
-        rentalFeeIncreaseField = new JTextField("0%");
+        rentalFeeIncreaseField = new JTextField("                                   %");
         rentalFeeIncreaseField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         rentalFeeIncreaseField.setBounds(840, 265, 160, 35);
-        //rentalFeeIncreaseField.setBackground(new Color(169,223,191));
-        rentalFeeIncreaseField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (rentalFeeIncreaseField.getText().equals("0%")) {
-                rentalFeeIncreaseField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (rentalFeeIncreaseField.getText().isEmpty()) {
-                rentalFeeIncreaseField.setText("0%");
-            } else if (!rentalFeeIncreaseField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                rentalFeeIncreaseField.setText(rentalFeeIncreaseField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(rentalFeeIncreaseField);
         add(rentalFeeIncreaseField);
             
         // renter Insurance Field setup
-            renterInsuranceField = new JTextField("$0");
+            renterInsuranceField = new JTextField("$");
             renterInsuranceField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             renterInsuranceField.setBounds(840, 305, 160, 35);
            // renterInsuranceField.setBackground(new Color(169,223,191));
@@ -1855,7 +1632,7 @@ class RentVsBuyCalculator extends JFrame{
             add(renterInsuranceField);
         
         // security Deposit Field setup
-            securityDepositField = new JTextField("$0");
+            securityDepositField = new JTextField("$");
             securityDepositField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             securityDepositField.setBounds(840, 345, 160, 35);
            // securityDepositField.setBackground(new Color(169,223,191));
@@ -1883,7 +1660,7 @@ class RentVsBuyCalculator extends JFrame{
             add(securityDepositField);
             
         // upfront Cost Field setup
-            upfrontCostField = new JTextField("$0");
+            upfrontCostField = new JTextField("$");
             upfrontCostField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             upfrontCostField.setBounds(840, 385, 160, 35);
            // upfrontCostField.setBackground(new Color(169,223,191));
@@ -1911,81 +1688,24 @@ class RentVsBuyCalculator extends JFrame{
             add(upfrontCostField);
         
         // average Return Field setup
-        averageReturnField = new JTextField("0%");
+        averageReturnField = new JTextField("                                     %");
         averageReturnField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         averageReturnField.setBounds(870, 485, 160, 35);
-        //averageReturnField.setBackground(new Color(169,223,191));
-        averageReturnField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (averageReturnField.getText().equals("0%")) {
-                averageReturnField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (averageReturnField.getText().isEmpty()) {
-                averageReturnField.setText("0%");
-            } else if (!averageReturnField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                averageReturnField.setText(averageReturnField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(averageReturnField);
         add(averageReturnField);
         
         // marginal Federal Field setup
-        marginalFederalField = new JTextField("0%");
+        marginalFederalField = new JTextField("                                   %");
         marginalFederalField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         marginalFederalField.setBounds(870, 525, 160, 35);
-        //marginalFederalField.setBackground(new Color(169,223,191));
-        marginalFederalField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (marginalFederalField.getText().equals("0%")) {
-                marginalFederalField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (marginalFederalField.getText().isEmpty()) {
-                marginalFederalField.setText("0%");
-            } else if (!marginalFederalField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                marginalFederalField.setText(marginalFederalField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(marginalFederalField);
         add(marginalFederalField);
         
         // marginal State Field setup
-        marginalStateField = new JTextField("0%");
+        marginalStateField = new JTextField("                                           %");
         marginalStateField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
         marginalStateField.setBounds(870, 565, 160, 35);
-        //marginalStateField.setBackground(new Color(169,223,191));
-        marginalStateField.addFocusListener(new FocusAdapter() {
-        @Override
-        public void focusGained(FocusEvent e) {
-            // Clear "%" when field is clicked for editing
-            if (marginalStateField.getText().equals("0%")) {
-                marginalStateField.setText("");
-            }
-        }
-        @Override
-        public void focusLost(FocusEvent e) {
-            // Set default "0%" if field is left empty
-            if (marginalStateField.getText().isEmpty()) {
-                marginalStateField.setText("0%");
-            } else if (!marginalStateField.getText().endsWith("%")) {
-                // Append "%" if not empty and doesn't already end with "%"
-                marginalStateField.setText(marginalStateField.getText().trim() + "%");
-                }
-            }
-        });
+        PercentageFieldHelper.setupPercentageField(marginalStateField);
         add(marginalStateField);
         
         TaxStatusComboBox = new JComboBox<>(TaxStatusOptions);
@@ -2012,34 +1732,31 @@ class RentVsBuyCalculator extends JFrame{
           
         }
         
-        private void calculateResults(){
-            
-        }
         private void clearFields(){
         // Set up default empty or zero values
             TaxStatusComboBox.setSelectedIndex(0); // Unselect any option initially
-            homePriceField.setText("");
-            downPaymentField.setText("");
-            interestRateField.setText("");
+            homePriceField.setText("$");
+            downPaymentField.setText("                                           %");
+            interestRateField.setText("                                            %");
             loanTermField.setText("");
-            buyingClosingField.setText("");
-            propertyTaxField.setText("");
-            propertyTaxIncreaseField.setText("");
-            homeInsuranceField.setText("");
-            HOAFeeField.setText("");
-            maintenanceCostField.setText("");
-            homeValueField.setText("");
-            CostIncreaseField.setText("");
-            sellingCostsField.setText("");
-            monthlyRentalFeeField.setText("");
-            rentalFeeIncreaseField.setText("");
-            renterInsuranceField.setText("");
-            securityDepositField.setText("");
-            upfrontCostField.setText("");
-            averageReturnField.setText("");
-            marginalFederalField.setText("");
-            marginalStateField.setText("");
-    }
+            buyingClosingField.setText("                                              %");
+            propertyTaxField.setText("                                                %");
+            propertyTaxIncreaseField.setText("                                     %");
+            homeInsuranceField.setText("$");
+            HOAFeeField.setText("$");
+            maintenanceCostField.setText("                                        %");
+            homeValueField.setText("                                              %");
+            CostIncreaseField.setText("                                           %");
+            sellingCostsField.setText("                                           %");
+            monthlyRentalFeeField.setText("$");
+            rentalFeeIncreaseField.setText("                                         %");
+            renterInsuranceField.setText("$");
+            securityDepositField.setText("$");
+            upfrontCostField.setText("$");
+            averageReturnField.setText("                                             %");
+            marginalFederalField.setText("                                            %");
+            marginalStateField.setText("                                              %");
+        }       
         
         @Override
             protected void paintComponent(Graphics g) {
@@ -2047,7 +1764,8 @@ class RentVsBuyCalculator extends JFrame{
                 g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
             }
     }
-// FocusListener to format JTextField input as currency on focus loss
+       
+    // FocusListener to format JTextField input as currency on focus loss
     private class CurrencyFormatFocusListener extends FocusAdapter {
         @Override
         public void focusLost(FocusEvent e) {
@@ -2060,8 +1778,304 @@ class RentVsBuyCalculator extends JFrame{
                 source.setText(""); // Clear field if input is invalid
             }
         }
+    }    
+    
+    // Add this inner class to display results
+class ResultsFrame extends JFrame {
+    private final JTable resultsTable;
+    
+    public ResultsFrame(List<YearlyResult> results) {
+        setTitle("Rent vs Buy Comparison Results");
+        setSize(900, 700);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        // Create main panel with BorderLayout
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));  // Add gaps between components
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));  // Add margin around the panel
+        
+        
+        // Create table panel
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBorder(BorderFactory.createTitledBorder("Detailed Results"));
+        
+        // Create column names
+        String[] columnNames = {"Year", "Monthly Buying Cost", "Annual Buying Cost", 
+                              "Monthly Renting Cost", "Annual Renting Cost"};
+        
+        // Create table model
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        // Add data to model
+        DecimalFormat currencyFormat = new DecimalFormat("$#,##0");
+        for (YearlyResult result : results) {
+            model.addRow(new Object[]{
+                result.year,
+                currencyFormat.format(result.monthlyBuyingCost),
+                currencyFormat.format(result.annualBuyingCost),
+                currencyFormat.format(result.monthlyRentingCost),
+                currencyFormat.format(result.annualRentingCost)
+            });
+        }
+        
+        // Create and configure table
+        resultsTable = new JTable(model);
+        resultsTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        
+        // Center align all columns
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < resultsTable.getColumnCount(); i++) {
+            resultsTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        
+        // Add table to scroll pane and add to table panel
+        JScrollPane scrollPane = new JScrollPane(resultsTable);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+        
+        // Create chart panel
+        JPanel chartPanel = new JPanel(new BorderLayout());
+        chartPanel.setBorder(BorderFactory.createTitledBorder("Cost Comparison Over Time"));
+        
+        // Create dataset for the chart
+        XYSeriesCollection dataset = new XYSeriesCollection();
+        XYSeries buyingSeries = new XYSeries("Monthly Buying Cost");
+        XYSeries rentingSeries = new XYSeries("Monthly Renting Cost");
+        
+        // Add data to series
+        for (YearlyResult result : results) {
+            buyingSeries.add(result.year, result.monthlyBuyingCost);
+            rentingSeries.add(result.year, result.monthlyRentingCost);
+        }
+        
+        dataset.addSeries(buyingSeries);
+        dataset.addSeries(rentingSeries);
+        
+        // Create the chart
+        JFreeChart chart = ChartFactory.createXYLineChart(
+            "Monthly Costs: Buying vs Renting",
+            "Year",
+            "Monthly Cost ($)",
+            dataset,
+            PlotOrientation.VERTICAL,
+            true,
+            true,
+            false
+        );
+        
+        // Customize the chart
+        XYPlot plot = chart.getXYPlot();
+        XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+        renderer.setSeriesPaint(0, new Color(0, 119, 182)); // Blue for buying
+        renderer.setSeriesPaint(1, new Color(196, 77, 88));  // Red for renting
+        renderer.setSeriesStroke(0, new BasicStroke(2.0f));
+        renderer.setSeriesStroke(1, new BasicStroke(2.0f));
+        plot.setRenderer(renderer);
+        plot.setBackgroundPaint(Color.WHITE);
+        plot.setRangeGridlinePaint(Color.GRAY);
+        plot.setDomainGridlinePaint(Color.GRAY);
+        
+        // Create ChartPanel with fixed size
+        ChartPanel chartComponent = new ChartPanel(chart);
+        chartComponent.setPreferredSize(new Dimension(800, 300));  // Reduced chart height
+        chartPanel.add(chartComponent, BorderLayout.CENTER);
+        
+        // Add panels to main panel
+        mainPanel.add(chartPanel, BorderLayout.NORTH);
+        mainPanel.add(tablePanel, BorderLayout.CENTER);
+        
+        // Add main panel to frame
+        add(mainPanel);
+        
+        // Pack the frame to optimal size
+        pack();
     }
 }
+
+// Add this class to store yearly results
+class YearlyResult {
+    int year;
+    double monthlyBuyingCost;
+    double annualBuyingCost;
+    double monthlyRentingCost;
+    double annualRentingCost;
+    
+    public YearlyResult(int year, double monthlyBuyingCost, double annualBuyingCost,
+                       double monthlyRentingCost, double annualRentingCost) {
+        this.year = year;
+        this.monthlyBuyingCost = monthlyBuyingCost;
+        this.annualBuyingCost = annualBuyingCost;
+        this.monthlyRentingCost = monthlyRentingCost;
+        this.annualRentingCost = annualRentingCost;
+    }
+}
+
+// Replace the empty calculateResults() method with this implementation
+public void calculateResults() {
+    try {
+        // Parse input values
+        double homePrice = Double.parseDouble(homePriceField.getText().replaceAll("[$,]", ""));
+        double downPaymentPct = Double.parseDouble(downPaymentField.getText().replaceAll("%", "")) / 100;
+        double interestRate = Double.parseDouble(interestRateField.getText().replaceAll("%", "")) / 100;
+        int loanTerm = Integer.parseInt(loanTermField.getText().replaceAll("[^0-9]", ""));
+        double buyingClosingCostPct = Double.parseDouble(buyingClosingField.getText().replaceAll("%", "")) / 100;
+        double propertyTaxRate = Double.parseDouble(propertyTaxField.getText().replaceAll("%", "")) / 100;
+        double propertyTaxIncrease = Double.parseDouble(propertyTaxIncreaseField.getText().replaceAll("%", "")) / 100;
+        double homeInsurance = Double.parseDouble(homeInsuranceField.getText().replaceAll("[$,]", ""));
+        double hoaFee = Double.parseDouble(HOAFeeField.getText().replaceAll("[$,]", ""));
+        double maintenanceCostPct = Double.parseDouble(maintenanceCostField.getText().replaceAll("%", "")) / 100;
+        double appreciationRate = Double.parseDouble(homeValueField.getText().replaceAll("%", "")) / 100;
+        double costIncreaseRate = Double.parseDouble(CostIncreaseField.getText().replaceAll("%", "")) / 100;
+        double sellingClosingCostPct = Double.parseDouble(sellingCostsField.getText().replaceAll("%", "")) / 100;
+        double monthlyRent = Double.parseDouble(monthlyRentalFeeField.getText().replaceAll("[$,]", ""));
+        double rentIncreaseRate = Double.parseDouble(rentalFeeIncreaseField.getText().replaceAll("%", "")) / 100;
+        double renterInsurance = Double.parseDouble(renterInsuranceField.getText().replaceAll("[$,]", ""));
+        double securityDeposit = Double.parseDouble(securityDepositField.getText().replaceAll("[$,]", ""));
+        double upfrontCost = Double.parseDouble(upfrontCostField.getText().replaceAll("[$,]", ""));
+        double investmentReturn = Double.parseDouble(averageReturnField.getText().replaceAll("%", "")) / 100;
+        double federalTaxRate = Double.parseDouble(marginalFederalField.getText().replaceAll("%", "")) / 100;
+        double stateTaxRate = Double.parseDouble(marginalStateField.getText().replaceAll("%", "")) / 100;
+        String filingStatus = (String) TaxStatusComboBox.getSelectedItem();
+
+        // Calculate mortgage payment
+        double monthlyRate = interestRate / 12;
+        double numPayments = loanTerm * 12;
+        double loanAmount = homePrice * (1 - downPaymentPct);
+        double monthlyMortgagePayment = loanAmount * 
+            (monthlyRate * Math.pow(1 + monthlyRate, numPayments)) / 
+            (Math.pow(1 + monthlyRate, numPayments) - 1);
+
+        List<YearlyResult> results = new ArrayList<>();
+        
+        // Calculate results for each year
+        for (int year = 1; year <= 30; year++) {
+            // Property costs with increases
+            double currentPropertyTax = (homePrice * propertyTaxRate) * Math.pow(1 + propertyTaxIncrease, year - 1);
+            double currentInsurance = homeInsurance * Math.pow(1 + costIncreaseRate, year - 1);
+            double currentHOA = hoaFee * Math.pow(1 + costIncreaseRate, year - 1);
+            double currentMaintenance = (homePrice * maintenanceCostPct) * Math.pow(1 + costIncreaseRate, year - 1);
+            
+            // Calculate mortgage interest for the year
+            double balance = loanAmount;
+            double annualInterest = 0;
+            for (int month = 1; month <= 12; month++) {
+                double monthlyInterest = balance * monthlyRate;
+                annualInterest += monthlyInterest;
+                double principal = monthlyMortgagePayment - monthlyInterest;
+                balance -= principal;
+            }
+            
+            // Calculate tax savings
+            double deductiblePropertyTax = Math.min(currentPropertyTax, 10000);
+            double totalDeductible = annualInterest + deductiblePropertyTax;
+            double standardDeduction = getStandardDeduction(filingStatus);
+            double taxSavings = totalDeductible > standardDeduction ? 
+                (totalDeductible - standardDeduction) * (federalTaxRate + stateTaxRate) : 0;
+            
+            // Calculate annual buying costs
+            double annualBuyingCost = (monthlyMortgagePayment * 12) + currentPropertyTax + 
+                currentInsurance + currentHOA + currentMaintenance - taxSavings;
+            double monthlyBuyingCost = annualBuyingCost / 12;
+            
+            // Calculate rental costs
+            double currentRent = monthlyRent * Math.pow(1 + rentIncreaseRate, year - 1);
+            double currentRenterInsurance = renterInsurance * Math.pow(1 + costIncreaseRate, year - 1);
+            double annualRentingCost = (currentRent * 12) + (currentRenterInsurance * 12);
+            double monthlyRentingCost = annualRentingCost / 12;
+            
+            results.add(new YearlyResult(year, monthlyBuyingCost, annualBuyingCost,
+                                       monthlyRentingCost, annualRentingCost));
+        }
+        
+        // Create and show results frame
+        ResultsFrame resultsFrame = new ResultsFrame(results);
+        resultsFrame.setVisible(true);
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Please enter valid numbers in all fields",
+                                    "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    // Helper method to get standard deduction
+    private double getStandardDeduction(String filingStatus) {
+        switch (filingStatus.toLowerCase()) {
+            case "single": return 13850;
+            case "married filing jointly": return 27700;
+            case "married filing separately": return 13850;
+            case "head of household": return 20800;
+            case "qualified widow": return 27700;
+            default: return 13850;
+        }
+    }
+}
+
+    
+public class PercentageFieldHelper {
+
+    public static void setupPercentageField(JTextField textField) {
+        // Add KeyListener for numeric validation
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                String text = textField.getText();
+
+                // Allow only digits, one decimal point, and control characters
+                if (!Character.isDigit(c) && c != '.' && !Character.isISOControl(c)) {
+                    e.consume();
+                    JOptionPane.showMessageDialog(null, 
+                        "Please enter only numeric values or a single decimal point.",
+                        "Invalid Input", 
+                        JOptionPane.WARNING_MESSAGE);
+                }
+
+                // Prevent multiple decimal points
+                if (c == '.' && text.contains(".")) {
+                    e.consume();
+                }
+            }
+        });
+
+        // Add FocusListener to manage the % symbol
+        textField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                // Remove % for editing
+                String text = textField.getText();
+                if (text.endsWith("%")) {
+                    textField.setText(text.replace("%", "").trim());
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                // Append % when focus is lost
+                String text = textField.getText();
+                try {
+                    if (!text.isEmpty()) {
+                        // Validate as a decimal number
+                        Double.parseDouble(text);
+                        if (!text.endsWith("%")) {
+                            textField.setText(text.trim() + "%");
+                        }
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, 
+                        "Please enter a valid numeric value.",
+                        "Invalid Input", 
+                        JOptionPane.WARNING_MESSAGE);
+                    textField.setText(""); // Clear invalid input
+                }
+            }
+        });
+    }
+}   
 
 // New JFrame class for the curency calculator
 class CurrencyCalculator extends JFrame{
@@ -2409,7 +2423,6 @@ public class MortgageCalculator extends JFrame {
             loanAmountField = new JTextField("$");
             loanAmountField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
             loanAmountField.setBounds(300, 250, 200, 40);
-            loanAmountField.addFocusListener(new CurrencyFormatFocusListener());
             add(loanAmountField);
             
             downPaymentLabel = new JLabel("Down Payment: ");
@@ -2420,24 +2433,6 @@ public class MortgageCalculator extends JFrame {
             downPaymentField = new JTextField("                                    %");
             downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
             downPaymentField.setBounds(300, 310, 200, 40);
-            // Add a FocusListener to manage the % symbol
-            downPaymentField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (downPaymentField.getText().endsWith("%")) {
-                        downPaymentField.setText(downPaymentField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!downPaymentField.getText().isEmpty() && !downPaymentField.getText().endsWith("%")) {
-                        downPaymentField.setText(downPaymentField.getText().trim() + "%");
-                    }
-                }
-            });
             add(downPaymentField);
             
             // ComboBox symbols for down payment
@@ -2534,24 +2529,7 @@ public class MortgageCalculator extends JFrame {
             interestRateField = new JTextField("                                    %");
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
             interestRateField.setBounds(300, 430, 200, 40);
-            // Add a FocusListener to manage the % symbol
-            interestRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(interestRateField);
             add(interestRateField);
             
             startDateLabel = new JLabel("Start Date ");
@@ -3018,25 +2996,7 @@ class HouseAffordabilityCalc extends JFrame{
             interestRateField = new JTextField("                                    %");
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             interestRateField.setBounds(320, 300, 200, 40); // Position next to interestRateLabel
-            
-            // Add a FocusListener to manage the % symbol
-            interestRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(interestRateField);
             add(interestRateField);
 
             debtPaybackField = new JTextField("$");
@@ -3048,6 +3008,7 @@ class HouseAffordabilityCalc extends JFrame{
             downPaymentField = new JTextField("                                    %");
             downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             downPaymentField.setBounds(320, 400, 200, 40); // Position next to downPaymentLabel
+            PercentageFieldHelper.setupPercentageField(downPaymentField);
             add(downPaymentField);
             
             // ComboBox symbols for down payment
@@ -3090,6 +3051,7 @@ class HouseAffordabilityCalc extends JFrame{
             propertyTaxField = new JTextField("                                    %");
             propertyTaxField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             propertyTaxField.setBounds(320, 450, 200, 40); // Position next to propertyTaxLabel
+            PercentageFieldHelper.setupPercentageField(propertyTaxField);
             add(propertyTaxField);
             
             // ComboBox symbols for property Tax field
@@ -3132,6 +3094,7 @@ class HouseAffordabilityCalc extends JFrame{
             hoaFeeField = new JTextField("                                    %");
             hoaFeeField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             hoaFeeField.setBounds(320, 500, 200, 40); // Position next to hoaFeeLabel
+            PercentageFieldHelper.setupPercentageField(hoaFeeField);
             add(hoaFeeField);
             
             // ComboBox symbols for hoa fee
@@ -3173,6 +3136,7 @@ class HouseAffordabilityCalc extends JFrame{
             insuranceField = new JTextField("                                    %");
             insuranceField.setFont(new Font("Times New Roman", Font.PLAIN, 20)); // Set font
             insuranceField.setBounds(320, 550, 200, 40); // Position next to insuranceLabel
+            PercentageFieldHelper.setupPercentageField(insuranceField);
             add(insuranceField);
             
             // ComboBox symbols for Insurance
@@ -3430,7 +3394,6 @@ class HouseAffordabilityCalc extends JFrame{
 }
 }
 
-
 public class Retirment_Calculator extends JFrame {
     private final Image backgroundImage;
     private JComboBox<String> symbolsComboBox1;
@@ -3448,7 +3411,7 @@ public class Retirment_Calculator extends JFrame {
     private JTextField OtherIncomeField;
     private JTextField CurrentSavingsField;
     private JTextField FutureSavingsField;
-    private NumberFormat currencyFormat;
+    private final NumberFormat currencyFormat;
 
     public Retirment_Calculator() {
         // Load the background image
@@ -3609,37 +3572,7 @@ public class Retirment_Calculator extends JFrame {
             CurrentIncomeField = new JTextField("                                    %");
             CurrentIncomeField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             CurrentIncomeField.setBounds(380, 340, 200, 35);
-            // Add KeyListener to validate input
-            CurrentIncomeField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-
-            // Add a FocusListener to manage the % symbol
-            CurrentIncomeField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (CurrentIncomeField.getText().endsWith("%")) {
-                        CurrentIncomeField.setText(CurrentIncomeField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!CurrentIncomeField.getText().isEmpty() && !CurrentIncomeField.getText().endsWith("%")) {
-                        CurrentIncomeField.setText(CurrentIncomeField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(CurrentIncomeField);
             add(CurrentIncomeField);
             
             yearLabel2 = new JLabel("/year");
@@ -3656,18 +3589,7 @@ public class Retirment_Calculator extends JFrame {
             IncomeNeededField = new JTextField("                                            %");
             IncomeNeededField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             IncomeNeededField.setBounds(380, 380, 200, 35);
-            // Add KeyListener to validate input
-            IncomeNeededField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(IncomeNeededField);
             add(IncomeNeededField);
 
             // ComboxBox for income needed
@@ -3726,36 +3648,7 @@ public class Retirment_Calculator extends JFrame {
             AverageInvestmentField = new JTextField("                                            %");
             AverageInvestmentField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             AverageInvestmentField.setBounds(380, 420, 200, 35);
-            // Add KeyListener to validate input
-            AverageInvestmentField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            // Add a FocusListener to manage the % symbol
-            AverageInvestmentField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (AverageInvestmentField.getText().endsWith("%")) {
-                        AverageInvestmentField.setText(AverageInvestmentField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!AverageInvestmentField.getText().isEmpty() && !AverageInvestmentField.getText().endsWith("%")) {
-                        AverageInvestmentField.setText(AverageInvestmentField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(AverageInvestmentField);
             add(AverageInvestmentField);
             
             yearLabel3 = new JLabel("/year");
@@ -3772,36 +3665,7 @@ public class Retirment_Calculator extends JFrame {
             InflationRateField = new JTextField("                                            %");
             InflationRateField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             InflationRateField.setBounds(380, 460, 200, 35);
-            // Add KeyListener to validate input
-            InflationRateField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            // Add a FocusListener to manage the % symbol
-            InflationRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (InflationRateField.getText().endsWith("%")) {
-                        InflationRateField.setText(InflationRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!InflationRateField.getText().isEmpty() && !InflationRateField.getText().endsWith("%")) {
-                        InflationRateField.setText(InflationRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(InflationRateField);
             add(InflationRateField);
             
             yearLabel4 = new JLabel("/year");
@@ -3848,18 +3712,7 @@ public class Retirment_Calculator extends JFrame {
             FutureSavingsField = new JTextField("                                            %");
             FutureSavingsField.setFont(new Font("Times New Roman", Font.PLAIN, 20));
             FutureSavingsField.setBounds(380, 580, 200, 35);
-            // Add KeyListener to validate input
-            FutureSavingsField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(FutureSavingsField);
             add(FutureSavingsField);
 
             // ComboBox symbols for future savings
@@ -4217,36 +4070,7 @@ public class RefinanceCalculator extends JFrame {
             currentRateField = new JTextField("                                              %");
             currentRateField.setFont(new Font("Times New Roman", Font.PLAIN,24));
             currentRateField.setBounds(320,300,200,40);
-            // Add KeyListener to validate input
-            currentRateField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            // Add a FocusListener to manage the % symbol
-            currentRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (currentRateField.getText().endsWith("%")) {
-                        currentRateField.setText(currentRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!currentRateField.getText().isEmpty() && !currentRateField.getText().endsWith("%")) {
-                        currentRateField.setText(currentRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(currentRateField);
             add(currentRateField);
 
             new_term_yearLabel = new JLabel("New loan term (years)");
@@ -4279,36 +4103,7 @@ public class RefinanceCalculator extends JFrame {
             newRateField = new JTextField("                                              %");
             newRateField.setFont(new Font("Times New Roman", Font.PLAIN,24));
             newRateField.setBounds(320,400,200,40);
-            // Add KeyListener to validate input
-            newRateField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            // Add a FocusListener to manage the % symbol
-            newRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (newRateField.getText().endsWith("%")) {
-                        newRateField.setText(newRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!newRateField.getText().isEmpty() && !newRateField.getText().endsWith("%")) {
-                        newRateField.setText(newRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(newRateField);
             add(newRateField);
 
             pointsLabel = new JLabel("Points");
@@ -4372,9 +4167,7 @@ public class RefinanceCalculator extends JFrame {
             add(calculateButton);
 
             // Action listener for the button
-            calculateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            calculateButton.addActionListener((ActionEvent e) -> {
                 try {
                     // Get the values from input fields
                     double remainingBalance = parseCurrency(remainingBalanceField.getText());
@@ -4387,9 +4180,9 @@ public class RefinanceCalculator extends JFrame {
                     double cashOut = parseCurrency(cashOutField.getText());
 
                     // Call the refinance calculation method
-                    RefinanceResults results = refinanceCalculator(remainingBalance, monthlyPayment, currentRate, 
-                                                                   newTermYears, newRate, points, costsFees, cashOut);
-
+                    RefinanceResults results = refinanceCalculator(remainingBalance, monthlyPayment, currentRate,
+                            newTermYears, newRate, points, costsFees, cashOut);
+                    
                     // Build the results text
                     String resultText = "<html>";
 
@@ -4437,8 +4230,7 @@ public class RefinanceCalculator extends JFrame {
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Please enter valid numeric values.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            }
-        });
+            });
 
         // Result label
         resultLabel = new JLabel("");
@@ -4660,36 +4452,7 @@ class DownPaymentCalculator extends JFrame{
             downPaymentField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             downPaymentField.setForeground(Color.BLACK);
             downPaymentField.setBounds(340, 280, 200,50);
-            // Add KeyListener to validate input
-            downPaymentField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            // Add a FocusListener to manage the % symbol
-            downPaymentField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (downPaymentField.getText().endsWith("%")) {
-                        downPaymentField.setText(downPaymentField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!downPaymentField.getText().isEmpty() && !downPaymentField.getText().endsWith("%")) {
-                        downPaymentField.setText(downPaymentField.getText().trim() + "%");
-                    }
-                }
-            });
+             PercentageFieldHelper.setupPercentageField(downPaymentField);
             add(downPaymentField);
             
             closingCostsLabel = new JLabel("Closing Costs");
@@ -4702,36 +4465,7 @@ class DownPaymentCalculator extends JFrame{
             closingCostsField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             closingCostsField.setForeground(Color.BLACK);
             closingCostsField.setBounds(340, 360, 200,50);
-             // Add KeyListener to validate input
-            closingCostsField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            // Add a FocusListener to manage the % symbol
-            closingCostsField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (closingCostsField.getText().endsWith("%")) {
-                        closingCostsField.setText(closingCostsField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!closingCostsField.getText().isEmpty() && !closingCostsField.getText().endsWith("%")) {
-                        closingCostsField.setText(closingCostsField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(closingCostsField);
             add(closingCostsField);
             
             interestRateLabel = new JLabel("Interest Rate");
@@ -4744,36 +4478,7 @@ class DownPaymentCalculator extends JFrame{
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             interestRateField.setForeground(Color.BLACK);
             interestRateField.setBounds(340, 440, 200,50);
-            // Add KeyListener to validate input
-            interestRateField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            // Add a FocusListener to manage the % symbol
-            interestRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(interestRateField);
             add(interestRateField);
             
             loanTermLabel = new JLabel("Loan Term (years)");
@@ -5344,37 +5049,7 @@ public class InterestCalculator extends JFrame {
             interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             interestRateField.setForeground(Color.BLACK);
             interestRateField.setBounds(340,350,220,40);
-            // Add KeyListener to validate input
-            interestRateField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-            
-             // Add a FocusListener to manage the % symbol
-            interestRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!interestRateField.getText().isEmpty() && !interestRateField.getText().endsWith("%")) {
-                        interestRateField.setText(interestRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(interestRateField);
             add(interestRateField);
             
             // Compound label and field set up
@@ -5425,36 +5100,7 @@ public class InterestCalculator extends JFrame {
             taxRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             taxRateField.setForeground(Color.BLACK);
             taxRateField.setBounds(340,500,220,40);
-            // Add KeyListener to validate input
-            taxRateField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-             // Add a FocusListener to manage the % symbol
-            taxRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (taxRateField.getText().endsWith("%")) {
-                        taxRateField.setText(taxRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!taxRateField.getText().isEmpty() && !taxRateField.getText().endsWith("%")) {
-                        taxRateField.setText(taxRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(taxRateField);
             add(taxRateField);
             
             // Inflation Rate label and field set up
@@ -5468,36 +5114,7 @@ public class InterestCalculator extends JFrame {
             inflationRateField.setFont(new Font("Times New Roman", Font.PLAIN, 28));
             inflationRateField.setForeground(Color.BLACK);
             inflationRateField.setBounds(340,550,220,40);
-            // Add KeyListener to validate input
-            inflationRateField.addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyTyped(KeyEvent e) {
-                    char c = e.getKeyChar();
-                    // Allow only digits and control characters (e.g., backspace)
-                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
-                        e.consume(); // Ignore the invalid character
-                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                    }
-                }
-            });
-             // Add a FocusListener to manage the % symbol
-            inflationRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (inflationRateField.getText().endsWith("%")) {
-                        inflationRateField.setText(inflationRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!inflationRateField.getText().isEmpty() && !inflationRateField.getText().endsWith("%")) {
-                        inflationRateField.setText(inflationRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(inflationRateField);
             add(inflationRateField);   
         }
         
@@ -5800,24 +5417,7 @@ public class RothIRACalculator extends JFrame{
             returnRateField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
             returnRateField.setForeground(Color.BLACK);
             returnRateField.setBounds(300,300,220,40);
-            // Add a FocusListener to manage the % symbol
-            returnRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (returnRateField.getText().endsWith("%")) {
-                        returnRateField.setText(returnRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!returnRateField.getText().isEmpty() && !returnRateField.getText().endsWith("%")) {
-                        returnRateField.setText(returnRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(returnRateField);
             add(returnRateField);
             
             // Current Age JLabel and Field set up
@@ -5881,24 +5481,7 @@ public class RothIRACalculator extends JFrame{
             taxRateField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
             taxRateField.setForeground(Color.BLACK);
             taxRateField.setBounds(300,450,220,40);
-            // Add a FocusListener to manage the % symbol
-            taxRateField.addFocusListener(new FocusAdapter() {
-                @Override
-                public void focusGained(FocusEvent e) {
-                    // Remove % when field is clicked for editing
-                    if (taxRateField.getText().endsWith("%")) {
-                        taxRateField.setText(taxRateField.getText().replace("%", "").trim());
-                    }
-                }
-
-                @Override
-                public void focusLost(FocusEvent e) {
-                    // Append % when focus is lost
-                    if (!taxRateField.getText().isEmpty() && !taxRateField.getText().endsWith("%")) {
-                        taxRateField.setText(taxRateField.getText().trim() + "%");
-                    }
-                }
-            });
+            PercentageFieldHelper.setupPercentageField(taxRateField);
             add(taxRateField);
             
             resultsInfoLabel = new JLabel("");
