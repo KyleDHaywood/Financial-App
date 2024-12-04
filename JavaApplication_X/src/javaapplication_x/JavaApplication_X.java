@@ -88,7 +88,62 @@ public class JavaApplication_X extends JFrame {
             fincalLabel.setForeground(Color.WHITE); // Set label color to white
             fincalLabel.setBounds(50, 635, 500, 140); // Position and size of the label (adjust if needed)
             add(fincalLabel); // Add label to the panel
+            
+            addMenuBar();
         }
+        
+        private void addMenuBar() {
+        // Create a menu bar
+        JMenuBar menuBar = new JMenuBar();
+       
+       
+
+        // Create a "File" menu
+        JMenu fileMenu = new JMenu("Options");
+       
+       
+        // Set font for "Options" menu
+        Font menuFont = new Font("Times New Roman", Font.BOLD, 20);
+           
+       
+
+        // Create menu items for the "File" menu
+       
+       
+        JMenuItem aboutUsItem = new JMenuItem("about us"); // add option1
+        JMenuItem PurposeItem = new JMenuItem("Purpose"); // add option2
+        JMenuItem GoalItem = new JMenuItem("Goal"); //add option3
+       
+        // Set font for menu items
+       
+        aboutUsItem.setFont(menuFont);
+        PurposeItem.setFont(menuFont);
+        GoalItem.setFont(menuFont);
+
+
+        // Add action listeners for menu items
+        aboutUsItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Hannia Hernandez '27.\nSamir Rojas '24.\nJuan Lopez '27.\nKyle Haywood '26."));
+        PurposeItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "The purpose of this project was to create an interface with different calculators\nallowing users to find answers to some of thier financial questions."));
+        GoalItem.addActionListener(e -> JOptionPane.showMessageDialog(this, "Our main goal is support people learning and understanding more about financial literacy\n and give them help when calculating some prices"));
+       
+       
+
+        // Add menu items to the "File" menu
+        fileMenu.add(aboutUsItem);
+        fileMenu.addSeparator();
+        fileMenu.add(PurposeItem);
+        fileMenu.addSeparator();
+        fileMenu.add(GoalItem);
+     
+
+        // Add the "File" menu to the menu bar
+        menuBar.add(fileMenu);
+
+        // Set the menu bar for the frame
+        JavaApplication_X.this.setJMenuBar(menuBar);
+    }
+        
+        
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -670,8 +725,9 @@ class MortgageAndRealCategory extends JFrame{
                 }
                 @Override
                 public void mouseClicked(MouseEvent evt) {
-                    // Show message when clicked
-                    JOptionPane.showMessageDialog(null, "Mortgage Payoff Calculator will come soon");
+                    MortgagePayoffCalculator MortgagePayoffCalculatorFrame = new MortgagePayoffCalculator();
+                    MortgagePayoffCalculatorFrame.setVisible(true);
+                    dispose();
                 }
             });
             // Add the label to the panel
@@ -965,7 +1021,7 @@ class Auto_loan_calculator extends JFrame{
             results_Label = new JLabel("");
             results_Label.setFont(new Font("Times New Roman", Font.PLAIN, 22));
             results_Label.setBounds(580,200,500,300);
-            results_Label.setForeground(Color.BLACK);
+            results_Label.setForeground(Color.BLACK);            
             add(results_Label);
             
             // Calculate button setup
@@ -5810,9 +5866,535 @@ public class RothIRACalculator extends JFrame{
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
-}        
+}
+
+public class MortgagePayoffCalculator extends JFrame{
+    private Image backgroundImage;
+    private NumberFormat currencyFormat;
+    private JLabel titleLabel;
+    private JTextField originalLoanField, originalLoanTermField, interestRateField;
+    private JTextField remainingTernField, remainingTernMonthField;
+    private ButtonGroup buttonGroupOptions;
+    private JTextField perMonthField, perYearField, oneTimeField;
+    private JLabel results_label;
+    
+    public MortgagePayoffCalculator(){
+       // Load the background image
+       backgroundImage = new ImageIcon(getClass().getResource("/javaapplication_x/images/mortgage_payoff_calculator_background.png")).getImage();
+       // Set up the JFrame
+       setTitle("Mortgage Payoff Calculator");
+       setSize(1200, 800);
+       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       setLocationRelativeTo(null);
+       setResizable(false);
+       // Create currency formatter for USD
+       currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+       
+       // Add content to the JFrame (background panel)
+       setContentPane(new ImagePanel()); 
+    }
+    
+    // Inner class to handle the background image panel
+    private class ImagePanel extends JPanel{
+        private final JButton backButton, calculateButton, clearButton;
+        private final JLabel resultNameLabel;
+        private final JLabel originalLoanLabel, originalLoanTermLabel, interestRateLabel;
+        private final JLabel remainingTernLabel, repaymentOptionsLabel;
+        private final JLabel paybackAltogetherLabel, extraPaymentLabel, biweeklyRepaymentLabel, normalRepaymentLabel;
+        private final JLabel perMonthLabel, perYearLabel, oneTimeLabel;
         
+        public ImagePanel(){
+            setLayout(null);
+            
+            // Back button setup
+            backButton = new JButton(new ImageIcon(getClass().getResource("/javaapplication_x/images/back_button.png")));
+            backButton.setBounds(20, 20, 80, 40);
+            add(backButton);
+            backButton.addActionListener(e -> {
+                MortgageAndRealCategory MortgageAndRealCategoryFrame = new MortgageAndRealCategory();
+                MortgageAndRealCategoryFrame.setVisible(true);
+                dispose();
+            });
+            
+            // Title label setup
+            titleLabel = new JLabel("Mortgage Payoff Calculator");
+            titleLabel.setFont(new Font("Times New Roman", Font.BOLD, 60));
+            titleLabel.setForeground(Color.BLACK);
+            titleLabel.setBounds(175, 10, 800, 200);
+            add(titleLabel);
+            
+            // Create and set up the "Calculate" JButton
+            calculateButton = new JButton("Calculate");
+            calculateButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
+            calculateButton.setForeground(Color.BLACK); // Set text color to black
+            calculateButton.setBackground(new Color(169, 223, 191)); // Set background color to green
+            calculateButton.setBounds(80, 680, 200, 60); // Position and size of the button
+            add(calculateButton); // Add button to the panel
+            calculateButton.addActionListener(e -> calculate_MortgagePayoff());
+            
+            // Create and set up the "Clear" JButton
+            clearButton = new JButton("Clear");
+            clearButton.setFont(new Font("Times New Roman", Font.BOLD, 32)); // Set font
+            clearButton.setForeground(Color.WHITE); // Set text color to white
+            clearButton.setBackground(Color.GRAY); // Set background color to gray
+            clearButton.setBounds(330, 680, 150, 60); // Position and size of the button
+            add(clearButton); // Add button to the panel
+            clearButton.addActionListener(e -> clearFields());
+            
+            results_label = new JLabel("");
+            results_label.setFont(new Font("Timens New Roman", Font.PLAIN, 24));
+            results_label.setForeground(Color.BLACK);
+            results_label.setBounds(605,170,565,300);
+            add(results_label);
+            
+            resultNameLabel = new JLabel("Results");
+            resultNameLabel.setFont(new Font("Times New Roman", Font.BOLD, 40));
+            resultNameLabel.setForeground(Color.WHITE);
+            resultNameLabel.setBounds(615, 175, 200, 50);
+            add(resultNameLabel);
+            
+            // Original loan amount JLabel and Field set up
+            originalLoanLabel = new JLabel("Original loan amount");
+            originalLoanLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            originalLoanLabel.setForeground(Color.BLACK);
+            originalLoanLabel.setBounds(40,180,350,40);
+            add(originalLoanLabel);
+            
+            originalLoanField = new JTextField("$");
+            originalLoanField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            originalLoanField.setForeground(Color.BLACK);
+            originalLoanField.setBounds(340,180,200,40);
+            originalLoanField.addFocusListener(new CurrencyFormatFocusListener());
+            add(originalLoanField);
+            
+            // Original loan term JLabel and Field set up
+            originalLoanTermLabel = new JLabel("Original loan term");
+            originalLoanTermLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            originalLoanTermLabel.setForeground(Color.BLACK);
+            originalLoanTermLabel.setBounds(40,230,350,40);
+            add(originalLoanTermLabel);
+            
+            originalLoanTermField = new JTextField("");
+            originalLoanTermField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            originalLoanTermField.setForeground(Color.BLACK);
+            originalLoanTermField.setBounds(340,230,200,40);
+            // Add KeyListener to validate input
+            originalLoanTermField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+            add(originalLoanTermField);
+            
+            // Interest rate JLabel and Field set up
+            interestRateLabel = new JLabel("Interest rate");
+            interestRateLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            interestRateLabel.setForeground(Color.BLACK);
+            interestRateLabel.setBounds(40,280,350,40);
+            add(interestRateLabel);
+            
+            interestRateField = new JTextField("                                %");
+            interestRateField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            interestRateField.setForeground(Color.BLACK);
+            interestRateField.setBounds(340,280,200,40);
+            PercentageFieldHelper.setupPercentageField(interestRateField);
+            add(interestRateField);
+            
+            // Remaining Term JLabel and Field set up
+            remainingTernLabel = new JLabel("Remaining term (yy/mm)");
+            remainingTernLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            remainingTernLabel.setForeground(Color.BLACK);
+            remainingTernLabel.setBounds(40,330,350,40);
+            add(remainingTernLabel);
+            
+            remainingTernField = new JTextField("");
+            remainingTernField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            remainingTernField.setForeground(Color.BLACK);
+            remainingTernField.setBounds(340,330,100,40);
+            // Add KeyListener to validate input
+            remainingTernField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+            add(remainingTernField);
+            
+            remainingTernMonthField= new JTextField("");
+            remainingTernMonthField.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            remainingTernMonthField.setForeground(Color.BLACK);
+            remainingTernMonthField.setBounds(450,330,100,40);
+            // Add KeyListener to validate input
+            remainingTernMonthField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    char c = e.getKeyChar();
+                    // Allow only digits and control characters (e.g., backspace)
+                    if (!Character.isDigit(c) && !Character.isISOControl(c)) {
+                        e.consume(); // Ignore the invalid character
+                        JOptionPane.showMessageDialog(null, "Please enter only numeric values.", "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                    }
+                }
+            });
+            add(remainingTernMonthField);
+            
+            // Repayment options JLabel and Field set up
+            repaymentOptionsLabel = new JLabel("<html><b>Repayment options:</b></html>");
+            repaymentOptionsLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            repaymentOptionsLabel.setForeground(Color.BLACK);
+            repaymentOptionsLabel.setBounds(40,380,350,40);
+            add(repaymentOptionsLabel);
+            
+            buttonGroupOptions = new ButtonGroup();
+            // Create radio buttons
+            JRadioButton paybackAll = new JRadioButton("Payback altogether");
+            paybackAll.setBounds(40,430,20,20);
+            paybackAll.setOpaque(false);
+            add(paybackAll);
+            
+            paybackAltogetherLabel = new JLabel("Payback altogether");
+            paybackAltogetherLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            paybackAltogetherLabel.setForeground(Color.BLACK);
+            paybackAltogetherLabel.setBounds(60,420,350,40);
+            add(paybackAltogetherLabel);
+            
+            JRadioButton extraPayments = new JRadioButton("Repayment with extra payments");
+            extraPayments.setBounds(40,480,20,20);
+            extraPayments.setOpaque(false);
+            add(extraPayments);
+            
+            extraPaymentLabel = new JLabel("Repayment with extra payments");
+            extraPaymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            extraPaymentLabel.setForeground(Color.BLACK);
+            extraPaymentLabel.setBounds(60,470,350,40);
+            add(extraPaymentLabel);
+            
+            perMonthField = new JTextField("$");
+            perMonthField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            perMonthField.setForeground(Color.BLACK);
+            perMonthField.setBounds(60,510,160,35);
+            perMonthField.addFocusListener(new CurrencyFormatFocusListener());
+            add(perMonthField);
+            
+            perMonthLabel = new JLabel("per month");
+            perMonthLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            perMonthLabel.setForeground(Color.BLACK);
+            perMonthLabel.setBounds(235,510,120,30);
+            add(perMonthLabel);
+            
+            perYearLabel = new JLabel("per year");
+            perYearLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            perYearLabel.setForeground(Color.BLACK);
+            perYearLabel.setBounds(235,550,120,30);
+            add(perYearLabel);
+            
+            perYearField = new JTextField("$");
+            perYearField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            perYearField.setForeground(Color.BLACK);
+            perYearField.setBounds(60,550,160,35);
+            perYearField.addFocusListener(new CurrencyFormatFocusListener());
+            add(perYearField);
+            
+            oneTimeLabel = new JLabel("one time");
+            oneTimeLabel.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            oneTimeLabel.setForeground(Color.BLACK);
+            oneTimeLabel.setBounds(235,590,120,30);
+            add(oneTimeLabel);
+            
+            oneTimeField = new JTextField("$");
+            oneTimeField.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+            oneTimeField.setForeground(Color.BLACK);
+            oneTimeField.setBounds(60,590,160,35);
+            oneTimeField.addFocusListener(new CurrencyFormatFocusListener());
+            add(oneTimeField);
+            
+            JRadioButton biweekly = new JRadioButton("Biweekly repayment");
+            biweekly.setBounds(40,630,20,20);
+            biweekly.setOpaque(false);
+            add(biweekly);
+            
+            biweeklyRepaymentLabel = new JLabel("Biweekly repayment");
+            biweeklyRepaymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            biweeklyRepaymentLabel.setForeground(Color.BLACK);
+            biweeklyRepaymentLabel.setBounds(60,620,350,40);
+            add(biweeklyRepaymentLabel);
+            
+            JRadioButton normal = new JRadioButton("Normal repayment");
+            normal.setBounds(330,630,20,20);
+            normal.setOpaque(false);
+            add(normal);
+            
+            normalRepaymentLabel = new JLabel("Normal repayment");
+            normalRepaymentLabel.setFont(new Font("Times New Roman", Font.PLAIN, 26));
+            normalRepaymentLabel.setForeground(Color.BLACK);
+            normalRepaymentLabel.setBounds(350,620,350,40);
+            add(normalRepaymentLabel);        
+            
+            // Add radio buttons to group
+            buttonGroupOptions.add(paybackAll);
+            buttonGroupOptions.add(extraPayments);
+            buttonGroupOptions.add(biweekly);
+            buttonGroupOptions.add(normal);
+            
+        }
         
+        private void calculate_MortgagePayoff() {
+    try {
+        // Parse input values
+        double originalLoanAmount = parseCurrencyField(originalLoanField);
+        int originalLoanTermYears = Integer.parseInt(originalLoanTermField.getText());
+        double interestRate = parsePercentageField(interestRateField) / 100.0;
+        
+        // Remaining term parsing
+        int remainingYears = Integer.parseInt(remainingTernField.getText());
+        int remainingMonths = Integer.parseInt(remainingTernMonthField.getText());
+        
+        // Constants
+        int totalLoanTermMonths = originalLoanTermYears * 12;
+        int remainingTermMonths = remainingYears * 12 + remainingMonths;
+        double monthlyRate = interestRate / 12;
+        
+        // Calculate original monthly payment
+        double originalMonthlyPayment = calculateMonthlyPayment(
+            originalLoanAmount, 
+            monthlyRate, 
+            totalLoanTermMonths
+        );
+        
+        // Calculate remaining balance
+        double remainingBalance = calculateRemainingBalance(
+            originalLoanAmount, 
+            monthlyRate, 
+            originalMonthlyPayment, 
+            totalLoanTermMonths - remainingTermMonths
+        );
+        
+        // Determine repayment strategy based on selected radio button
+        double extraMonthlyPayment = 0;
+        double extraYearlyPayment = 0;
+        double oneTimePayment = 0;
+        
+        Enumeration<AbstractButton> buttons = buttonGroupOptions.getElements();
+        while (buttons.hasMoreElements()) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                switch (button.getText()) {
+                    case "Payback altogether":
+                        oneTimePayment = remainingBalance;
+                        break;
+                    case "Repayment with extra payments":
+                        extraMonthlyPayment = parseCurrencyField(perMonthField);
+                        extraYearlyPayment = parseCurrencyField(perYearField);
+                        oneTimePayment = parseCurrencyField(oneTimeField);
+                        break;
+                    case "Biweekly repayment":
+                        extraMonthlyPayment = originalMonthlyPayment / 2;
+                        break;
+                    case "Normal repayment":
+                        // No extra payments
+                        break;
+                }
+                break;
+            }
+        }
+        
+        // Perform payoff calculation
+        PayoffResult result = calculatePayoff(
+            remainingBalance, 
+            monthlyRate, 
+            originalMonthlyPayment, 
+            extraMonthlyPayment, 
+            extraYearlyPayment, 
+            oneTimePayment
+        );
+        
+        // Display results (you would implement this method to show results on the GUI)
+        displayPayoffResults(result);
+        
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(
+            this, 
+            "Please enter valid numeric values.\n" + e.getMessage(), 
+            "Input Error", 
+            JOptionPane.ERROR_MESSAGE
+        );
+    }
+}
+
+// Helper method to calculate monthly payment
+private double calculateMonthlyPayment(double loanAmount, double monthlyRate, int totalMonths) {
+    return loanAmount * monthlyRate / (1 - Math.pow(1 + monthlyRate, -totalMonths));
+}
+
+// Helper method to calculate remaining balance
+private double calculateRemainingBalance(
+    double originalLoanAmount, 
+    double monthlyRate, 
+    double monthlyPayment, 
+    int monthsPassed
+) {
+    return originalLoanAmount * Math.pow(1 + monthlyRate, monthsPassed) - 
+           monthlyPayment * ((Math.pow(1 + monthlyRate, monthsPassed) - 1) / monthlyRate);
+}
+
+// Payoff calculation method
+private PayoffResult calculatePayoff(
+    double remainingBalance, 
+    double monthlyRate, 
+    double originalMonthlyPayment,
+    double extraMonthlyPayment,
+    double extraYearlyPayment,
+    double oneTimePayment
+) {
+    double newMonthlyPayment = originalMonthlyPayment + extraMonthlyPayment;
+    int monthsPaid = 0;
+    double totalPayoffInterest = 0;
+    double workingBalance = remainingBalance - oneTimePayment;
+    
+    while (workingBalance > 0) {
+        // Calculate interest and principal for this month
+        double interestPayment = workingBalance * monthlyRate;
+        double principalPayment = Math.min(newMonthlyPayment - interestPayment, workingBalance);
+        
+        // Reduce working balance
+        workingBalance -= principalPayment;
+        totalPayoffInterest += interestPayment;
+        monthsPaid++;
+        
+        // Apply yearly extra payment
+        if (monthsPaid % 12 == 0) {
+            workingBalance -= extraYearlyPayment;
+        }
+    }
+    
+    // Prepare result
+    PayoffResult result = new PayoffResult();
+    result.originalMonthlyPayment = originalMonthlyPayment;
+    result.newMonthlyPayment = newMonthlyPayment;
+    result.monthsPaid = monthsPaid;
+    result.totalPayoffInterest = totalPayoffInterest;
+    result.workingBalance = workingBalance;
+    
+    return result;
+}
+
+// Helper method to parse currency fields
+private double parseCurrencyField(JTextField field) {
+    String text = field.getText().replace("$", "").replace(",", "").trim();
+    if (text.isEmpty()) return 0;
+    return Double.parseDouble(text);
+}
+
+// Helper method to parse percentage fields
+private double parsePercentageField(JTextField field) {
+    String text = field.getText().replace("%", "").trim();
+    if (text.isEmpty()) return 0;
+    return Double.parseDouble(text);
+}
+
+// Results container class
+private class PayoffResult {
+    double originalMonthlyPayment;
+    double newMonthlyPayment;
+    int monthsPaid;
+    double totalPayoffInterest;
+    double workingBalance;
+}
+
+// Method to display results (you would customize this to match your UI)
+private void displayPayoffResults(PayoffResult result) {
+    int payoffYears = result.monthsPaid / 12;
+    int payoffMonths = result.monthsPaid % 12;
+    
+    // Format the results as HTML to allow for line breaks and better formatting
+    String formattedResults = String.format(
+        "<html>" +
+        "<b>Payoff Details:</b><br>" +
+        "Original Monthly Payment: $%,.2f<br>" +
+        "New Monthly Payment: $%,.2f<br>" +
+        "Months to Payoff: %d (%d years, %d months)<br>" +
+        "Total Payoff Interest: $%,.2f" +
+        "</html>",
+        result.originalMonthlyPayment,
+        result.newMonthlyPayment,
+        result.monthsPaid,
+        payoffYears,
+        payoffMonths,
+        result.totalPayoffInterest
+    );
+    
+    // Update the results label
+    results_label.setText(formattedResults);
+    
+    // Create bar chart
+    DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+    dataset.addValue(result.originalMonthlyPayment, "Payments", "Original Monthly Payment");
+    dataset.addValue(result.newMonthlyPayment, "Payments", "New Monthly Payment");
+    
+    JFreeChart chart = ChartFactory.createBarChart(
+        "Monthly Payment Comparison",  // Chart title
+        "Payment Type",                // X-Axis Label
+        "Amount ($)",                  // Y-Axis Label
+        dataset                        // Dataset
+    );
+    
+    // Create chart panel
+    ChartPanel chartPanel = new ChartPanel(chart);
+    chartPanel.setBounds(605, 410, 520, 300);  // Position below results label
+    add(chartPanel);
+    
+    // Refresh the panel
+    revalidate();
+    repaint();
+}
+        
+        private void clearFields(){
+            originalLoanField.setText("$");
+            originalLoanTermField.setText("");
+            interestRateField.setText("%");
+            remainingTernField.setText("");
+            remainingTernMonthField.setText("");
+            perMonthField.setText("$");
+            perYearField.setText("$");
+            oneTimeField.setText("$");
+            buttonGroupOptions.clearSelection();
+        }
+        
+        // FocusListener to format JTextField input as currency on focus loss
+        private class CurrencyFormatFocusListener extends FocusAdapter {
+            @Override
+            public void focusLost(FocusEvent e) {
+                JTextField source = (JTextField) e.getSource();
+                try {
+                    // Parse and format the value as currency
+                    double value = Double.parseDouble(source.getText().replace(",", "").replace("$", ""));
+                    source.setText(currencyFormat.format(value));
+                } catch (NumberFormatException ex) {
+                    source.setText(""); // Clear field if input is invalid
+                }
+            }
+        }
+        
+        @Override
+        protected void paintComponent(Graphics g){
+            super.paintComponent(g);
+            // Draw the background image
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
+}
+      
     public static void main(String[] args) {
         // Create and display the form
         SwingUtilities.invokeLater(() -> {
